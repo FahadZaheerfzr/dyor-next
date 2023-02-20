@@ -1,3 +1,4 @@
+import Image from 'next/image'
 import React from 'react'
 
 export default function Graph() {
@@ -7,7 +8,7 @@ export default function Graph() {
             <div className="h-[20%]">
                 <div className="flex flex-row justify-between px-5 mt-7">
                     <div className="flex flex-row items-center">
-                        <img className="dark:hidden" src="/images/icon.svg" />
+                        <Image width={10} height={10} alt="graph-icon" className="dark:hidden" src="/images/icon.svg" />
                         <img className="hidden dark:block" src="/images/graph/icon.png" />
                         <span className="text-xl text-gold font-extrabold mx-3">WBNB / DYOR</span>
                         <img className="mr-2 dark:hidden" src="/images/binocolars.svg" />
