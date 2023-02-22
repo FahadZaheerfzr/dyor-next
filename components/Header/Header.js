@@ -1,16 +1,19 @@
-import { useWeb3React } from '@web3-react/core';
+import { formatAddress } from '@/utils/formatAddress';
+import { useEthers } from '@usedapp/core';
 import { useTheme } from 'next-themes'
 import Image from 'next/image'
 import React, { useEffect } from 'react'
 import { useModal } from 'react-simple-modal-provider'
 
 export default function Header({ toggleSidebar }) {
-    const { active, chainId, account } = useWeb3React();
+    const { account } = useEthers();
     const { theme, setTheme } = useTheme()
     const [tempfixed, setTempFixed] = React.useState(false)
     const { open: openModal } = useModal("ConnectionModal");
 
-
+    useEffect(() => {
+        console.log(account)
+    }, [])
 
     useEffect(() => {
         if (theme === 'dark') {
@@ -47,13 +50,13 @@ export default function Header({ toggleSidebar }) {
                         className="sr-only peer"
                         onChange={handleTempFixed}
                     />
-                    <div className="w-10 h-6 bg-transparent peer-focus:outline-none peer-focus:ring-0 peer-focus:ring-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-gold after:content-[''] after:absolute after:top-[22px] after:md:top-[12px] after:left-[2px] peer-checked:after:left-[6px] after:bg-gold after:border-gold after:border after:rounded-full after:h-4 after:w-4 after:transition-all border border-gold" />
+                    <div className="w-10 h-6 bg-transparent peer-focus:outline-none peer-focus:ring-0 peer-focus:ring-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-gold after:content-[''] after:absolute after:top-[22px] after:md:top-[4px] after:left-[2px] peer-checked:after:left-[6px] after:bg-gold after:border-gold after:border after:rounded-full after:h-4 after:w-4 after:transition-all border border-gold" />
                 </label>
                 <div className='cursor-pointer' onClick={openModal}>
 
                     {
-                        active ?
-                            <span>{account}</span>
+                        account ?
+                            <span className='py-[9px] font-nunito_sans px-4 border border-gold rounded-xl text-gold font-light'>{formatAddress(account)}</span>
                             : (!tempfixed ?
                                 <Image className="brand-image" src="/images/wallet.svg" alt='logo' width={40} height={40} />
                                 :

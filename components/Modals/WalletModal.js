@@ -1,43 +1,31 @@
 import React, { useEffect } from "react";
 import Modal, { useModalState } from "react-simple-modal-provider";
 
-import { Web3ReactProvider } from "@web3-react/core";
-// import { useWeb3React } from "@web3-react/core";
-import { Web3Provider } from "@ethersproject/providers";
+import WalletConnectProvider from '@walletconnect/web3-provider/dist/umd/index.min.js'
+
 import { useEthers } from '@usedapp/core'
 
 import { wallets } from "@/data/wallets";
 import Image from "next/image";
+import { networkConfig } from "@/config/networks";
 
-function getLibrary(provider) {
-  return new Web3Provider(provider);
-}
-
-import { WalletLinkConnector } from "@web3-react/walletlink-connector";
-import { WalletConnectConnector } from "@web3-react/walletconnect-connector";
-import { InjectedConnector } from "@web3-react/injected-connector";
-
-const CoinbaseWallet = new WalletLinkConnector({
-  url: `https://mainnet.infura.io/v3/${process.env.INFURA_KEY}`,
-  appName: "Web3-react Demo",
-  supportedChainIds: [1, 3, 4, 5, 42],
-});
-
-const WalletConnect = new WalletConnectConnector({
-  rpcUrl: `https://mainnet.infura.io/v3/${process.env.INFURA_KEY}`,
-  bridge: "https://bridge.walletconnect.org",
-  qrcode: true,
-});
-
-const Injected = new InjectedConnector({
-  supportedChainIds: [1, 3, 4, 5, 42],
-});
-
-import { useWeb3React } from "@web3-react/core";
 
 export default function ConnectionModal({ children }) {
   const [isOpen, setOpen] = useModalState();
   const { activate, account, activateBrowserWallet } = useEthers();
+
+
+  const onConnect = async () => {
+    try {
+      const provider = new WalletConnectProvider({
+        rpc: networkConfig.readOnlyUrls,
+      })
+      await provider.enable()
+      await activate(provider)
+    } catch (error) {
+      console.error(error)
+    }
+  }
 
 
   const onMetamask = async () => {
@@ -53,7 +41,7 @@ export default function ConnectionModal({ children }) {
         if (account) {
           setOpen(false)
         }
-      }, [account, setOpen, isOpen])
+      }, [account, setOpen])
 
 
   return (
@@ -85,7 +73,7 @@ export default function ConnectionModal({ children }) {
         <div className="mt-14 grid grid-cols-2 gap-8">
           {/* Metamask */}
           <button
-            className="flex focus:outline outline-primary-green py-4 px-4 flex-col items-center justify-center"
+            className="flex focus:outline-none focus:outline-gold py-4 px-4 flex-col items-center justify-center"
             key={wallets[0].id}
             onClick={onMetamask}
           >
@@ -101,11 +89,9 @@ export default function ConnectionModal({ children }) {
             </span>
           </button>
           <button
-            className="flex focus:outline outline-primary-green py-4 px-4 flex-col items-center justify-center"
+            className="flex focus:outline-none focus:outline-gold active:outline-none py-4 px-4 flex-col items-center justify-center"
             key={wallets[1].id}
-            onClick={() => {
-              activate(WalletConnect);
-            }}
+            onClick={onConnect}
           >
             <Image
               src={wallets[1].image}
