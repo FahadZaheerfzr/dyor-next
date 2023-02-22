@@ -2,7 +2,7 @@ import React from "react";
 import { useState, useEffect } from "react";
 
 import Image from "next/image";
-import { data, buttons, tags_colors } from "@/data/developers";
+import { data, buttons, tags_colors, topVoted } from "@/data/developers";
 
 const Overview = () => {
   const [page, setPage] = useState(1);
@@ -17,23 +17,26 @@ const Overview = () => {
   const nextPage = () => {
     if (page !== Math.ceil(data.length / perPage)) {
       setPage(page + 1);
+      setPaginatedData(data.slice(page * perPage, (page + 1) * perPage));
     }
   };
 
   const updatePageItems = (number) => {
     setPerPage(number);
-    setPaginatedData(data.slice(0, perPage));
+    setPaginatedData(data.slice(0, number));
     setPage(1);
   };
 
   const backPage = () => {
     if (page !== 1) {
       setPage(page - 1);
+      setPaginatedData(data.slice((page - 2) * perPage, (page - 1) * perPage));
     }
   };
 
   const goToPage = (numPage) => {
     setPage(numPage);
+    setPaginatedData(data.slice((numPage - 1) * perPage, numPage * perPage));
   };
 
   const handleActive = (index) => {
@@ -51,7 +54,7 @@ const Overview = () => {
   };
 
   return (
-    <main className="workspace">
+    <main className="workspace font-nunito_sans">
       <section className="breadcrumb">
         <h1 className="text-[32px] text-muted">DOGE your own research</h1>
         <ul className="text-[#57534E] text-sm flex mb-4">
@@ -61,7 +64,7 @@ const Overview = () => {
           <Image
             width={12}
             height={10}
-            class="mx-2 "
+            className="mx-2 "
             src="/images/arrow.svg"
             alt="arrow"
           />
@@ -72,7 +75,7 @@ const Overview = () => {
           <Image
             width={12}
             height={10}
-            class="mx-2 "
+            className="mx-2 "
             src="/images/arrow.svg"
             alt="arrow"
           />
@@ -81,28 +84,28 @@ const Overview = () => {
         </ul>
       </section>
 
-      <div className="mt-7 mb-12 px-9 pt-8">
-        <div className="banner lg:h-[250px] h-[150px]">
+      <div className="mt-7 mb-12 px-3 md:px-9 pt-8">
+        <div className="banner lg:h-[250px] md:h-[150px] h-[100px]">
           <div className="w-full h-full flex justify-between items-center banner-icons">
-            <div className="font-gilroy font-extrabold pl-12 text-[#B07329]">
-              <span className="font-left lg:text-6xl text-3xl">
+            <div className="font-gilroy font-extrabold pl-3 md:pl-12 text-[#B07329]">
+              <span className="font-left lg:text-6xl md:text-3xl text-lg">
                 One vote
                 <br />
-                <span className="text-4xl lg:text-8xl">PER DAY</span>
+                <span className="text-xl md:text-4xl lg:text-8xl">PER DAY</span>
               </span>
             </div>
             <div className="flex justify-center">
               <div className="banner-center absolute lg:h-[150px] h-[50px]"></div>
-              <span className="banner-text text-3xl lg:text-6xl ">
+              <span className="banner-text text-lg md:text-3xl lg:text-6xl ">
                 DYOR <br />
                 TOKENS
               </span>
             </div>
-            <div className="font-gilroy font-extrabold text-right pr-12 text-[#B07329]">
-              <span className="font-right text-3xl lg:text-6xl">
+            <div className="font-gilroy font-extrabold text-right pr-3 md:pr-12 text-[#B07329]">
+              <span className="font-right text-lg md:text-3xl lg:text-6xl">
                 IF YOU HOLD
                 <br />
-                <span className="text-4xl lg:text-8xl">0.15%</span>
+                <span className="text-xl md:text-4xl lg:text-8xl">0.15%</span>
               </span>
             </div>
           </div>
@@ -114,26 +117,30 @@ const Overview = () => {
           </span>
 
           <div className="w-full my-14 bg-white dark:bg-[#292524] rounded-2xl">
-            <div className="table-header text-sm lg:text-lg font-extrabold text-[#57534E] rounded-t-2xl">
+            <div className="table-header text-xs md:text-sm lg:text-lg font-extrabold text-[#57534E] rounded-t-2xl">
               <div className="py-7 w-full flex justify-between px-6">
-                <span className="w-1/6 flex justify-center">
+                <span className="w-1/3 md:w-1/4 lg:w-1/6 flex justify-center">
                   Developer Name
                 </span>
-                {
-                  <div className="lg:w-1/3 hidden lg:flex lg:justify-around">
-                    <span className="flex justify-center">
-                      Current project TG
-                    </span>
-                    <span className="flex justify-center">Poocoin project</span>
-                  </div>
-                }
-                <span className="w-1/6 flex justify-center ml-6 lg:ml-0">
+
+                <div className="lg:w-1/3 hidden lg:flex lg:justify-around">
+                  <span className="flex w-full justify-center">
+                    Current project TG
+                  </span>
+                  <span className="flex w-full justify-center">
+                    Poocoin project
+                  </span>
+                </div>
+
+                <span className="w-1/3 md:w-1/4 lg:w-1/6 flex justify-center ml-6 lg:ml-0">
                   Website
                 </span>
-                <span className="w-1/6 flex justify-center">
+                <span className="md:w-1/4 lg:w-1/6 hidden md:flex justify-center">
                   Number of projects
                 </span>
-                <span className="w-1/6 flex justify-center">Votes</span>
+                <span className="w-1/3 md:w-1/4 lg:w-1/6 flex justify-center">
+                  Votes
+                </span>
               </div>
             </div>
 
@@ -143,22 +150,22 @@ const Overview = () => {
                   className="px-6 py-4 flex items-center justify-between"
                   key={index}
                 >
-                  <div className="flex w-1/6">
+                  <div className="flex w-1/3 md:w-1/4 lg:w-1/6">
                     <Image
                       src={require(`/public/images/overview/${item.icon}`)}
                       alt="icon"
                       width={40}
                       height={40}
                     />
-                    <div className="flex flex-col ml-4">
+                    <div className="flex flex-col ml-1 lg:ml-4">
                       <div className="flex items-center">
-                        <span className="text-sm lg:text-base text-[#57534E] font-extrabold">
+                        <span className="text-[8px] md:text-sm lg:text-base text-[#57534E] font-extrabold">
                           {item.name}
                         </span>
 
                         {item.verified && (
                           <Image
-                            className="ml-2 w-3 h-3"
+                            className="ml-1 lg:ml-2 w-3 h-3"
                             src={require("/public/images/overview/verified.svg")}
                             alt="verified"
                             width={12}
@@ -171,7 +178,7 @@ const Overview = () => {
                         <div className="flex">
                           {item.tags.map((tag, index) => (
                             <div
-                              className="py-[1px] px-2 mr-[6px]"
+                              className="sm:py-[1px] px-1 lg:px-2 lg:mr-[6px] scale-75 lg:scale-100"
                               key={index}
                               style={{
                                 backgroundColor: tags_colors[index].bg_color,
@@ -179,7 +186,7 @@ const Overview = () => {
                                 borderRadius: tags_colors[index].radius,
                               }}
                             >
-                              <span className="text-[10px] font-extrabold">
+                              <span className="text-[8px] md:text-[10px] font-extrabold">
                                 {tag}
                               </span>
                             </div>
@@ -191,7 +198,7 @@ const Overview = () => {
 
                   {
                     <div className="hidden lg:flex lg:justify-around lg:w-1/3">
-                      <div className="text-sm flex justify-center font-extrabold">
+                      <div className="text-sm text-[#78716C] flex justify-center font-extrabold">
                         <span>{item.project}</span>
                       </div>
 
@@ -201,16 +208,16 @@ const Overview = () => {
                     </div>
                   }
 
-                  <div className="text-sm ml-10 text-[#78716C] w-1/6 flex justify-center font-extrabold">
+                  <div className="text-xs md:text-sm lg:ml-0 ml-10 text-[#78716C] w-1/3 md:w-1/4 lg:w-1/6 flex justify-center font-extrabold">
                     <span>{item.website.slice(0, 12)}...</span>
                   </div>
 
-                  <div className="text-sm text-[#78716C] w-1/6 flex justify-center font-extrabold">
+                  <div className="text-sm text-[#78716C] hidden md:w-1/4 lg:w-1/6 md:flex justify-center font-extrabold">
                     <span>{item.no_of_projects}</span>
                   </div>
 
-                  <div className="w-1/6 flex justify-center">
-                    <div className="flex items-center gap-x-2 px-[10px] py-3 border border-[#CA8A04] rounded-md">
+                  <div className="w-1/3 md:w-1/4 lg:w-1/6 flex justify-center">
+                    <div className="flex items-center gap-x-2 px-[5px] md:px-[10px] py-3 border border-[#CA8A04] rounded-md">
                       <Image
                         src={require("/public/images/overview/vote-icon.svg")}
                         alt="vote-icon"
@@ -218,7 +225,7 @@ const Overview = () => {
                         height={20}
                       />
 
-                      <span className="text-[#CA8A04] font-semibold">
+                      <span className="text-[#CA8A04] font-semibold text-xs md:text-base">
                         {item.votes}
                       </span>
                     </div>
@@ -275,11 +282,15 @@ const Overview = () => {
           </div>
 
           <div className="flex items-center">
-            <span className="font-bold text-sm">Results per page:</span>
+            <span className="font-bold text-sm text-[#78716C]">
+              Results per page:
+            </span>
 
             <div className="flex items-center bg-white dark:bg-[#1C1917]  ml-1 pl-[10px] rounded-[3px]">
               <div className="pr-[5px]">
-                <span className="font-bold text-sm">{optionSelected}</span>
+                <span className="font-bold text-sm dark:text-[#57534E] ">
+                  {optionSelected}
+                </span>
               </div>
               <div
                 className="px-[6px] cursor-pointer py-2 border-l border-[#292524] h-full"
@@ -303,7 +314,7 @@ const Overview = () => {
               <div className="w-full py-1 gap-y-1 rounded bg-white dark:bg-[#1C1917] flex flex-col items-center">
                 {[10, 20, 50].map((item, index) => (
                   <div
-                    className="flex justify-center cursor-pointer w-full h-full hover:bg-[#CA8A04] hover:text-[#1C1917]"
+                    className="flex justify-center cursor-pointer w-full h-full hover:bg-[#CA8A04] dark:text-[#57534E] hover:text-[#1C1917]"
                     key={index}
                     onClick={() => {
                       handleOptionSelected(item);
@@ -318,20 +329,26 @@ const Overview = () => {
         )}
 
         <div className="w-full my-14 bg-white dark:bg-[#292524] rounded-2xl">
-          <div className="table-header text-sm lg:text-lg font-extrabold text-[#57534E] rounded-t-2xl">
+          <div className="table-header text-xs md:text-sm lg:text-lg font-extrabold text-[#57534E] rounded-t-2xl">
             <div className="py-7 w-full flex justify-between px-6">
-              <span className="w-1/6 flex justify-center">Assets</span>
+              <span className="w-1/3 md:w-1/4 lg:w-1/6 flex justify-center">
+                Assets
+              </span>
               <span className="w-1/6 lg:flex justify-center hidden">
                 Symbol
               </span>
-              <span className="w-1/6 flex justify-center ml-6 lg:ml-0">
+              <span className="w-1/3 md:w-1/4 lg:w-1/6 flex justify-center ml-6 lg:ml-0">
                 24h volume
               </span>
               <span className="w-1/6 lg:flex justify-center hidden">
                 Market Cap
               </span>
-              <span className="w-1/6 flex justify-center">Launch</span>
-              <span className="w-1/6 flex justify-center">Votes</span>
+              <span className="md:w-1/4 lg:w-1/6 hidden md:flex justify-center">
+                Launch
+              </span>
+              <span className="w-1/3 md:w-1/4 lg:w-1/6 flex justify-center">
+                Votes
+              </span>
             </div>
           </div>
           <div>
@@ -340,36 +357,36 @@ const Overview = () => {
                 className="px-6 py-4 flex items-center justify-between"
                 key={index}
               >
-                <div className="flex w-1/6">
+                <div className="flex w-1/3 md:w-1/4 lg:w-1/6">
                   <Image
                     src={require(`/public/images/overview/${item.icon}`)}
-                    alt={item.name}
+                    alt="icon"
                     width={40}
                     height={40}
                   />
-                  <div className="flex flex-col ml-4">
+                  <div className="flex flex-col ml-1 lg:ml-4">
                     <div className="flex items-center">
-                      <span className="text-[#57534E] font-extrabold lg:text-base text-xs">
+                      <span className="text-[8px] md:text-sm lg:text-base text-[#57534E] font-extrabold">
                         {item.name}
                       </span>
 
                       {item.verified && (
                         <Image
-                          className="ml-2 w-3 h-3"
+                          className="ml-1 lg:ml-2 w-3 h-3"
                           src={require("/public/images/overview/verified.svg")}
                           alt="verified"
-                          width={15}
-                          height={15}
+                          width={12}
+                          height={12}
                         />
                       )}
                     </div>
 
-                    <div className="flex mt-1 ">
+                    <div className="flex mt-1">
                       <div className="flex">
                         {item.tags.map((tag, index) => (
                           <div
+                            className="py-[1px] px-1 lg:px-2 lg:mr-[6px] scale-75 lg:scale-100"
                             key={index}
-                            className="py-[1px] px-2 mr-[6px]"
                             style={{
                               backgroundColor: tags_colors[index].bg_color,
                               color: tags_colors[index].text_color,
@@ -394,24 +411,24 @@ const Overview = () => {
                   <span>{item.poocoin.slice(0, 12)}...</span>
                 </div>
 
-                <div className="text-sm ml-10 text-[#78716C] w-1/6 flex justify-center font-extrabold">
+                <div className="text-sm ml-10 text-[#78716C] w-1/3 md:w-1/4 lg:w-1/6 flex justify-center font-extrabold">
                   <span>{item.website.slice(0, 12)}...</span>
                 </div>
 
-                <div className="text-sm text-[#78716C] w-1/6 flex justify-center font-extrabold">
+                <div className="text-xs md:text-sm text-[#78716C] hidden md:w-1/4 lg:w-1/6 md:flex justify-center font-extrabold">
                   <span>{item.no_of_projects}</span>
                 </div>
 
-                <div className="w-1/6 flex justify-center">
-                  <div className="flex items-center gap-x-2 px-[10px] py-3 border border-[#CA8A04] rounded-md">
+                <div className="w-1/3 md:w-1/4 lg:w-1/6 flex justify-center">
+                  <div className="flex items-center gap-x-2 px-[5px] md:px-[10px] py-3 border border-[#CA8A04] rounded-md">
                     <Image
                       src={require("/public/images/overview/vote-icon.svg")}
                       alt="vote-icon"
-                      height={20}
                       width={20}
+                      height={20}
                     />
 
-                    <span className="text-[#CA8A04] font-semibold">
+                    <span className="text-[#CA8A04] font-semibold text-xs md:text-base">
                       {item.votes}
                     </span>
                   </div>

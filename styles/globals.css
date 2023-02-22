@@ -65,7 +65,7 @@ h3 {
 }
 
 .form-control::placeholder {
-  color: #44403C !important;
+  @apply text-[#D6D3D1] dark:text-[#44403C];
   font-weight: 400 !important;
 }
 

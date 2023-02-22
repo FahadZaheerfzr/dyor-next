@@ -1,10 +1,13 @@
 import { useTheme } from 'next-themes'
 import Image from 'next/image'
 import React, { useEffect } from 'react'
+import { useModal } from 'react-simple-modal-provider'
 
 export default function Header({ toggleSidebar }) {
     const { theme, setTheme } = useTheme()
     const [tempfixed, setTempFixed] = React.useState(false)
+    const { open: openModal } = useModal("ConnectionModal");
+
 
 
     useEffect(() => {
@@ -46,12 +49,13 @@ export default function Header({ toggleSidebar }) {
                     />
                     <div className="w-10 h-6 bg-transparent peer-focus:outline-none peer-focus:ring-0 peer-focus:ring-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-gold after:content-[''] after:absolute after:top-[22px] after:md:top-[12px] after:left-[2px] peer-checked:after:left-[6px] after:bg-gold after:border-gold after:border after:rounded-full after:h-4 after:w-4 after:transition-all border border-gold" />
                 </label>
-
-                {!tempfixed ?
-                    <Image className="brand-image" src="/images/wallet.svg" alt='logo' width={40} height={40} />
-                    :
-                    <Image className="brand-image" src="/images/wallet-light.svg" alt='logo' width={40} height={40} />
-                }
+                <div className='cursor-pointer' onClick={openModal}>
+                    {!tempfixed ?
+                        <Image className="brand-image" src="/images/wallet.svg" alt='logo' width={40} height={40} />
+                        :
+                        <Image className="brand-image" src="/images/wallet-light.svg" alt='logo' width={40} height={40} />
+                    }
+                </div>
             </div>
         </header>
     )

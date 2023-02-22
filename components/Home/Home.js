@@ -147,7 +147,7 @@ const Home = () => {
           <div className="mt-5">
             <form id="app" className=' font-extrabold' onSubmit={checkform} action="/" method="post">
               <div className="mb-5">
-                <label className="block mb-2 label" for="developer_wallet">
+                <label className="block mb-2 label" htmlFor="developer_wallet">
                   Developer Wallet <span className="invalid-feedback">*</span>
                 </label>
                 <input
@@ -166,7 +166,7 @@ const Home = () => {
                   </small>}
               </div>
               <div className="mb-5">
-                <label className="block mb-2 label" for="scam_type"
+                <label className="block mb-2 label" htmlFor="scam_type"
                 >Scam Type (Describe what happened)
                   <span className="invalid-feedback">*</span>
                 </label>
@@ -187,7 +187,7 @@ const Home = () => {
               </div>
 
               <div className="mb-5">
-                <label className="block mb-2 label" for="telegram_username">
+                <label className="block mb-2 label" htmlFor="telegram_username">
                   Telegram Username
                   <span className="invalid-feedback">*</span>
                 </label>
@@ -212,7 +212,7 @@ const Home = () => {
                   </small>}
               </div>
               <div className="mb-5">
-                <label className="block mb-2 label" for="telegram_id">
+                <label className="block mb-2 label" htmlFor="telegram_id">
                   Telegram ID
                 </label>
                 <input
@@ -226,7 +226,7 @@ const Home = () => {
                 />
               </div>
               <div className="mb-5">
-                <label className="block mb-2 label" for="twitter_username">
+                <label className="block mb-2 label" htmlFor="twitter_username">
                   Twitter Username
                 </label>
                 <div className="input-group">
@@ -245,7 +245,7 @@ const Home = () => {
                 </div>
               </div>
               <div className="mb-5">
-                <label className="block mb-2 label" for="title">
+                <label className="block mb-2 label" htmlFor="title">
                   Project Name <span className="invalid-feedback">*</span>
                 </label>
                 <input
@@ -264,7 +264,7 @@ const Home = () => {
                   </small>}
               </div>
               <div className="mb-5">
-                <label className="block mb-2 label" for="title">
+                <label className="block mb-2 label" htmlFor="title">
                   Project Contract <span className="invalid-feedback">*</span>
                 </label>
                 <input
@@ -283,7 +283,7 @@ const Home = () => {
                   </small>}
               </div>
               <div className="mb-5">
-                <label className="block mb-2 label" for="title">
+                <label className="block mb-2 label" htmlFor="title">
                   Transaction Address
                 </label>
                 <input
