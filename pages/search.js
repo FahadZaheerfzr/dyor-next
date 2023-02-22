@@ -4,7 +4,7 @@ import React from 'react'
 
 const search = () => {
   return (
-    <BaseLayout footer>
+    <BaseLayout title={"Search"} footer>
       <ComingSoon />
     </BaseLayout>
   )

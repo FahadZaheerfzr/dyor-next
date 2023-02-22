@@ -1,17 +1,19 @@
-import HomeBase from '@/components/Home'
-import Head from 'next/head'
+import HomeBase from "@/components/Home";
+import { Web3ReactProvider } from "@web3-react/core";
+import Head from "next/head";
 
 const index = () => {
   return (
-    <div>
-      <Head>
-        <title>Dyor</title>
-        <meta name="description" content="Dyor App Dashboard Page" />
-        <link rel="icon" href="/favicon.ico" />
-      </Head>
-      <HomeBase />
-    </div>
-  )
-}
+    <Web3ReactProvider>
+      <div>
+        <Head>
+          <meta name="description" content="Dyor App Dashboard Page" />
+          <link rel="icon" href="/favicon.ico" />
+        </Head>
+        <HomeBase />
+      </div>
+    </Web3ReactProvider>
+  );
+};
 
-export default index
+export default index;

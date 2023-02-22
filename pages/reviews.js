@@ -4,7 +4,7 @@ import React from 'react'
 
 const reviews = () => {
   return (
-    <BaseLayout footer>
+    <BaseLayout title={"Reviews"} footer>
       <ComingSoon />
     </BaseLayout>
   )

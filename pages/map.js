@@ -4,7 +4,7 @@ import React from 'react'
 
 const map = () => {
   return (
-    <BaseLayout footer>
+    <BaseLayout title={"Map"} footer>
       <ComingSoon />
     </BaseLayout>
   )

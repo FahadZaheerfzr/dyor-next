@@ -4,7 +4,7 @@ import React from "react";
 
 const overview = () => {
   return (
-    <BaseLayout>
+    <BaseLayout title={"Overview"}>
       <Overview />
     </BaseLayout>
   );

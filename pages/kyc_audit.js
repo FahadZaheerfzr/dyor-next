@@ -4,7 +4,7 @@ import React from 'react'
 
 const kyc_audit = () => {
   return (
-    <BaseLayout footer>
+    <BaseLayout title={"KYC Audit"} footer>
       <ComingSoon />
     </BaseLayout>
   )

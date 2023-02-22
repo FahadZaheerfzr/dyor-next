@@ -1,5 +1,7 @@
+import { networkConfig } from '@/config/networks'
 import '@/styles/globals.css'
 import { Nunito_Sans, Nunito } from '@next/font/google'
+import { DAppProvider } from '@usedapp/core'
 import { ThemeProvider } from 'next-themes'
 
 
@@ -18,16 +20,18 @@ const nunito = Nunito({
 
 export default function App({ Component, pageProps }) {
   return (
-    <ThemeProvider attribute='class' defaultTheme='dark'>
-      <style jsx global>
-        {`
+    <DAppProvider config={networkConfig}>
+      <ThemeProvider attribute='class' defaultTheme='dark'>
+        <style jsx global>
+          {`
           :root {
             --nunito-font: ${nunito.style.fontFamily};
             --nunito-sans-font: ${nunito_sans.style.fontFamily};
           }
         `}
-      </style>
-      <Component {...pageProps} />
-    </ThemeProvider>
+        </style>
+        <Component {...pageProps} />
+      </ThemeProvider>
+    </DAppProvider>
   )
 }

@@ -4,7 +4,7 @@ import React from 'react'
 
 const bot = () => {
   return (
-    <BaseLayout>
+    <BaseLayout title={"Bot"}>
       <ComingSoon />
     </BaseLayout>
   )
