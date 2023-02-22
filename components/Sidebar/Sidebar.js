@@ -47,7 +47,7 @@ export default function Sidebar({ active, toggleSidebar }) {
                     </div>
                 </div>
                 {openSub1 && (
-                    <div className='bg-fields bg-opacity-10 pl-5'>
+                    <div className='bg-fields bg-opacity-10 pl-8'>
                         <div className="w-full h-[60px] sidebarsub">
                             <Link href="/developers/registration" className="flex flex-row items-center h-full justify-start">
                                 <span className="font-extrabold text-[#57534E] text-base ml-[35px]">Registration</span>

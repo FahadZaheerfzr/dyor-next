@@ -9,19 +9,10 @@ export default function handler(req, res) {
     const developer_website = req.body.developer_website    
     const developer_twitter = req.body.developer_twitter
     const developer_telegram = req.body.developer_telegram
-    const transaction_address = req.body.transaction_address
+    const contract_address = req.body.contract_address
     const telegram_project = req.body.telegram_project
 
-
-    console.log(profile_picture)
-    console.log(developer_name)
-    console.log(developer_about)
-    console.log(developer_wallet)
-    console.log(developer_website)
-    console.log(developer_twitter)
-    console.log(developer_telegram)
-    console.log(transaction_address)
-    console.log(telegram_project)
+    
 
     
 

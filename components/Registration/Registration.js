@@ -14,7 +14,7 @@ export default function Registration() {
     const [developer_telegram, setDeveloperTelegram] = useState('')
     const [developer_twitter, setDeveloperTwitter] = useState('')
     const [telegram_project, setTelegramProject] = useState('')
-    const [transaction_address, setTransactionAddress] = useState('')
+    const [contract_address, setContractAddress] = useState('')
     
 
 
@@ -51,8 +51,8 @@ export default function Registration() {
         if (telegram_project === '') {
             errors.telegram_project = 'Telegram project is required'
         }
-        if (transaction_address === '') {
-            errors.transaction_address = 'Transaction address is required'
+        if (contract_address === '') {
+            errors.contract_address = 'Transaction address is required'
         }
 
         const res = await axios.post('/api/register', {
@@ -64,7 +64,7 @@ export default function Registration() {
             developer_telegram: developer_telegram,
             developer_twitter: developer_twitter,
             telegram_project: telegram_project,
-            transaction_address: transaction_address,
+            contract_address: contract_address,
         })
 
         setErrors(errors)
@@ -160,15 +160,10 @@ export default function Registration() {
                                 </div>
                             </div>
 
-                            <div className="flex flex-col mb-5 font-semibold text-lg">
-                                <span className="text-[#78716C]">Please submit a payment of 100 USDT to this address</span>
-                                <span className="text-gold">0x00000000</span>
-                            </div>
-
                             <div className="mb-5">
-                                <label className="label block mb-2" htmlFor="title">Then submit the transaction to the field below</label>
+                                <label className="label block mb-2" htmlFor="title">Contract Address</label>
                                 <input id="transactions" name="transactions" type="text" className="form-control" placeholder="Transaction Address"
-                                onChange={(e)=>setTransactionAddress(e.target.value)} value={transaction_address} />
+                                onChange={(e)=>setContractAddress(e.target.value)} value={contract_address} />
                             </div>
                             <div className="mb-5">
                                 <small>All fields with (<span className="invalid-feedback">*</span>) are Required.</small>
