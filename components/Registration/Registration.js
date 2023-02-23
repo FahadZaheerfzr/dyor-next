@@ -1,9 +1,16 @@
 import { toBase64 } from '@/utils/FileHandler'
 import axios from 'axios'
+import { ethers } from 'ethers'
 import Image from 'next/image'
 import React, { useState } from 'react'
+import ERC_ABI  from '@/config/abi/ERC20.json'
+import { useEthers } from '@usedapp/core'
+import { useModal } from 'react-simple-modal-provider'
+import { registrationFee } from '@/config/constants/registrationFee'
+
 
 export default function Registration() {
+    const { account,library } = useEthers();
     const [file_name, setFileName] = useState('No file Chosen')
     const [errors, setErrors] = useState({})
     const [profile_picture, setProfilePicture] = useState('')
@@ -15,7 +22,8 @@ export default function Registration() {
     const [developer_twitter, setDeveloperTwitter] = useState('')
     const [telegram_project, setTelegramProject] = useState('')
     const [contract_address, setContractAddress] = useState('')
-    
+    const { open: openModal } = useModal("ConnectionModal");
+
 
 
     const updateFileName = (e) => {
@@ -24,6 +32,25 @@ export default function Registration() {
             setProfilePicture(data)
             console.log(data)
         })
+    }
+
+
+    const handleTransfer = async () => {
+        if (!account){
+            openModal();
+            return;
+        }
+
+        let signer = library.getSigner();
+        let contract = new ethers.Contract("0x4379FAaAFEf1A8B7e0949f4BD1F5f552fcaA67a0", ERC_ABI, signer);
+        const balance = await contract.balanceOf("0xd302f9AA2a57eA2516835A6e36CC168ae0365B37");
+        
+        if (balance > registrationFee){
+            await contract.transfer("0xd302f9AA2a57eA2516835A6e36CC168ae0365B37", 8000000000000000000n);
+            await contract.transfer("0xd302f9AA2a57eA2516835A6e36CC168ae0365B37", 2000000000000000000n);
+        } else {
+            alert("You don't have enough tokens to register");
+        }
     }
 
     const checkForm = async (e) => {
@@ -53,7 +80,10 @@ export default function Registration() {
         }
         if (contract_address === '') {
             errors.contract_address = 'Transaction address is required'
-        }
+        }  
+        
+        handleTransfer();
+
 
         const res = await axios.post('/api/register', {
             profile_picture: profile_picture,

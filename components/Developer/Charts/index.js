@@ -5,14 +5,14 @@ import { useScreenshot } from 'use-react-screenshot'
 import Graph from './Graph'
 
 export default function Charts() {
-    const {theme} = useTheme();
+    const { theme } = useTheme();
     const [profile, setProfile] = useState(true)
     const [currentCharts, setCurrentCharts] = useState(true)
     const [menuOpen, setMenuOpen] = useState(false)
     const [tablemenu, setTableMenu] = useState(false)
     const graph = useRef(null)
     const [image, takeScreenShot] = useScreenshot();
-    
+
     const getImage = () => takeScreenShot(graph.current);
 
 
