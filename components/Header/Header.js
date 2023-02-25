@@ -12,10 +12,6 @@ export default function Header({ toggleSidebar }) {
     const { open: openModal } = useModal("ConnectionModal");
 
     useEffect(() => {
-        console.log(account)
-    }, [])
-
-    useEffect(() => {
         if (theme === 'dark') {
             setTempFixed(false)
         } else {
@@ -26,6 +22,12 @@ export default function Header({ toggleSidebar }) {
     const handleTempFixed = () => {
         setTempFixed(!tempfixed)
         setTheme(theme === 'dark' ? 'light' : 'dark')
+    }
+
+    const handleOpen = () => {
+        if (!account) {
+            openModal()
+        }
     }
 
 
@@ -52,7 +54,7 @@ export default function Header({ toggleSidebar }) {
                     />
                     <div className={`w-10 h-6 bg-transparent peer-focus:outline-none peer-focus:ring-0 peer-focus:ring-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-gold after:content-[''] after:absolute after:top-[22px] ${account? "after:md:top-[4px]" : "after:md:top-[12px]"} after:left-[2px] peer-checked:after:left-[6px] after:bg-gold after:border-gold after:border after:rounded-full after:h-4 after:w-4 after:transition-all border border-gold`} />
                 </label>
-                <div className='cursor-pointer' onClick={openModal}>
+                <div className='cursor-pointer' onClick={handleOpen}>
 
                     {
                         account ?

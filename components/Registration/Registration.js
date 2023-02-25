@@ -3,14 +3,14 @@ import axios from 'axios'
 import { ethers } from 'ethers'
 import Image from 'next/image'
 import React, { useState } from 'react'
-import ERC_ABI  from '@/config/abi/ERC20.json'
+import ERC_ABI from '@/config/abi/ERC20.json'
 import { useEthers } from '@usedapp/core'
 import { useModal } from 'react-simple-modal-provider'
-import { registrationFee } from '@/config/constants/registrationFee'
+import { registrationFee } from '@/config/constants/registration_constants'
 
 
 export default function Registration() {
-    const { account,library } = useEthers();
+    const { account, library } = useEthers();
     const [file_name, setFileName] = useState('No file Chosen')
     const [errors, setErrors] = useState({})
     const [profile_picture, setProfilePicture] = useState('')
@@ -30,27 +30,39 @@ export default function Registration() {
         setFileName(e.target.files[0].name)
         toBase64(e.target.files[0]).then((data) => {
             setProfilePicture(data)
-            console.log(data)
         })
     }
 
 
     const handleTransfer = async () => {
-        if (!account){
+        if (!account) {
             openModal();
             return;
         }
 
         let signer = library.getSigner();
         let contract = new ethers.Contract("0x4379FAaAFEf1A8B7e0949f4BD1F5f552fcaA67a0", ERC_ABI, signer);
-        const balance = await contract.balanceOf("0xd302f9AA2a57eA2516835A6e36CC168ae0365B37");
-        
-        if (balance > registrationFee){
-            await contract.transfer("0xd302f9AA2a57eA2516835A6e36CC168ae0365B37", 8000000000000000000n);
-            await contract.transfer("0xd302f9AA2a57eA2516835A6e36CC168ae0365B37", 2000000000000000000n);
+        const previous_balance = await contract.balanceOf("0xd302f9AA2a57eA2516835A6e36CC168ae0365B37");
+
+        if (previous_balance > registrationFee) {
+            try {
+                await contract.transfer("0xd302f9AA2a57eA2516835A6e36CC168ae0365B37", 80000000)
+                await contract.transfer("0xd302f9AA2a57eA2516835A6e36CC168ae0365B37", 20000000);
+            } catch (e) {
+                return;
+            }
         } else {
             alert("You don't have enough tokens to register");
         }
+
+
+        const updated_balance = await contract.balanceOf("0xd302f9AA2a57eA2516835A6e36CC168ae0365B37");
+
+        if (updated_balance === previous_balance - registrationFee) {
+            
+        }
+
+
     }
 
     const checkForm = async (e) => {
@@ -80,8 +92,8 @@ export default function Registration() {
         }
         if (contract_address === '') {
             errors.contract_address = 'Transaction address is required'
-        }  
-        
+        }
+
         handleTransfer();
 
 
@@ -135,19 +147,19 @@ export default function Registration() {
                             <div className="mb-5">
                                 <label className="label block mb-2" htmlFor="developer_name">Developer Name <span className="invalid-feedback">*</span></label>
                                 <input id="developer_name" name="developer_name" type="text" className="form-control" placeholder="Your name"
-                                onChange={(e)=>setDeveloperName(e.target.value)} defaultValue={developer_name} />
+                                    onChange={(e) => setDeveloperName(e.target.value)} defaultValue={developer_name} />
                                 <small v-if="errors.developer_wallet" className="block mt-2 invalid-feedback">{errors.developer_wallet}</small>
                             </div>
                             <div className="mb-5">
                                 <label className="label block mb-2" htmlFor="scam_type">Description <span className="invalid-feedback">*</span></label>
                                 <textarea id="scam_type" name="scam_type" className="form-control" rows="4" placeholder="Tell us few things about you"
-                                onChange={(e)=>setScamType(e.target.value)} defaultValue={scam_type}></textarea>
+                                    onChange={(e) => setScamType(e.target.value)} defaultValue={scam_type}></textarea>
                                 {errors.scam_type && <small className="block mt-2 invalid-feedback">{errors.scam_type}</small>}
                             </div>
                             <div className="mb-5">
                                 <label className="label block mb-2" htmlFor="developer_wallet">Developer Wallet <span className="invalid-feedback">*</span></label>
                                 <input id="developer_wallet" name="developer_wallet" type="text" className="form-control" placeholder="Please input a valid address"
-                                onChange={(e)=>setDeveloperWallet(e.target.value)} value={developer_wallet} />
+                                    onChange={(e) => setDeveloperWallet(e.target.value)} value={developer_wallet} />
                                 {errors.developer_wallet && <small className="block mt-2 invalid-feedback">{errors.developer_wallet}</small>}
                             </div>
 
@@ -157,7 +169,7 @@ export default function Registration() {
                                     <div className="input-group">
                                         <div className="input-addon input-addon-prepend input-group-item !bg-[#CA8A04] dark:!bg-[#292524] !text-white dark:!text-[#57534E]">@</div>
                                         <input id="telegram_username" type="text" name="telegram_username" className="form-control input-group-item" placeholder="Telegram Username"
-                                        onChange={(e)=>setDeveloperTelegram(e.target.value)} value={developer_telegram} />
+                                            onChange={(e) => setDeveloperTelegram(e.target.value)} value={developer_telegram} />
                                     </div>
                                     {errors.telegram_username && <small className="block mt-2 invalid-feedback">{errors.telegram_username}</small>}
                                 </div>
@@ -165,8 +177,8 @@ export default function Registration() {
                                     <label className="label block mb-2" htmlFor="twitter_username">Twitter Username</label>
                                     <div className="input-group">
                                         <div className="input-addon input-addon-prepend input-group-item !bg-[#CA8A04] dark:!bg-[#292524] !text-white dark:!text-[#57534E]">@</div>
-                                        <input id="twitter_username" type="text" name="twitter_username" className="form-control input-group-item" placeholder="Twitter Username" 
-                                            onChange={(e)=>setDeveloperTwitter(e.target.value)} value={developer_twitter}
+                                        <input id="twitter_username" type="text" name="twitter_username" className="form-control input-group-item" placeholder="Twitter Username"
+                                            onChange={(e) => setDeveloperTwitter(e.target.value)} value={developer_twitter}
                                         />
                                     </div>
                                 </div>
@@ -177,7 +189,7 @@ export default function Registration() {
                                     <label className="label block mb-2" htmlFor="telegram_project">Telegram Project <span className="invalid-feedback">*</span></label>
                                     <div className="input-group">
                                         <input id="telegram_project" type="text" name="telegram_project" className="form-control input-group-item" placeholder="Telegram Project"
-                                        onChange={(e)=>setTelegramProject(e.target.value)} value={telegram_project} />
+                                            onChange={(e) => setTelegramProject(e.target.value)} value={telegram_project} />
                                     </div>
                                     {errors.telegram_username && <small className="block mt-2 invalid-feedback">{errors.telegram_username}</small>}
                                 </div>
@@ -185,7 +197,7 @@ export default function Registration() {
                                     <label className="label block mb-2" htmlFor="website">Website</label>
                                     <div className="input-group">
                                         <input id="website" type="text" name="website" className="form-control input-group-item" placeholder="Website"
-                                        onChange={(e)=>setDeveloperWebsite(e.target.value)} value={developer_website} />
+                                            onChange={(e) => setDeveloperWebsite(e.target.value)} value={developer_website} />
                                     </div>
                                 </div>
                             </div>
@@ -193,7 +205,7 @@ export default function Registration() {
                             <div className="mb-5">
                                 <label className="label block mb-2" htmlFor="title">Contract Address</label>
                                 <input id="transactions" name="transactions" type="text" className="form-control" placeholder="Transaction Address"
-                                onChange={(e)=>setContractAddress(e.target.value)} value={contract_address} />
+                                    onChange={(e) => setContractAddress(e.target.value)} value={contract_address} />
                             </div>
                             <div className="mb-5">
                                 <small>All fields with (<span className="invalid-feedback">*</span>) are Required.</small>

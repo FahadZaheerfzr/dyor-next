@@ -1,10 +1,16 @@
+import { Config } from '@/config/constants/config';
+import { ethers } from 'ethers';
 import { useTheme } from 'next-themes';
 import Image from 'next/image'
 import React, { useEffect, useRef, useState } from 'react'
 import { useScreenshot } from 'use-react-screenshot'
 import Graph from './Graph'
+import CustomChart from './TradingView';
+import ERC_ABI from '@/config/abi/ERC20.json'
+import { useEthers } from '@usedapp/core'
 
 export default function Charts() {
+    const { library } = useEthers();
     const { theme } = useTheme();
     const [profile, setProfile] = useState(true)
     const [currentCharts, setCurrentCharts] = useState(true)
@@ -12,14 +18,33 @@ export default function Charts() {
     const [tablemenu, setTableMenu] = useState(false)
     const graph = useRef(null)
     const [image, takeScreenShot] = useScreenshot();
-
+    const [symbol, setSymbol] = useState("")
+    const [projects, setProjects] = useState()
     const getImage = () => takeScreenShot(graph.current);
+
+    const handleSymbol = async () => {
+        try {
+            let signer = await library.getSigner("0xd302f9AA2a57eA2516835A6e36CC168ae0365B37");
+            let contract = new ethers.Contract("0xdd534480782ecf53e4a5257b0f3c37702a0bad61", ERC_ABI, signer)
+            let symbol = await contract.symbol()
+            setSymbol(`${symbol}/BNB`)
+        } catch (err) {
+            setSymbol("DOGE")
+            console.log(err)
+        }
+
+    }
+
+    useEffect(() => {
+        if (library) {
+            handleSymbol()
+        }
+    }, [library])
 
 
 
     useEffect(() => {
         getImage()
-        console.log("Theme changed")
     }, [theme])
 
     const toggleProfile = (bool) => {
@@ -33,8 +58,6 @@ export default function Charts() {
 
     const toggleMenu = (bool) => {
         setMenuOpen(bool)
-
-        console.log(bool)
     }
 
     const toggleTableMenu = (bool) => {
@@ -178,11 +201,12 @@ export default function Charts() {
                             </div>
                             <div className=" col-span-7 px-8 h-full w-full flex justify-center items-center" >
                                 <div className='h-full w-full flex justify-center items-center  dark:bg-primary' ref={graph}>
-                                    <Graph id="graph" />
+                                    {symbol !== "" && <CustomChart symbol={symbol} />}
                                 </div>
                             </div>
                         </div>
                     </div>
+                    {projects &&
                     <div className=" row-span-2 my-10">
                         <div className="grid grid-cols-4 gap-3">
                             <div className="col-span-1 h-full w-full flex justify-center items-center">
@@ -209,10 +233,11 @@ export default function Charts() {
                                 </div>
                             </div>
                         </div>
-                    </div>
+                    </div>}
                 </div>
-                <div className="w-full flex justify-center items-center">
-                    <button className=" rounded-3xl bg-white dark:bg-[#1C1917] text-[#292524] text-xs font-bold uppercase py-2 px-5 infobox-shadow">
+                <div className="w-full mt-14 flex justify-center items-center">
+                    <button className=" rounded-3xl bg-white dark:bg-[#1C1917] text-[#292524] text-xs font-bold uppercase py-2 px-5 infobox-shadow"
+                        onClick={handleSymbol}>
                         See More
                     </button>
                 </div>
@@ -384,6 +409,7 @@ export default function Charts() {
                     </div>
                 </div>
             </div>
+
         </main>
     )
 }

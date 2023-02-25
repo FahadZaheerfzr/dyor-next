@@ -52,7 +52,6 @@ const Home = () => {
       setProjectName('')
       setProjectContract('')
       setTransactions('')
-      console.log('Form is valid')
     }
   }
 
