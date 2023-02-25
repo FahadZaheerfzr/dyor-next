@@ -20,7 +20,7 @@ model developer{
   developer_website String
   developer_twitter String
   developer_telegram String
-  contract_address String
+  contract_address String @unique
   telegram_project String
   number_of_projects Int @default(1)
   votes Int @default(0)

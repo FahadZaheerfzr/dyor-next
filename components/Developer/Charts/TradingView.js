@@ -1,11 +1,13 @@
 // TradingViewWidget.jsx
 
+import { useTheme } from 'next-themes';
 import Link from 'next/link';
 import React, { useEffect, useRef } from 'react';
 
 let tvScriptLoadingPromise;
 
 export default function TradingViewWidget({symbol}) {
+    const {theme} = useTheme()
     const onLoadScriptRef = useRef();
 
     useEffect(
@@ -38,14 +40,14 @@ export default function TradingViewWidget({symbol}) {
                         symbol: symbol,
                         interval: "D",
                         timezone: "exchange",
-                        theme: "light",
+                        theme: theme === 'dark' ? 'Dark' : 'Light',
                         style: "1",
                         toolbar_bg: "#f1f3f6",
                         withdateranges: true,
                         hide_side_toolbar: false,
                         allow_symbol_change: false,
                         save_image: false,
-                        studies: ["ROC@tv-basicstudies", "StochasticRSI@tv-basicstudies", "MASimple@tv-basicstudies"],
+                        //studies: ["ROC@tv-basicstudies", "StochasticRSI@tv-basicstudies", "MASimple@tv-basicstudies"],
                         show_popup_button: true,
                         popup_width: "1000",
                         popup_height: "650",
@@ -54,16 +56,16 @@ export default function TradingViewWidget({symbol}) {
                 }
             }
         },
-        []
+        [theme]
     );
 
     return (
         <div className='tradingview-widget-container w-full'>
             <div id='technical-analysis-chart-demo' />
             <div className="tradingview-widget-copyright">
-                <Link href="https://www.tradingview.com/symbols/AAPL/" rel="noopener" target="_blank">
+                <Link href={`https://www.tradingview.com/symbols/${symbol}`} rel="noopener" target="_blank">
                     <span className="blue-text">
-                        AAPL stock chart
+                        {symbol} stock chart
                     </span>
                 </Link> by TradingView
             </div>

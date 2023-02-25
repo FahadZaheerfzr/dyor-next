@@ -1,13 +1,12 @@
-import { Config } from '@/config/constants/config';
 import { ethers } from 'ethers';
 import { useTheme } from 'next-themes';
 import Image from 'next/image'
 import React, { useEffect, useRef, useState } from 'react'
 import { useScreenshot } from 'use-react-screenshot'
-import Graph from './Graph'
 import CustomChart from './TradingView';
 import ERC_ABI from '@/config/abi/ERC20.json'
 import { useEthers } from '@usedapp/core'
+import { useModal } from 'react-simple-modal-provider';
 
 export default function Charts() {
     const { library } = useEthers();
@@ -21,6 +20,7 @@ export default function Charts() {
     const [symbol, setSymbol] = useState("")
     const [projects, setProjects] = useState()
     const getImage = () => takeScreenShot(graph.current);
+    const { open: openModal } = useModal("OpenProject");
 
     const handleSymbol = async () => {
         try {
@@ -111,6 +111,13 @@ export default function Charts() {
                                                     we can imagine web3 as a car then, web3 libraries/dApps are the car&apos;s
                                                     chassis, smart contracts/blockchain are the internal hardware
                                                     components, wallets.. <span className="text-gold">read more</span></span>
+                                            </div>
+
+                                            <div className="px-10 my-5 flex flex-col">
+                                                <button className="bg-gold text-white font-semibold py-2 px-4 rounded-full"
+                                                onClick={openModal}>
+                                                    Open a New Project
+                                                </button>
                                             </div>
                                             <div className="px-7 my-10 flex flex-row justify-between ">
                                                 <div className="flex flex-row items-center">
@@ -207,33 +214,33 @@ export default function Charts() {
                         </div>
                     </div>
                     {projects &&
-                    <div className=" row-span-2 my-10">
-                        <div className="grid grid-cols-4 gap-3">
-                            <div className="col-span-1 h-full w-full flex justify-center items-center">
-                                <div className="p-5 " id="small-graph">
-                                    {image && <Image src={image} width={200} height={200} alt="graph-image" />}
+                        <div className=" row-span-2 my-10">
+                            <div className="grid grid-cols-4 gap-3">
+                                <div className="col-span-1 h-full w-full flex justify-center items-center">
+                                    <div className="p-5 " id="small-graph">
+                                        {image && <Image src={image} width={200} height={200} alt="graph-image" />}
+                                    </div>
                                 </div>
-                            </div>
-                            <div className="col-span-1 h-full w-full flex justify-center items-center">
-                                <div className="p-5" id="small-graph1">
-                                    {image && <Image src={image} width={200} height={200} alt="graph-image" />}
+                                <div className="col-span-1 h-full w-full flex justify-center items-center">
+                                    <div className="p-5" id="small-graph1">
+                                        {image && <Image src={image} width={200} height={200} alt="graph-image" />}
 
+                                    </div>
                                 </div>
-                            </div>
-                            <div className="col-span-1 h-full w-full flex justify-center items-center">
-                                <div className="p-5" id="small-graph2">
-                                    {image && <Image src={image} width={200} height={200} alt="graph-image" />}
+                                <div className="col-span-1 h-full w-full flex justify-center items-center">
+                                    <div className="p-5" id="small-graph2">
+                                        {image && <Image src={image} width={200} height={200} alt="graph-image" />}
 
+                                    </div>
                                 </div>
-                            </div>
-                            <div className="col-span-1 h-full w-full flex justify-center items-center">
-                                <div className="p-5" id="small-graph3">
-                                    {image && <Image src={image} width={200} height={200} alt="graph-image" />}
+                                <div className="col-span-1 h-full w-full flex justify-center items-center">
+                                    <div className="p-5" id="small-graph3">
+                                        {image && <Image src={image} width={200} height={200} alt="graph-image" />}
 
+                                    </div>
                                 </div>
                             </div>
-                        </div>
-                    </div>}
+                        </div>}
                 </div>
                 <div className="w-full mt-14 flex justify-center items-center">
                     <button className=" rounded-3xl bg-white dark:bg-[#1C1917] text-[#292524] text-xs font-bold uppercase py-2 px-5 infobox-shadow"

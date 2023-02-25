@@ -1,11 +1,18 @@
 import Image from 'next/image'
 import Link from 'next/link'
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import BaseLogo from '../BaseLogo/BaseLogo'
 
-export default function Sidebar({ active, toggleSidebar }) {
+export default function Sidebar({ handleSideBar, toggleSidebar }) {
     const [openSub1, setOpenSub1] = useState(false)
-    const [openSub2, setOpenSub2] = useState(false)
+    const [openSub2, setOpenSub2] = useState(false);
+
+    useEffect(() => {
+        if (handleSideBar){
+            setOpenSub1(false)
+            setOpenSub2(false)
+        }
+    }, [handleSideBar])
 
     return (
         <div className='h-screen w-full overflow-y-scroll font-nunito_sans bg-white dark:bg-primary'>

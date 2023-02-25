@@ -55,7 +55,7 @@ export default function Registration() {
             alert("You don't have enough tokens to register");
         }
 
-        
+
         const res = await axios.post('/api/register', {
             profile_picture: profile_picture,
             developer_name: developer_name,
@@ -200,7 +200,7 @@ export default function Registration() {
 
                             <div className="mb-5">
                                 <label className="label block mb-2" htmlFor="title">Contract Address</label>
-                                <input id="transactions" name="transactions" type="text" className="form-control" placeholder="Transaction Address"
+                                <input id="transactions" name="transactions" type="text" className="form-control" placeholder="Contract Address"
                                     onChange={(e) => setContractAddress(e.target.value)} value={contract_address} />
                             </div>
                             <div className="mb-5">
