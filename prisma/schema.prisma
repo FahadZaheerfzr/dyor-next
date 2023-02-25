@@ -25,6 +25,7 @@ model developer{
   number_of_projects Int @default(1)
   votes Int @default(0)
   audit Boolean @default(false)
+  closed Boolean @default(false)
   created_at DateTime @default(now())
   updated_at DateTime @default(now())
   deleted_at DateTime? 

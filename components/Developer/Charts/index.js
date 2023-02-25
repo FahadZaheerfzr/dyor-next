@@ -9,7 +9,7 @@ import { useEthers } from '@usedapp/core'
 import { useModal } from 'react-simple-modal-provider';
 
 export default function Charts() {
-    const { library } = useEthers();
+    const { account, library } = useEthers();
     const { theme } = useTheme();
     const [profile, setProfile] = useState(true)
     const [currentCharts, setCurrentCharts] = useState(true)
@@ -22,14 +22,26 @@ export default function Charts() {
     const getImage = () => takeScreenShot(graph.current);
     const { open: openModal } = useModal("OpenProject");
 
+
+    const fetchDeveloper = async () => {
+        if (account) {
+            try {
+                let data = await response.json()
+                setProjects(data)
+            } catch (err) {
+                console.log(err)
+            }
+        }
+    }
+
     const handleSymbol = async () => {
         try {
             let signer = await library.getSigner("0xd302f9AA2a57eA2516835A6e36CC168ae0365B37");
             let contract = new ethers.Contract("0xdd534480782ecf53e4a5257b0f3c37702a0bad61", ERC_ABI, signer)
             let symbol = await contract.symbol()
-            setSymbol(`${symbol}/BNB`)
+            //setSymbol(`${symbol}/BNB`)
         } catch (err) {
-            setSymbol("DOGE")
+            setSymbol("RBAUSD_48E54C")
             console.log(err)
         }
 
@@ -115,7 +127,7 @@ export default function Charts() {
 
                                             <div className="px-10 my-5 flex flex-col">
                                                 <button className="bg-gold text-white font-semibold py-2 px-4 rounded-full"
-                                                onClick={openModal}>
+                                                    onClick={openModal}>
                                                     Open a New Project
                                                 </button>
                                             </div>
@@ -242,12 +254,13 @@ export default function Charts() {
                             </div>
                         </div>}
                 </div>
-                <div className="w-full mt-14 flex justify-center items-center">
-                    <button className=" rounded-3xl bg-white dark:bg-[#1C1917] text-[#292524] text-xs font-bold uppercase py-2 px-5 infobox-shadow"
-                        onClick={handleSymbol}>
-                        See More
-                    </button>
-                </div>
+                {projects &&
+                    <div className="w-full mt-14 flex justify-center items-center">
+                        <button className=" rounded-3xl bg-white dark:bg-[#1C1917] text-[#292524] text-xs font-bold uppercase py-2 px-5 infobox-shadow"
+                            onClick={handleSymbol}>
+                            See More
+                        </button>
+                    </div>}
             </div>
 
             <div className="card !bg-[#F9F9F9] dark:!bg-[#292524] py-10 mt-[50px] mb-10 lg:hidden flex items-center justify-center relative">
@@ -318,8 +331,7 @@ export default function Charts() {
                 <div className={` !bg-[#F9F9F9] dark:!bg-[#292524] w-full mt-10 flex flex-col p-5 ${!profile && currentCharts ? "block" : "hidden"}`}>
                     <div className="w-full">
                         <div className=" my-5" >
-                            <img className="hidden dark:block" src="/images/mobile/graph.png" />
-                            <img className="dark:hidden" src="/images/mobile/graph-white.png" />
+                            {symbol !== "" && <CustomChart symbol={symbol} />}
                         </div>
                     </div>
                     <div className="rounded-3xl !bg-white dark:!bg-[#1C1917] w-full relative p-5">

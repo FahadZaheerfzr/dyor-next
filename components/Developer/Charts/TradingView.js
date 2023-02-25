@@ -60,14 +60,17 @@ export default function TradingViewWidget({symbol}) {
     );
 
     return (
-        <div className='tradingview-widget-container w-full'>
+        <div className='tradingview-widget-container w-full '>
             <div id='technical-analysis-chart-demo' />
             <div className="tradingview-widget-copyright">
                 <Link href={`https://www.tradingview.com/symbols/${symbol}`} rel="noopener" target="_blank">
-                    <span className="blue-text">
+                    <span className="text-muted font-bold font-nunito_sans">
                         {symbol} stock chart
                     </span>
-                </Link> by TradingView
+                </Link> 
+                <span className='text-muted font-bold ml-1 font-nunito_sans'>
+                    by TradingView
+                </span>
             </div>
         </div>
     );
