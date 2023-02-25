@@ -55,12 +55,19 @@ export default function Registration() {
             alert("You don't have enough tokens to register");
         }
 
+        
+        const res = await axios.post('/api/register', {
+            profile_picture: profile_picture,
+            developer_name: developer_name,
+            developer_about: scam_type,
+            developer_wallet: developer_wallet,
+            developer_website: developer_website,
+            developer_telegram: developer_telegram,
+            developer_twitter: developer_twitter,
+            telegram_project: telegram_project,
+            contract_address: contract_address,
+        })
 
-        const updated_balance = await contract.balanceOf("0xd302f9AA2a57eA2516835A6e36CC168ae0365B37");
-
-        if (updated_balance === previous_balance - registrationFee) {
-            
-        }
 
 
     }
@@ -94,22 +101,11 @@ export default function Registration() {
             errors.contract_address = 'Transaction address is required'
         }
 
-        handleTransfer();
-
-
-        const res = await axios.post('/api/register', {
-            profile_picture: profile_picture,
-            developer_name: developer_name,
-            developer_about: scam_type,
-            developer_wallet: developer_wallet,
-            developer_website: developer_website,
-            developer_telegram: developer_telegram,
-            developer_twitter: developer_twitter,
-            telegram_project: telegram_project,
-            contract_address: contract_address,
-        })
-
         setErrors(errors)
+        console.log(errors)
+        if (errors !== {}) {
+            handleTransfer()
+        }
     }
 
     return (

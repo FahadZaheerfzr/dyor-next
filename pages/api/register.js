@@ -1,4 +1,6 @@
 
+import { PrismaClient } from "@prisma/client";
+
 export default async function handler(req, res) {
 
   // Get the data from the request body
@@ -15,7 +17,8 @@ export default async function handler(req, res) {
   const prisma = new PrismaClient();
 
   // Create a new user in the database
-  const user = await prisma.developer.create({
+  try{
+  const developer = await prisma.developer.create({
     data: {
       profile_picture: profile_picture,
       developer_name: developer_name,
@@ -29,9 +32,13 @@ export default async function handler(req, res) {
     },
   })
 
+  // Return the user data
+  res.status(200).json(developer);
+  } catch (error) {
+    console.log(error)
+  }
 
 
 
 
-  res.status(200).json({ name: 'John Doe' })
 }
