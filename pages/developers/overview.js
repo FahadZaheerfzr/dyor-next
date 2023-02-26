@@ -10,19 +10,17 @@ const OverviewPage = () => {
   useEffect(() => {
     const fetchData = async () => {
       const response = await fetch("/api/fetch_developers");
-      const fetch_data = await response.json();
+      const res_data = await response.json();
       let tags = ["BSC"]
-      for (let i = 0; i < fetch_data.length; i++) {
-        fetch_data[i].tags = tags;
+      for (let i = 0; i < res_data.length; i++) {
+        res_data[i].tags = tags;
       }
-
-      let topVoted = fetch_data.sort((a, b) => b.votes - a.votes).slice(0, 5);
-
-      setData(fetch_data);
-
-
+      console.log(res_data)
+      let topVoted = res_data.sort((a, b) => b.votes - a.votes).slice(0, 5);
+      setData(res_data);
       setTopVoted(topVoted);
     };
+
     fetchData();
   }, []);
 

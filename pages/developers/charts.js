@@ -5,7 +5,7 @@ import React from 'react'
 export default function charts() {
   return (
     <BaseLayout title={"Charts"}>
-        <Charts />
+      <Charts />
     </BaseLayout>
   )
 }
