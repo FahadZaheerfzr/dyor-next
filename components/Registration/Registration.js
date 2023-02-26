@@ -25,12 +25,20 @@ export default function Registration() {
     const { open: openModal } = useModal("ConnectionModal");
 
 
+    const uploadToServer = async (image) => {
+        const body = new FormData();
+        body.append("file", image);
+        const response = await fetch("/api/handleFile", {
+            method: "POST",
+            body
+        });
+    };
+
+
 
     const updateFileName = (e) => {
         setFileName(e.target.files[0].name)
-        toBase64(e.target.files[0]).then((data) => {
-            setProfilePicture(data)
-        })
+        setProfilePicture(e.target.files[0])
     }
 
 
@@ -56,8 +64,13 @@ export default function Registration() {
         }
 
 
+        uploadToServer(profile_picture);
+
+        
+        console.log(profile_picture.name)
+
         const res = await axios.post('/api/register', {
-            profile_picture: profile_picture,
+            profile_picture: profile_picture.name,
             developer_name: developer_name,
             developer_about: scam_type,
             developer_wallet: developer_wallet,
@@ -67,6 +80,8 @@ export default function Registration() {
             telegram_project: telegram_project,
             contract_address: contract_address,
         })
+
+
 
 
 

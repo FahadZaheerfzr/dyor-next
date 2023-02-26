@@ -113,7 +113,8 @@ export default function Charts() {
                                                     <img className="" src="/images/Vector.png" />
                                                 </div>
                                                 <div className="flex flex-col justify-center text-center">
-                                                    {developer?.profile_picture ? "Developer Picture"
+                                                    {developer?.profile_picture ?
+                                                        <Image className='rounded-lg' width={130} height={130} src={`/uploads/${developer?.profile_picture}`} alt="profile-picture" />
                                                         :
                                                         <img src="/images/profile-pic.png" />
                                                     }
