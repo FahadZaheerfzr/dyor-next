@@ -26,6 +26,7 @@ model developer{
   votes Int @default(0)
   audit Boolean @default(false)
   closed Boolean @default(false)
+  verified Boolean @default(true)
   created_at DateTime @default(now())
   updated_at DateTime @default(now())
   deleted_at DateTime? 

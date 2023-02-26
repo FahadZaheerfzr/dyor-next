@@ -3,6 +3,7 @@ import { useState, useEffect } from "react";
 
 import Image from "next/image";
 import { buttons, tags_colors } from "@/data/developers";
+import VoteIconSVG from "@/svg/VoteIcon";
 
 const Overview = ({ data, topVoted }) => {
   const [page, setPage] = useState(1);
@@ -151,14 +152,14 @@ const Overview = ({ data, topVoted }) => {
               </div>
 
               <div>
-                {topVoted.map((item, index) => (
+                {topVoted.map((developer, index) => (
                   <div
                     className="px-6 py-4 flex items-center justify-between"
                     key={index}
                   >
                     <div className="flex w-1/3 md:w-1/4 lg:w-1/6">
                       <Image
-                        src={require(`/public/images/overview/${item.icon}`)}
+                        src={`/uploads/${developer.profile_picture}`}
                         alt="icon"
                         width={40}
                         height={40}
@@ -166,10 +167,10 @@ const Overview = ({ data, topVoted }) => {
                       <div className="flex flex-col ml-1 lg:ml-4">
                         <div className="flex items-center">
                           <span className="text-[8px] md:text-sm lg:text-base text-[#57534E] font-extrabold">
-                            {item.name}
+                            {developer.developer_name}
                           </span>
 
-                          {item.verified && (
+                          {developer.verified && (
                             <Image
                               className="ml-1 lg:ml-2 w-3 h-3"
                               src={require("/public/images/overview/verified.svg")}
@@ -182,7 +183,7 @@ const Overview = ({ data, topVoted }) => {
 
                         <div className="flex mt-1">
                           <div className="flex">
-                            {item.tags.map((tag, index) => (
+                            {developer.tags.map((tag, index) => (
                               <div
                                 className="sm:py-[1px] px-1 lg:px-2 lg:mr-[6px] scale-75 lg:scale-100"
                                 key={index}
@@ -205,34 +206,29 @@ const Overview = ({ data, topVoted }) => {
                     {
                       <div className="hidden lg:flex lg:justify-around lg:w-1/3">
                         <div className="text-sm text-[#78716C] flex justify-center font-extrabold">
-                          <span>{item.project}</span>
+                          <span>{developer.telegram_project}</span>
                         </div>
 
                         <div className="text-sm text-[#CA8A04] flex justify-center font-extrabold">
-                          <span>{item.poocoin.slice(0, 12)}...</span>
+                          <span>{developer.developer_website.slice(0, 12)}...</span>
                         </div>
                       </div>
                     }
 
                     <div className="text-xs md:text-sm lg:ml-0 ml-10 text-[#78716C] w-1/3 md:w-1/4 lg:w-1/6 flex justify-center font-extrabold">
-                      <span>{item.website.slice(0, 12)}...</span>
+                      <span>{developer.developer_website.slice(0, 12)}...</span>
                     </div>
 
                     <div className="text-sm text-[#78716C] hidden md:w-1/4 lg:w-1/6 md:flex justify-center font-extrabold">
-                      <span>{item.no_of_projects}</span>
+                      <span>{developer.number_of_projects}</span>
                     </div>
 
                     <div className="w-1/3 md:w-1/4 lg:w-1/6 flex justify-center">
-                      <div className="flex items-center gap-x-2 px-[5px] md:px-[10px] py-3 border border-[#CA8A04] rounded-md">
-                        <Image
-                          src={require("/public/images/overview/vote-icon.svg")}
-                          alt="vote-icon"
-                          width={20}
-                          height={20}
-                        />
+                      <div className="flex min-w-[100px] items-center justify-center group cursor-pointer gap-x-2 px-[5px] md:px-[10px] py-3 border border-[#CA8A04] rounded-md hover:bg-gold text-[#CA8A04] hover:text-white">
+                        <VoteIconSVG className="fill-gold group-hover:fill-white" />
 
-                        <span className="text-[#CA8A04] font-semibold text-xs md:text-base">
-                          {item.votes}
+                        <span className=" font-semibold text-xs md:text-base">
+                          {developer.votes}
                         </span>
                       </div>
                     </div>
@@ -355,25 +351,25 @@ const Overview = ({ data, topVoted }) => {
               </div>
             </div>
             <div>
-              {paginatedData.map((item, index) => (
+              {paginatedData.map((developer, index) => (
                 <div
                   className="px-6 py-4 flex items-center justify-between"
                   key={index}
                 >
                   <div className="flex w-1/3 md:w-1/4 lg:w-1/6">
                     <Image
-                      src={require(`/public/images/overview/${item.icon}`)}
-                      alt="icon"
+                      src={`/uploads/${developer.profile_picture}`}
+                      alt={developer.profile_picture}
                       width={40}
                       height={40}
                     />
                     <div className="flex flex-col ml-1 lg:ml-4">
                       <div className="flex items-center">
                         <span className="text-[8px] md:text-sm lg:text-base text-[#57534E] font-extrabold">
-                          {item.name}
+                          {developer.developer_name}
                         </span>
 
-                        {item.verified && (
+                        {developer.verified && (
                           <Image
                             className="ml-1 lg:ml-2 w-3 h-3"
                             src={require("/public/images/overview/verified.svg")}
@@ -386,7 +382,7 @@ const Overview = ({ data, topVoted }) => {
 
                       <div className="flex mt-1">
                         <div className="flex">
-                          {item.tags.map((tag, index) => (
+                          {developer.tags.map((tag, index) => (
                             <div
                               className="py-[1px] px-1 lg:px-2 lg:mr-[6px] scale-75 lg:scale-100"
                               key={index}
@@ -406,33 +402,28 @@ const Overview = ({ data, topVoted }) => {
                     </div>
                   </div>
 
-                  <div className="text-sm w-1/6 lg:flex hidden justify-center font-extrabold">
-                    <span>{item.project}</span>
+                  <div className="text-sm w-1/6 lg:flex hidden justify-center text-[#57534E] font-extrabold">
+                    <span>{developer.telegram_project}</span>
                   </div>
 
                   <div className="text-sm text-[#CA8A04] w-1/6 lg:flex justify-center hidden font-extrabold">
-                    <span>{item.poocoin.slice(0, 12)}...</span>
+                    <span>{developer.developer_website.slice(0, 12)}...</span>
                   </div>
 
                   <div className="text-sm ml-10 text-[#78716C] w-1/3 md:w-1/4 lg:w-1/6 flex justify-center font-extrabold">
-                    <span>{item.website.slice(0, 12)}...</span>
+                    <span>{developer.developer_website.slice(0, 12)}...</span>
                   </div>
 
                   <div className="text-xs md:text-sm text-[#78716C] hidden md:w-1/4 lg:w-1/6 md:flex justify-center font-extrabold">
-                    <span>{item.no_of_projects}</span>
+                    <span>{developer.number_of_projects}</span>
                   </div>
 
                   <div className="w-1/3 md:w-1/4 lg:w-1/6 flex justify-center">
-                    <div className="flex items-center gap-x-2 px-[5px] md:px-[10px] py-3 border border-[#CA8A04] rounded-md">
-                      <Image
-                        src={require("/public/images/overview/vote-icon.svg")}
-                        alt="vote-icon"
-                        width={20}
-                        height={20}
-                      />
+                    <div className="flex min-w-[100px] items-center justify-center group cursor-pointer gap-x-2 px-[5px] md:px-[10px] py-3 border border-[#CA8A04] rounded-md hover:bg-gold text-[#CA8A04] hover:text-white">
+                      <VoteIconSVG className="fill-gold group-hover:fill-white" />
 
-                      <span className="text-[#CA8A04] font-semibold text-xs md:text-base">
-                        {item.votes}
+                      <span className=" font-semibold text-xs md:text-base">
+                        {developer.votes}
                       </span>
                     </div>
                   </div>
