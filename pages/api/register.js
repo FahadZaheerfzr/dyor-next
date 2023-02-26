@@ -1,4 +1,4 @@
-
+import { dataURLtoFile } from "@/utils/FileHandler";
 import { PrismaClient } from "@prisma/client";
 
 export default async function handler(req, res) {
@@ -16,25 +16,33 @@ export default async function handler(req, res) {
 
   const prisma = new PrismaClient();
 
-  // Create a new user in the database
-  try{
-  const developer = await prisma.developer.create({
-    data: {
-      profile_picture: profile_picture,
-      developer_name: developer_name,
-      developer_about: developer_about,
-      developer_wallet: developer_wallet,
-      developer_website: developer_website,
-      developer_twitter: developer_twitter,
-      developer_telegram: developer_telegram,
-      contract_address: contract_address,
-      telegram_project: telegram_project,
-    },
-  })
+  // console.log(req.body.profile_picture)
 
-  // Return the user data
-  res.status(200).json(developer);
-  } catch (error) {
-    console.log(error)
-  }
+  const file = dataURLtoFile(profile_picture, developer_name)
+  console.log(file.name)
+  // Create a new user in the database
+  // try{
+  // const developer = await prisma.developer.create({
+  //   data: {
+  //     profile_picture: fileName,
+  //     developer_name: developer_name,
+  //     developer_about: developer_about,
+  //     developer_wallet: developer_wallet,
+  //     developer_website: developer_website,
+  //     developer_twitter: developer_twitter,
+  //     developer_telegram: developer_telegram,
+  //     contract_address: contract_address,
+  //     telegram_project: telegram_project,
+  //   },
+  // })
+
+
+  // // Return the user data
+  // res.status(200).json(developer);
+  // } catch (error) {
+  //  console.log(error)
+  // }
+
+  res.status(200).json({message: "success"});
+
 }

@@ -2,14 +2,12 @@ import React from "react";
 import { useState, useEffect } from "react";
 
 import Image from "next/image";
-import { data, buttons, tags_colors, topVoted } from "@/data/developers";
+import { buttons, tags_colors } from "@/data/developers";
 
-const Overview = () => {
+const Overview = ({ data, topVoted }) => {
   const [page, setPage] = useState(1);
   const [perPage, setPerPage] = useState(10);
-  const [paginatedData, setPaginatedData] = useState(
-    data.slice((page - 1) * perPage, page * perPage)
-  );
+  const [paginatedData, setPaginatedData] = useState();
   const [optionShow, setOptionShow] = useState(false);
   const [optionSelected, setOptionSelected] = useState(10);
   const [active, setActive] = useState(0);
@@ -52,6 +50,14 @@ const Overview = () => {
   const showOption = (val) => {
     setOptionShow(val);
   };
+
+
+  useEffect(() => {
+    if (data) {
+      setPaginatedData(data.slice((page - 1) * perPage, page * perPage))
+    }
+
+  }, [data]);
 
   return (
     <main className="workspace font-nunito_sans">
@@ -110,133 +116,133 @@ const Overview = () => {
             </div>
           </div>
         </div>
+        {topVoted &&
+          <div className="mt-16 top-rated flex flex-col">
+            <span className="font-extrabold text-[36px] text-[#78716C]">
+              Top Voted
+            </span>
 
-        <div className="mt-16 top-rated flex flex-col">
-          <span className="font-extrabold text-[36px] text-[#78716C]">
-            Top Voted
-          </span>
-
-          <div className="w-full my-14 bg-white dark:bg-[#292524] rounded-2xl">
-            <div className="table-header text-xs md:text-sm lg:text-lg font-extrabold text-[#57534E] rounded-t-2xl">
-              <div className="py-7 w-full flex justify-between px-6">
-                <span className="w-1/3 md:w-1/4 lg:w-1/6 flex justify-center">
-                  Developer Name
-                </span>
-
-                <div className="lg:w-1/3 hidden lg:flex lg:justify-around">
-                  <span className="flex w-full justify-center">
-                    Current project TG
+            <div className="w-full my-14 bg-white dark:bg-[#292524] rounded-2xl">
+              <div className="table-header text-xs md:text-sm lg:text-lg font-extrabold text-[#57534E] rounded-t-2xl">
+                <div className="py-7 w-full flex justify-between px-6">
+                  <span className="w-1/3 md:w-1/4 lg:w-1/6 flex justify-center">
+                    Developer Name
                   </span>
-                  <span className="flex w-full justify-center">
-                    Poocoin project
+
+                  <div className="lg:w-1/3 hidden lg:flex lg:justify-around">
+                    <span className="flex w-full justify-center">
+                      Current project TG
+                    </span>
+                    <span className="flex w-full justify-center">
+                      Poocoin project
+                    </span>
+                  </div>
+
+                  <span className="w-1/3 md:w-1/4 lg:w-1/6 flex justify-center ml-6 lg:ml-0">
+                    Website
+                  </span>
+                  <span className="md:w-1/4 lg:w-1/6 hidden md:flex justify-center">
+                    Number of projects
+                  </span>
+                  <span className="w-1/3 md:w-1/4 lg:w-1/6 flex justify-center">
+                    Votes
                   </span>
                 </div>
-
-                <span className="w-1/3 md:w-1/4 lg:w-1/6 flex justify-center ml-6 lg:ml-0">
-                  Website
-                </span>
-                <span className="md:w-1/4 lg:w-1/6 hidden md:flex justify-center">
-                  Number of projects
-                </span>
-                <span className="w-1/3 md:w-1/4 lg:w-1/6 flex justify-center">
-                  Votes
-                </span>
               </div>
-            </div>
 
-            <div>
-              {data.map((item, index) => (
-                <div
-                  className="px-6 py-4 flex items-center justify-between"
-                  key={index}
-                >
-                  <div className="flex w-1/3 md:w-1/4 lg:w-1/6">
-                    <Image
-                      src={require(`/public/images/overview/${item.icon}`)}
-                      alt="icon"
-                      width={40}
-                      height={40}
-                    />
-                    <div className="flex flex-col ml-1 lg:ml-4">
-                      <div className="flex items-center">
-                        <span className="text-[8px] md:text-sm lg:text-base text-[#57534E] font-extrabold">
-                          {item.name}
-                        </span>
+              <div>
+                {topVoted.map((item, index) => (
+                  <div
+                    className="px-6 py-4 flex items-center justify-between"
+                    key={index}
+                  >
+                    <div className="flex w-1/3 md:w-1/4 lg:w-1/6">
+                      <Image
+                        src={require(`/public/images/overview/${item.icon}`)}
+                        alt="icon"
+                        width={40}
+                        height={40}
+                      />
+                      <div className="flex flex-col ml-1 lg:ml-4">
+                        <div className="flex items-center">
+                          <span className="text-[8px] md:text-sm lg:text-base text-[#57534E] font-extrabold">
+                            {item.name}
+                          </span>
 
-                        {item.verified && (
-                          <Image
-                            className="ml-1 lg:ml-2 w-3 h-3"
-                            src={require("/public/images/overview/verified.svg")}
-                            alt="verified"
-                            width={12}
-                            height={12}
-                          />
-                        )}
-                      </div>
+                          {item.verified && (
+                            <Image
+                              className="ml-1 lg:ml-2 w-3 h-3"
+                              src={require("/public/images/overview/verified.svg")}
+                              alt="verified"
+                              width={12}
+                              height={12}
+                            />
+                          )}
+                        </div>
 
-                      <div className="flex mt-1">
-                        <div className="flex">
-                          {item.tags.map((tag, index) => (
-                            <div
-                              className="sm:py-[1px] px-1 lg:px-2 lg:mr-[6px] scale-75 lg:scale-100"
-                              key={index}
-                              style={{
-                                backgroundColor: tags_colors[index].bg_color,
-                                color: tags_colors[index].text_color,
-                                borderRadius: tags_colors[index].radius,
-                              }}
-                            >
-                              <span className="text-[8px] md:text-[10px] font-extrabold">
-                                {tag}
-                              </span>
-                            </div>
-                          ))}
+                        <div className="flex mt-1">
+                          <div className="flex">
+                            {item.tags.map((tag, index) => (
+                              <div
+                                className="sm:py-[1px] px-1 lg:px-2 lg:mr-[6px] scale-75 lg:scale-100"
+                                key={index}
+                                style={{
+                                  backgroundColor: tags_colors[index].bg_color,
+                                  color: tags_colors[index].text_color,
+                                  borderRadius: tags_colors[index].radius,
+                                }}
+                              >
+                                <span className="text-[8px] md:text-[10px] font-extrabold">
+                                  {tag}
+                                </span>
+                              </div>
+                            ))}
+                          </div>
                         </div>
                       </div>
                     </div>
-                  </div>
 
-                  {
-                    <div className="hidden lg:flex lg:justify-around lg:w-1/3">
-                      <div className="text-sm text-[#78716C] flex justify-center font-extrabold">
-                        <span>{item.project}</span>
+                    {
+                      <div className="hidden lg:flex lg:justify-around lg:w-1/3">
+                        <div className="text-sm text-[#78716C] flex justify-center font-extrabold">
+                          <span>{item.project}</span>
+                        </div>
+
+                        <div className="text-sm text-[#CA8A04] flex justify-center font-extrabold">
+                          <span>{item.poocoin.slice(0, 12)}...</span>
+                        </div>
                       </div>
+                    }
 
-                      <div className="text-sm text-[#CA8A04] flex justify-center font-extrabold">
-                        <span>{item.poocoin.slice(0, 12)}...</span>
+                    <div className="text-xs md:text-sm lg:ml-0 ml-10 text-[#78716C] w-1/3 md:w-1/4 lg:w-1/6 flex justify-center font-extrabold">
+                      <span>{item.website.slice(0, 12)}...</span>
+                    </div>
+
+                    <div className="text-sm text-[#78716C] hidden md:w-1/4 lg:w-1/6 md:flex justify-center font-extrabold">
+                      <span>{item.no_of_projects}</span>
+                    </div>
+
+                    <div className="w-1/3 md:w-1/4 lg:w-1/6 flex justify-center">
+                      <div className="flex items-center gap-x-2 px-[5px] md:px-[10px] py-3 border border-[#CA8A04] rounded-md">
+                        <Image
+                          src={require("/public/images/overview/vote-icon.svg")}
+                          alt="vote-icon"
+                          width={20}
+                          height={20}
+                        />
+
+                        <span className="text-[#CA8A04] font-semibold text-xs md:text-base">
+                          {item.votes}
+                        </span>
                       </div>
                     </div>
-                  }
-
-                  <div className="text-xs md:text-sm lg:ml-0 ml-10 text-[#78716C] w-1/3 md:w-1/4 lg:w-1/6 flex justify-center font-extrabold">
-                    <span>{item.website.slice(0, 12)}...</span>
                   </div>
-
-                  <div className="text-sm text-[#78716C] hidden md:w-1/4 lg:w-1/6 md:flex justify-center font-extrabold">
-                    <span>{item.no_of_projects}</span>
-                  </div>
-
-                  <div className="w-1/3 md:w-1/4 lg:w-1/6 flex justify-center">
-                    <div className="flex items-center gap-x-2 px-[5px] md:px-[10px] py-3 border border-[#CA8A04] rounded-md">
-                      <Image
-                        src={require("/public/images/overview/vote-icon.svg")}
-                        alt="vote-icon"
-                        width={20}
-                        height={20}
-                      />
-
-                      <span className="text-[#CA8A04] font-semibold text-xs md:text-base">
-                        {item.votes}
-                      </span>
-                    </div>
-                  </div>
-                </div>
-              ))}
+                ))}
+              </div>
             </div>
-          </div>
-        </div>
+          </div>}
 
-        <div className="flex items-center justify-between">
+        <div className="flex mt-10 items-center justify-between">
           <div className="lg:hidden">
             <button className="border flex items-center gap-x-2 py-2 px-3 border-[#CA8A04] rounded-[7px] bg-transparent">
               <Image
@@ -252,28 +258,25 @@ const Overview = () => {
             {buttons.map((button, index) => (
               <button
                 key={index}
-                className={`border flex items-center gap-x-2 py-2 px-3 border-[#CA8A04] rounded-[7px] ${
-                  active === button.id ? "bg-[#CA8A04]" : " bg-transparent"
-                }`}
+                className={`border flex items-center gap-x-2 py-2 px-3 border-[#CA8A04] rounded-[7px] ${active === button.id ? "bg-[#CA8A04]" : " bg-transparent"
+                  }`}
                 onClick={() => {
                   handleActive(button.id);
                 }}
               >
                 <Image
-                  src={require(`/public/images/overview/${
-                    active === button.id ? button.active_icon : button.icon
-                  }`)}
+                  src={require(`/public/images/overview/${active === button.id ? button.active_icon : button.icon
+                    }`)}
                   alt={button.name}
                   width={20}
                   height={20}
                 />
 
                 <span
-                  className={`${
-                    active === button.id
-                      ? "font-extrabold text-white dark:text-[#1C1917]"
-                      : "font-extrabold text-[#CA8A04]"
-                  }`}
+                  className={`${active === button.id
+                    ? "font-extrabold text-white dark:text-[#1C1917]"
+                    : "font-extrabold text-[#CA8A04]"
+                    }`}
                 >
                   {button.name}
                 </span>
@@ -327,151 +330,153 @@ const Overview = () => {
             </div>
           </div>
         )}
-
-        <div className="w-full my-14 bg-white dark:bg-[#292524] rounded-2xl">
-          <div className="table-header text-xs md:text-sm lg:text-lg font-extrabold text-[#57534E] rounded-t-2xl">
-            <div className="py-7 w-full flex justify-between px-6">
-              <span className="w-1/3 md:w-1/4 lg:w-1/6 flex justify-center">
-                Assets
-              </span>
-              <span className="w-1/6 lg:flex justify-center hidden">
-                Symbol
-              </span>
-              <span className="w-1/3 md:w-1/4 lg:w-1/6 flex justify-center ml-6 lg:ml-0">
-                24h volume
-              </span>
-              <span className="w-1/6 lg:flex justify-center hidden">
-                Market Cap
-              </span>
-              <span className="md:w-1/4 lg:w-1/6 hidden md:flex justify-center">
-                Launch
-              </span>
-              <span className="w-1/3 md:w-1/4 lg:w-1/6 flex justify-center">
-                Votes
-              </span>
+        {paginatedData &&
+          <div className="w-full my-14 bg-white dark:bg-[#292524] rounded-2xl">
+            <div className="table-header text-xs md:text-sm lg:text-lg font-extrabold text-[#57534E] rounded-t-2xl">
+              <div className="py-7 w-full flex justify-between px-6">
+                <span className="w-1/3 md:w-1/4 lg:w-1/6 flex justify-center">
+                  Assets
+                </span>
+                <span className="w-1/6 lg:flex justify-center hidden">
+                  Symbol
+                </span>
+                <span className="w-1/3 md:w-1/4 lg:w-1/6 flex justify-center ml-6 lg:ml-0">
+                  24h volume
+                </span>
+                <span className="w-1/6 lg:flex justify-center hidden">
+                  Market Cap
+                </span>
+                <span className="md:w-1/4 lg:w-1/6 hidden md:flex justify-center">
+                  Launch
+                </span>
+                <span className="w-1/3 md:w-1/4 lg:w-1/6 flex justify-center">
+                  Votes
+                </span>
+              </div>
             </div>
-          </div>
-          <div>
-            {paginatedData.map((item, index) => (
-              <div
-                className="px-6 py-4 flex items-center justify-between"
-                key={index}
-              >
-                <div className="flex w-1/3 md:w-1/4 lg:w-1/6">
-                  <Image
-                    src={require(`/public/images/overview/${item.icon}`)}
-                    alt="icon"
-                    width={40}
-                    height={40}
-                  />
-                  <div className="flex flex-col ml-1 lg:ml-4">
-                    <div className="flex items-center">
-                      <span className="text-[8px] md:text-sm lg:text-base text-[#57534E] font-extrabold">
-                        {item.name}
-                      </span>
+            <div>
+              {paginatedData.map((item, index) => (
+                <div
+                  className="px-6 py-4 flex items-center justify-between"
+                  key={index}
+                >
+                  <div className="flex w-1/3 md:w-1/4 lg:w-1/6">
+                    <Image
+                      src={require(`/public/images/overview/${item.icon}`)}
+                      alt="icon"
+                      width={40}
+                      height={40}
+                    />
+                    <div className="flex flex-col ml-1 lg:ml-4">
+                      <div className="flex items-center">
+                        <span className="text-[8px] md:text-sm lg:text-base text-[#57534E] font-extrabold">
+                          {item.name}
+                        </span>
 
-                      {item.verified && (
-                        <Image
-                          className="ml-1 lg:ml-2 w-3 h-3"
-                          src={require("/public/images/overview/verified.svg")}
-                          alt="verified"
-                          width={12}
-                          height={12}
-                        />
-                      )}
-                    </div>
+                        {item.verified && (
+                          <Image
+                            className="ml-1 lg:ml-2 w-3 h-3"
+                            src={require("/public/images/overview/verified.svg")}
+                            alt="verified"
+                            width={12}
+                            height={12}
+                          />
+                        )}
+                      </div>
 
-                    <div className="flex mt-1">
-                      <div className="flex">
-                        {item.tags.map((tag, index) => (
-                          <div
-                            className="py-[1px] px-1 lg:px-2 lg:mr-[6px] scale-75 lg:scale-100"
-                            key={index}
-                            style={{
-                              backgroundColor: tags_colors[index].bg_color,
-                              color: tags_colors[index].text_color,
-                              borderRadius: tags_colors[index].radius,
-                            }}
-                          >
-                            <span className="text-[10px] font-extrabold">
-                              {tag}
-                            </span>
-                          </div>
-                        ))}
+                      <div className="flex mt-1">
+                        <div className="flex">
+                          {item.tags.map((tag, index) => (
+                            <div
+                              className="py-[1px] px-1 lg:px-2 lg:mr-[6px] scale-75 lg:scale-100"
+                              key={index}
+                              style={{
+                                backgroundColor: tags_colors[index].bg_color,
+                                color: tags_colors[index].text_color,
+                                borderRadius: tags_colors[index].radius,
+                              }}
+                            >
+                              <span className="text-[10px] font-extrabold">
+                                {tag}
+                              </span>
+                            </div>
+                          ))}
+                        </div>
                       </div>
                     </div>
                   </div>
-                </div>
 
-                <div className="text-sm w-1/6 lg:flex hidden justify-center font-extrabold">
-                  <span>{item.project}</span>
-                </div>
+                  <div className="text-sm w-1/6 lg:flex hidden justify-center font-extrabold">
+                    <span>{item.project}</span>
+                  </div>
 
-                <div className="text-sm text-[#CA8A04] w-1/6 lg:flex justify-center hidden font-extrabold">
-                  <span>{item.poocoin.slice(0, 12)}...</span>
-                </div>
+                  <div className="text-sm text-[#CA8A04] w-1/6 lg:flex justify-center hidden font-extrabold">
+                    <span>{item.poocoin.slice(0, 12)}...</span>
+                  </div>
 
-                <div className="text-sm ml-10 text-[#78716C] w-1/3 md:w-1/4 lg:w-1/6 flex justify-center font-extrabold">
-                  <span>{item.website.slice(0, 12)}...</span>
-                </div>
+                  <div className="text-sm ml-10 text-[#78716C] w-1/3 md:w-1/4 lg:w-1/6 flex justify-center font-extrabold">
+                    <span>{item.website.slice(0, 12)}...</span>
+                  </div>
 
-                <div className="text-xs md:text-sm text-[#78716C] hidden md:w-1/4 lg:w-1/6 md:flex justify-center font-extrabold">
-                  <span>{item.no_of_projects}</span>
-                </div>
+                  <div className="text-xs md:text-sm text-[#78716C] hidden md:w-1/4 lg:w-1/6 md:flex justify-center font-extrabold">
+                    <span>{item.no_of_projects}</span>
+                  </div>
 
-                <div className="w-1/3 md:w-1/4 lg:w-1/6 flex justify-center">
-                  <div className="flex items-center gap-x-2 px-[5px] md:px-[10px] py-3 border border-[#CA8A04] rounded-md">
-                    <Image
-                      src={require("/public/images/overview/vote-icon.svg")}
-                      alt="vote-icon"
-                      width={20}
-                      height={20}
-                    />
+                  <div className="w-1/3 md:w-1/4 lg:w-1/6 flex justify-center">
+                    <div className="flex items-center gap-x-2 px-[5px] md:px-[10px] py-3 border border-[#CA8A04] rounded-md">
+                      <Image
+                        src={require("/public/images/overview/vote-icon.svg")}
+                        alt="vote-icon"
+                        width={20}
+                        height={20}
+                      />
 
-                    <span className="text-[#CA8A04] font-semibold text-xs md:text-base">
-                      {item.votes}
-                    </span>
+                      <span className="text-[#CA8A04] font-semibold text-xs md:text-base">
+                        {item.votes}
+                      </span>
+                    </div>
                   </div>
                 </div>
-              </div>
-            ))}
+              ))}
+            </div>
           </div>
-        </div>
-        <div className="flex justify-center mb-10 items-center gap-x-5">
-          <button onClick={backPage}>
-            <Image
-              src={require("/public/images/overview/pagination-prev.svg")}
-              alt="pagination-prev"
-              height={14}
-              width={7}
-            />
-          </button>
-          {new Array(Math.ceil(data.length / perPage))
-            .fill()
-            .map((_, i) => i + 1)
-            .map((item, index) => (
-              <button
-                key={item}
-                onClick={() => {
-                  goToPage(item);
-                }}
-                className="text-[20px] font-bold"
-                style={{
-                  color: page === item ? "#CA8A04" : "#57534E",
-                }}
-              >
-                {item}
-              </button>
-            ))}
-          <button onClick={nextPage}>
-            <Image
-              src={require("/public/images/overview/pagination-next.svg")}
-              alt="pagination-next"
-              height={14}
-              width={7}
-            />
-          </button>
-        </div>
+        }
+        {data &&
+          <div className="flex justify-center mb-10 items-center gap-x-5">
+            <button onClick={backPage}>
+              <Image
+                src={require("/public/images/overview/pagination-prev.svg")}
+                alt="pagination-prev"
+                height={14}
+                width={7}
+              />
+            </button>
+            {new Array(Math.ceil(data.length / perPage))
+              .fill()
+              .map((_, i) => i + 1)
+              .map((item, index) => (
+                <button
+                  key={item}
+                  onClick={() => {
+                    goToPage(item);
+                  }}
+                  className="text-[20px] font-bold"
+                  style={{
+                    color: page === item ? "#CA8A04" : "#57534E",
+                  }}
+                >
+                  {item}
+                </button>
+              ))}
+            <button onClick={nextPage}>
+              <Image
+                src={require("/public/images/overview/pagination-next.svg")}
+                alt="pagination-next"
+                height={14}
+                width={7}
+              />
+            </button>
+          </div>}
       </div>
     </main>
   );

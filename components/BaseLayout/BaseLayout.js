@@ -28,7 +28,7 @@ export default function BaseLayout({ children, title, footer }) {
                         <Sidebar handleSideBar={handleSideBar} toggleSidebar={handleSideBar} />
                     </div>
                 }
-                <div className={`w-full pr-2 flex flex-col justify-between min-h-screen md:pl-10 ease-in-out md:z-50 md:pr-0 md:mr-10 md:ml-[60px] bg-lightWhite dark:bg-fields relative duration-300 ${sideBar ? "md:translate-x-[200px] md:!w-[calc(100%-300px)] md:mr-20" : ""}`}>
+                <div className={`w-full pr-2 flex flex-col ${footer ? "justify-between" : ""} min-h-screen md:pl-10 ease-in-out md:z-50 md:pr-0 md:mr-10 md:ml-[60px] bg-lightWhite dark:bg-fields relative duration-300 ${sideBar ? "md:translate-x-[200px] md:!w-[calc(100%-300px)] md:mr-20" : ""}`}>
                     <Header toggleSidebar={handleSideBar} />
                     {children}
                     {footer && <Footer />}

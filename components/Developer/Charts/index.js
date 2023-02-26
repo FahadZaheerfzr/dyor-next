@@ -7,6 +7,7 @@ import CustomChart from './TradingView';
 import ERC_ABI from '@/config/abi/ERC20.json'
 import { useEthers } from '@usedapp/core'
 import { useModal } from 'react-simple-modal-provider';
+import axios from 'axios';
 
 export default function Charts() {
     const { account, library } = useEthers();
@@ -19,6 +20,7 @@ export default function Charts() {
     const [image, takeScreenShot] = useScreenshot();
     const [symbol, setSymbol] = useState("")
     const [projects, setProjects] = useState()
+    const [developer, setDeveloper] = useState()
     const getImage = () => takeScreenShot(graph.current);
     const { open: openModal } = useModal("OpenProject");
 
@@ -26,8 +28,9 @@ export default function Charts() {
     const fetchDeveloper = async () => {
         if (account) {
             try {
-                let data = await response.json()
-                setProjects(data)
+                const response = await axios.post('/api/fetch_developer', { developer_wallet: account })
+                let data = await response.data
+                setDeveloper(data[0])
             } catch (err) {
                 console.log(err)
             }
@@ -35,29 +38,30 @@ export default function Charts() {
     }
 
     const handleSymbol = async () => {
+        if (!developer) return;
         try {
-            let signer = await library.getSigner("0xd302f9AA2a57eA2516835A6e36CC168ae0365B37");
-            let contract = new ethers.Contract("0xdd534480782ecf53e4a5257b0f3c37702a0bad61", ERC_ABI, signer)
+            let signer = await library.getSigner(developer.developer_wallet);
+            let contract = new ethers.Contract(developer.contract_address, ERC_ABI, signer)
             let symbol = await contract.symbol()
-            //setSymbol(`${symbol}/BNB`)
+            setSymbol(`${symbol}/BNB`)
         } catch (err) {
             setSymbol("RBAUSD_48E54C")
             console.log(err)
         }
-
     }
 
     useEffect(() => {
         if (library) {
             handleSymbol()
         }
-    }, [library])
+    }, [library, developer])
 
 
 
     useEffect(() => {
-        getImage()
-    }, [theme])
+        console.log(account)
+        fetchDeveloper()
+    }, [account])
 
     const toggleProfile = (bool) => {
         setProfile(bool)
@@ -109,9 +113,16 @@ export default function Charts() {
                                                     <img className="" src="/images/Vector.png" />
                                                 </div>
                                                 <div className="flex flex-col justify-center text-center">
-                                                    <img src="/images/profile-pic.png" />
-                                                    <span className="mt-3 font-extrabold text-gold text-xl">PimkFale</span>
-                                                    <span className="text-sm font-semibold text-[#57534E]">@pimkfale</span>
+                                                    {developer?.profile_picture ? "Developer Picture"
+                                                        :
+                                                        <img src="/images/profile-pic.png" />
+                                                    }
+                                                    <span className="mt-3 font-extrabold text-gold text-xl">
+                                                        {developer?.developer_name ? developer?.developer_name : "Pim Kfale"}
+                                                    </span>
+                                                    <span className="text-sm font-semibold text-[#57534E]">@
+                                                        {developer?.developer_telegram ? developer?.developer_telegram : "pimkfale"}
+                                                    </span>
                                                 </div>
                                                 <div>
                                                     <img src="/images/more.png" />
@@ -119,29 +130,38 @@ export default function Charts() {
                                             </div>
                                             <div className="px-10 my-5 flex flex-col">
                                                 <span className="text-xl font-extrabold text-[#292524]">About</span>
-                                                <span className="text-[12px] font-normal text-[#57534E] dark:text-[#292524]">If
-                                                    we can imagine web3 as a car then, web3 libraries/dApps are the car&apos;s
-                                                    chassis, smart contracts/blockchain are the internal hardware
-                                                    components, wallets.. <span className="text-gold">read more</span></span>
-                                            </div>
+                                                {developer?.developer_about ? <span className="text-[12px] font-normal text-[#57534E] dark:text-[#292524]">
+                                                    {developer?.developer_about}
+                                                </span>
+                                                    :
+                                                    <span className="text-[12px] font-normal text-[#57534E] dark:text-[#292524]">
 
-                                            <div className="px-10 my-5 flex flex-col">
-                                                <button className="bg-gold text-white font-semibold py-2 px-4 rounded-full"
-                                                    onClick={openModal}>
-                                                    Open a New Project
-                                                </button>
+                                                        If we can imagine web3 as a car then, web3 libraries/dApps are the car&apos;s
+                                                        chassis, smart contracts/blockchain are the internal hardware
+                                                        components, wallets.. <span className="text-gold">read more</span></span>}
                                             </div>
+                                            {developer &&
+                                                <div className="px-10 my-5 flex flex-col">
+                                                    <button className="bg-gold text-white font-semibold py-2 px-4 rounded-full"
+                                                        onClick={openModal}>
+                                                        Open a New Project
+                                                    </button>
+                                                </div>}
                                             <div className="px-7 my-10 flex flex-row justify-between ">
                                                 <div className="flex flex-row items-center">
                                                     <img className="mr-2 dark:hidden" src="/images/twitter.svg" />
                                                     <img className="mr-2 hidden dark:block" src="/images/twitter.png" />
                                                     <span
-                                                        className="text-sm font-semibold text-[#57534E]">@pimkfalecomunity</span>
+                                                        className="text-sm font-semibold text-[#57534E]">@
+                                                        {developer?.developer_twitter ? developer?.developer_twitter : "pimkfalecomunity"}
+                                                    </span>
                                                 </div>
                                                 <div className="flex flex-row items-center">
                                                     <img className="mr-2 dark:hidden" src="/images/telegram.svg" />
                                                     <img className="mr-2 hidden dark:block" src="/images/telegram.png" />
-                                                    <span className="text-sm font-semibold text-[#57534E]">@pimkfaleee</span>
+                                                    <span className="text-sm font-semibold text-[#57534E]">@
+                                                        {developer?.developer_telegram ? developer?.developer_telegram : "pimkfaleee"}
+                                                    </span>
                                                 </div>
                                             </div>
                                         </div>
