@@ -30,9 +30,10 @@ export default function BaseLayout({ children, title, footer }) {
                 <Header toggleSidebar={handleSideBar} />
             </div>
             <div className='flex w-full bg-lightWhite dark:bg-fields mt-[75px]'>
+                {sideBar &&
                 <div className='hidden md:block md:w-[120px] fixed h-screen z-10'>
                     <Sidebar handleSideBar={handleSideBar} toggleSidebar={handleSideBar} />
-                </div>
+                </div>}
                 {sideBar &&
                     <div className={`md:hidden dark:bg-primary w-[120px] h-screen fixed top-[75px] ease-in-out duration-300  -ml-28 z-50 ${sideBar?"delay-100 translate-x-28":""}`}>
                         <Sidebar handleSideBar={handleSideBar} toggleSidebar={handleSideBar} />

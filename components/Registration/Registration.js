@@ -10,7 +10,6 @@ import { registrationFee } from '@/config/constants/registration_constants'
 
 export default function Registration() {
     const { account, library } = useEthers();
-    const [file_name, setFileName] = useState('No file Chosen')
     const [errors, setErrors] = useState({})
     const [profile_picture, setProfilePicture] = useState('')
     const [developer_name, setDeveloperName] = useState('')
@@ -24,22 +23,6 @@ export default function Registration() {
     const { open: openModal } = useModal("ConnectionModal");
 
 
-    const uploadToServer = async (image) => {
-        const body = new FormData();
-        body.append("file", image);
-        const response = await fetch("/api/handleFile", {
-            method: "POST",
-            body
-        });
-    };
-
-
-
-    const updateFileName = (e) => {
-        setFileName(e.target.files[0].name)
-        setProfilePicture(e.target.files[0])
-    }
-
 
     const handleTransfer = async () => {
         if (!account) {
@@ -48,7 +31,7 @@ export default function Registration() {
         }
 
         let signer = library.getSigner();
-        
+
         let contract = new ethers.Contract("0x55d398326f99059ff775485246999027b3197955", ERC_ABI, signer);
         const previous_balance = await contract.balanceOf(account);
 
@@ -64,11 +47,10 @@ export default function Registration() {
         }
 
 
-        uploadToServer(profile_picture);
 
 
         await axios.post('/api/register', {
-            profile_picture: profile_picture.name,
+            profile_picture: profile_picture,
             developer_name: developer_name,
             developer_about: scam_type,
             developer_wallet: developer_wallet,
@@ -146,12 +128,9 @@ export default function Registration() {
                             method="post"
                             className='text-muted font-bold text-sm'
                         >
-                            <div className="mb-7 relative ">
-                                <input id="profile-picture" name="profile-picture" type="file" className="opacity-0 relative w-full z-10 cursor-pointer " onChange={updateFileName} />
-                                <div className="w-full !p-0 cursor-pointer  form-control  absolute top-0 flex flex-row justify-between !rounded-[3.3px] dark:bg-fields">
-                                    <span className="p-2 pt-[10px] pl-4 font-normal text-sm text-[#44403C]">{file_name}</span>
-                                    <div className="input-addon  input-group-item !bg-gold !text-white dark:!text-[#1C1917] p-2 font-bold rounded-[3.3px] rounded-br-[3.3px] text-[12px] uppercase">Profile Picture</div>
-                                </div>
+                            <div className="mb-7 relative flex">
+                                <input id="profile-picture " name="profile-picture" type="text" className="form-control w-full" onChange={(e)=>setProfilePicture(e.target.value)} placeholder="Link to Image" />
+                                <div className="input-addon  input-group-item w-[200px] !bg-gold !text-white dark:!text-[#1C1917] p-2 font-bold rounded-[3.3px] rounded-br-[3.3px] text-[12px] uppercase">Profile Picture</div>
                             </div>
                             <div className="mb-5">
                                 <label className="label block mb-2" htmlFor="developer_name">Developer Name <span className="invalid-feedback">*</span></label>

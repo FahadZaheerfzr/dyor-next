@@ -4,12 +4,10 @@ import React, { useEffect, useState } from 'react'
 
 export default function Sidebar({ handleSideBar }) {
     const [openSub1, setOpenSub1] = useState(false)
-    const [openSub2, setOpenSub2] = useState(false);
 
     useEffect(() => {
         if (handleSideBar) {
             setOpenSub1(false)
-            setOpenSub2(false)
         }
     }, [handleSideBar])
 

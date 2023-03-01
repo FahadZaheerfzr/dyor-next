@@ -173,7 +173,7 @@ const Overview = ({ data, topVoted }) => {
                           {developer.verified && (
                             <Image
                               className="ml-1 lg:ml-2 w-3 h-3"
-                              src={require("/public/images/overview/verified.svg")}
+                              src={developer.profile_picture}
                               alt="verified"
                               width={12}
                               height={12}
