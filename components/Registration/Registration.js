@@ -1,4 +1,3 @@
-import { toBase64 } from '@/utils/FileHandler'
 import axios from 'axios'
 import { ethers } from 'ethers'
 import Image from 'next/image'

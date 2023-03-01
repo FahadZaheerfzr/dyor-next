@@ -26,7 +26,7 @@ export default function BaseLayout({ children, title, footer }) {
             <Head>
                 <title>{title}</title>
             </Head>
-            <div className='dark:bg-primary h-[75px] pr-10 top-0 fixed w-full z-50'>
+            <div className='bg-white dark:bg-primary h-[75px] pr-10 top-0 fixed w-full z-50'>
                 <Header toggleSidebar={handleSideBar} />
             </div>
             <div className='flex w-full bg-lightWhite dark:bg-fields mt-[75px]'>
