@@ -69,12 +69,12 @@ h3 {
   font-weight: 400 !important;
 }
 
-.input-group{
+.input-group {
   display: flex;
   align-items: center;
 }
 
-.input-addon{
+.input-addon {
   @apply bg-gold text-white dark:border-[#44403C] dark:border dark:bg-primary dark:text-[#44403C];
   position: relative;
   padding: 9px 16px;
@@ -112,4 +112,8 @@ h3 {
   text-transform: uppercase;
   text-align: center;
   color: #ffebb9;
+}
+
+.icon {
+  @apply text-[32px] text-muted hover:text-gold;
 }

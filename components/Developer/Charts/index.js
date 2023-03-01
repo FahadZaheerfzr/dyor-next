@@ -41,7 +41,6 @@ export default function Charts() {
     }
 
     const handleSymbol = async () => {
-        if (!developer) return;
         try {
             let signer = await library.getSigner(developer.developer_wallet);
             let contract = new ethers.Contract(developer.contract_address, ERC_ABI, signer)
@@ -188,8 +187,10 @@ export default function Charts() {
                                                 </div>
                                             </div>
                                         </div>
-                                        {developer &&
+                                        {developer ?
                                         <TokenInfo contract_address={developer?.contract_address} />
+                                        :
+                                        <TokenInfo />
                                         }
                                     </div>
                                 </div>

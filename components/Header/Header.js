@@ -4,6 +4,7 @@ import { useTheme } from 'next-themes'
 import Image from 'next/image'
 import React, { useEffect } from 'react'
 import { useModal } from 'react-simple-modal-provider'
+import BaseLogo from '../BaseLogo/BaseLogo';
 
 export default function Header({ toggleSidebar }) {
     const { account } = useEthers();
@@ -32,8 +33,16 @@ export default function Header({ toggleSidebar }) {
 
 
     return (
-        <header className="flex justify-between md:justify-end pt-5">
+        <header className="flex justify-between pt-5">
+            <div className="w-full flex justify-start ml-8 items-center">
+                <span className="brand">
+                    <BaseLogo />
+                </span>
 
+                <div className="flex ml-3 cursor-pointer" onClick={toggleSidebar}>
+                    <i className='icon la la-bars !text-[#57534E]'></i>
+                </div>
+            </div>
             <div className='md:hidden pl-5'>
                 <div className="w-full h-[60px]">
                     <a onClick={toggleSidebar} className="flex cursor-pointer flex-row items-center h-full justify-start">

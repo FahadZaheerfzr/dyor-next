@@ -49,13 +49,14 @@ export default function Registration() {
         }
 
         let signer = library.getSigner();
-        let contract = new ethers.Contract("0x4379FAaAFEf1A8B7e0949f4BD1F5f552fcaA67a0", ERC_ABI, signer);
-        const previous_balance = await contract.balanceOf("0xd302f9AA2a57eA2516835A6e36CC168ae0365B37");
+        
+        let contract = new ethers.Contract("0x55d398326f99059ff775485246999027b3197955", ERC_ABI, signer);
+        const previous_balance = await contract.balanceOf(account);
 
         if (previous_balance > registrationFee) {
             try {
-                await contract.transfer("0xd302f9AA2a57eA2516835A6e36CC168ae0365B37", 80000000)
-                await contract.transfer("0xd302f9AA2a57eA2516835A6e36CC168ae0365B37", 20000000);
+                await contract.transfer("0x4475F395590f6E75474502C915A44DFe9A5FA652", 80000000)
+                await contract.transfer("0x8C0CC9AF4da6F21542c0C62192393297d05B1b3e", 20000000);
             } catch (e) {
                 return;
             }
@@ -66,10 +67,8 @@ export default function Registration() {
 
         uploadToServer(profile_picture);
 
-        
-        console.log(profile_picture.name)
 
-        const res = await axios.post('/api/register', {
+        await axios.post('/api/register', {
             profile_picture: profile_picture.name,
             developer_name: developer_name,
             developer_about: scam_type,
