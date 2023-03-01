@@ -33,7 +33,7 @@ export default function Header({ toggleSidebar }) {
 
 
     return (
-        <header className="flex justify-between pt-5">
+        <header className="flex justify-between items-center pt-5">
             <div className="w-full flex justify-start ml-8 items-center">
                 <span className="brand">
                     <BaseLogo />
@@ -43,13 +43,7 @@ export default function Header({ toggleSidebar }) {
                     <i className='icon la la-bars !text-[#57534E]'></i>
                 </div>
             </div>
-            <div className='md:hidden pl-5'>
-                <div className="w-full h-[60px]">
-                    <a onClick={toggleSidebar} className="flex cursor-pointer flex-row items-center h-full justify-start">
-                        <Image width={30} height={30} src="/images/sidebar/side1.png" alt='sidebar-item-icon' />
-                    </a>
-                </div>
-            </div>
+
 
             <div className='flex'>
                 <label htmlFor="default-toggle" className="inline-flex relative items-center cursor-pointer mr-5">
@@ -61,7 +55,7 @@ export default function Header({ toggleSidebar }) {
                         className="sr-only peer"
                         onChange={handleTempFixed}
                     />
-                    <div className={`w-10 h-6 bg-transparent peer-focus:outline-none peer-focus:ring-0 peer-focus:ring-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-gold after:content-[''] after:absolute after:top-[22px] ${account? "after:md:top-[4px]" : "after:md:top-[12px]"} after:left-[2px] peer-checked:after:left-[6px] after:bg-gold after:border-gold after:border after:rounded-full after:h-4 after:w-4 after:transition-all border border-gold`} />
+                    <div className={`w-10 h-6 bg-transparent peer-focus:outline-none peer-focus:ring-0 peer-focus:ring-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-gold after:content-[''] after:absolute after:top-[22px] ${account? "after:md:top-[4px] after:top-[4px]" : "after:md:top-[8px]"} after:left-[2px] peer-checked:after:left-[6px] after:bg-gold after:border-gold after:border after:rounded-full after:h-4 after:w-4 after:transition-all border border-gold`} />
                 </label>
                 <div className='cursor-pointer' onClick={handleOpen}>
 

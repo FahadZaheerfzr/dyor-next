@@ -34,7 +34,7 @@ export default function BaseLayout({ children, title, footer }) {
                     <Sidebar handleSideBar={handleSideBar} toggleSidebar={handleSideBar} />
                 </div>
                 {sideBar &&
-                    <div className='md:hidden dark:bg-primary w-[250px] h-screen fixed top-0 z-50'>
+                    <div className={`md:hidden dark:bg-primary w-[120px] h-screen fixed top-[75px] ease-in-out duration-300  -ml-28 z-50 ${sideBar?"delay-100 translate-x-28":""}`}>
                         <Sidebar handleSideBar={handleSideBar} toggleSidebar={handleSideBar} />
                     </div>
                 }
