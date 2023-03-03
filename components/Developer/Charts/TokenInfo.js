@@ -4,7 +4,7 @@ export default function TokenInfo({ contract_address }) {
 
 
     const getContractInfo = async () => {
-        const res = await axios.get('http://api.coingecko.com/api/v3/simple/token_price/binance-smart-chain?contract_addresses=0xbb4CdB9CBd36B01bD1cBaEBF2De08d9173bc095c&vs_currencies=usd&include_market_cap=true&include_24hr_vol=true&include_24hr_change=true&include_last_updated_at=true')
+        const res = await axios.get('https://api.coingecko.com/api/v3/simple/token_price/binance-smart-chain?contract_addresses=0xbb4CdB9CBd36B01bD1cBaEBF2De08d9173bc095c&vs_currencies=usd&include_market_cap=true&include_24hr_vol=true&include_24hr_change=true&include_last_updated_at=true')
         console.log(res)
     }
 
