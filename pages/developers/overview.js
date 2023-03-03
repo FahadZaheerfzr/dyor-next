@@ -1,13 +1,30 @@
 import BaseLayout from "@/components/BaseLayout/BaseLayout";
 import Overview from "@/components/Developer/Overview/Overview";
+import { useEthers } from "@usedapp/core";
 import React, { useEffect, useState } from "react";
+import ERC_ABI from '@/config/abi/ERC20.json'
+import { ethers } from "ethers";
 
 const OverviewPage = () => {
   const [data, setData] = useState();
   const [topVoted, setTopVoted] = useState();
+  const { account } = useEthers();
+
+  const checkToken = async () => {
+    const provider = new ethers.providers.Web3Provider(window.ethereum);
+    const signer = provider.getSigner();
+    const tokenContract = new ethers.Contract("0xae13d989daC2f0dEbFf460aC112a837C89BAa7cd", ERC_ABI, signer);
+    const account = await signer.getAddress(); // Get the connected wallet address
+
+    const balance = await tokenContract.balanceOf(account);
+    const balanceInBNB = ethers.utils.formatEther(balance, 18); // Convert balance to BNB
+
+    console.log(`Wallet has ${balanceInBNB} BNB`);
+  }
 
 
   useEffect(() => {
+    checkToken()
     const fetchData = async () => {
       const response = await fetch("/api/fetch_developers");
       const res_data = await response.json();
@@ -24,14 +41,19 @@ const OverviewPage = () => {
     fetchData();
   }, []);
 
-
   useEffect(() => {
-    console.log(data)
-  }, [data])
+    checkToken()
+  }, [])
+
+
+
 
   return (
     <BaseLayout title={"Overview"}>
-      <Overview data={data} topVoted={topVoted} />
+      {account ? <Overview data={data} topVoted={topVoted} />
+        :
+        <div className="bg-gold font-nunito_sans text-white text-center py-2 mt-5">Please connect your wallet to view this page</div>}
+
     </BaseLayout>
   );
 };

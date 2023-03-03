@@ -1,36 +1,23 @@
-import { Config } from '@/config/constants/config';
 import React, { useEffect } from 'react'
-const Moralis = require("moralis").default;
-const { EvmChain } = require("@moralisweb3/common-evm-utils");
+import axios from 'axios'
 export default function TokenInfo({ contract_address }) {
 
 
-    const runMoralis = async () => {
-        // await Moralis.start({
-        //     apiKey: Config.API_KEY,
-        //     // ...and any other configuration
-        // });
+    const getContractInfo = async () => {
+        const config = {
+            headers: {
+                'Content-Type': 'application/json',
+                "Access-Control-Allow-Origin": "*",
+            }
+        }
 
-        const chain = EvmChain.ETHEREUM;
-
-        // token 0 address, e.g. WETH token address
-        const token0Address = contract_address;
-
-        // token 1 address, e.g. LINK token address
-        const token1Address = "0xbb4cdb9cbd36b01bd1cbaebf2de08d9173bc095c";
-
-        const response = await Moralis.EvmApi.defi.getPairAddress({
-            token0Address,
-            token1Address,
-            chain,
-        });
-
-        console.log(response.toJSON());
-    };
+        const res = await axios.get('http://api.coingecko.com/api/v3/simple/token_price/binance-smart-chain?contract_addresses=0xbb4CdB9CBd36B01bD1cBaEBF2De08d9173bc095c&vs_currencies=usd&include_market_cap=true&include_24hr_vol=true&include_24hr_change=true&include_last_updated_at=true', config)
+        console.log(res)
+    }
 
     useEffect(() => {
         try {
-            runMoralis()
+            getContractInfo();
         } catch (error) {
             console.log(error)
         }
