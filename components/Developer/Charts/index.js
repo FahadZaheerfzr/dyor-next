@@ -17,11 +17,11 @@ export default function Charts() {
     const [menuOpen, setMenuOpen] = useState(false)
     const [tablemenu, setTableMenu] = useState(false)
     const graph = useRef(null)
-    const [image, takeScreenShot] = useScreenshot();
+   // const [image, takeScreenShot] = useScreenshot();
     const [symbol, setSymbol] = useState("")
     const [projects, setProjects] = useState()
     const [developer, setDeveloper] = useState()
-    const getImage = () => takeScreenShot(graph.current);
+    //const getImage = () => takeScreenShot(graph.current);
     const { open: openModal } = useModal("OpenProject");
     const [loaded, setLoaded] = useState(true)
 
