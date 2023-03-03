@@ -1,11 +1,11 @@
 import React, { useEffect } from 'react'
 import axios from 'axios'
 export default function TokenInfo({ contract_address }) {
-
+    const [contractInfo, setContractInfo] = useState();
 
     const getContractInfo = async () => {
-        const res = await axios.get('https://api.coingecko.com/api/v3/simple/token_price/binance-smart-chain?contract_addresses=0xbb4CdB9CBd36B01bD1cBaEBF2De08d9173bc095c&vs_currencies=usd&include_market_cap=true&include_24hr_vol=true&include_24hr_change=true&include_last_updated_at=true')
-        console.log(res)
+        const res = await axios.get(`https://api.coingecko.com/api/v3/simple/token_price/binance-smart-chain?contract_addresses=${contract_address}&vs_currencies=usd&include_market_cap=true&include_24hr_vol=true&include_24hr_change=true&include_last_updated_at=true`)
+        setContractInfo(res.data[contract_address]);
     }
 
     useEffect(() => {
@@ -34,19 +34,18 @@ export default function TokenInfo({ contract_address }) {
                         <span className="text-xs font-semibold text-[#292524] col-span-1">24h
                             volume:</span>
                         <span
-                            className=" text-[#78716C] text-xs font-normal col-span-1">$109.33</span>
+                            className=" text-[#78716C] text-xs font-normal col-span-1">{contractInfo.usd_24h_vol}</span>
                     </div>
                     <div className="grid grid-cols-2 mb-2">
-                        <span className="text-xs font-semibold text-[#292524] col-span-1">Pooled
-                            WBNB:</span>
-                        <span className=" text-[#78716C] text-xs font-normal col-span-1">4.65</span>
+                        <span className="text-xs font-semibold text-[#292524] col-span-1">24 Hour Change:</span>
+                        <span className=" text-[#78716C] text-xs font-normal col-span-1">{contractInfo.usd_24h_change}</span>
                     </div>
-                    <div className="grid grid-cols-2 mb-2">
+                    {/* <div className="grid grid-cols-2 mb-2">
                         <span className="text-xs font-semibold text-[#292524] col-span-1">Pooled
                             DYOR:</span>
                         <span
                             className=" text-[#78716C] text-xs font-normal col-span-1">88.99M</span>
-                    </div>
+                    </div> */}
                     <div className="grid grid-cols-2 mb-2">
                         <span className="text-xs font-semibold text-[#292524] col-span-1">Total
                             tx:</span>
@@ -54,13 +53,13 @@ export default function TokenInfo({ contract_address }) {
                             className=" text-[#78716C] text-xs font-normal col-span-1">8.27K</span>
                     </div>
                     <div className="grid grid-cols-2 mb-2">
-                        <span className="text-xs font-semibold text-[#292524] col-span-1">Total
+                        <span className="text-xs font-semibold text-[#292524] col-span-1">
                             Market Cap:</span>
                         <span
-                            className=" text-[#78716C] text-xs font-normal col-span-1">$1.82K</span>
+                            className=" text-[#78716C] text-xs font-normal col-span-1">{contractInfo.usd_market_cap}</span>
                     </div>
                 </div>
-                <div
+                {/* <div
                     className="group absolute bottom-0 left-0 py-2 w-full bg-gold flex flex-row items-center justify-center rounded-b-2xl">
                     <span className="text-sm font-extrabold text-white dark:text-[#1C1917]">More Info</span>
                     <span className="relative ml-1">
@@ -84,7 +83,7 @@ export default function TokenInfo({ contract_address }) {
                             <span className="mt-1 mb-2">ETC</span>
                         </div>
                     </span>
-                </div>
+                </div> */}
             </div>
         </div>
     )
