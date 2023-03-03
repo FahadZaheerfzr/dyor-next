@@ -2,7 +2,6 @@ import { ethers } from 'ethers';
 import { useTheme } from 'next-themes';
 import Image from 'next/image'
 import React, { useEffect, useRef, useState } from 'react'
-import { useScreenshot } from 'use-react-screenshot'
 import CustomChart from './TradingView';
 import ERC_ABI from '@/config/abi/ERC20.json'
 import { useEthers } from '@usedapp/core'
