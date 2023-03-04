@@ -2,6 +2,7 @@ import { ethers } from 'ethers';
 import { useTheme } from 'next-themes';
 import Image from 'next/image'
 import React, { useEffect, useRef, useState } from 'react'
+import { useScreenshot } from 'use-react-screenshot'
 import CustomChart from './TradingView';
 import ERC_ABI from '@/config/abi/ERC20.json'
 import { useEthers } from '@usedapp/core'
@@ -9,7 +10,7 @@ import { useModal } from 'react-simple-modal-provider';
 import axios from 'axios';
 import TokenInfo from './TokenInfo';
 
-export default function Charts() {
+export default function Charts({wallet}) {
     const { account, library } = useEthers();
     const { theme } = useTheme();
     const [profile, setProfile] = useState(true)
@@ -17,18 +18,18 @@ export default function Charts() {
     const [menuOpen, setMenuOpen] = useState(false)
     const [tablemenu, setTableMenu] = useState(false)
     const graph = useRef(null)
-   // const [image, takeScreenShot] = useScreenshot();
+    const [image, takeScreenShot] = useScreenshot();
     const [symbol, setSymbol] = useState("")
     const [projects, setProjects] = useState()
     const [developer, setDeveloper] = useState()
-    //const getImage = () => takeScreenShot(graph.current);
+    const getImage = () => takeScreenShot(graph.current);
     const { open: openModal } = useModal("OpenProject");
     const [loaded, setLoaded] = useState(true)
 
 
     const fetchDeveloper = async () => {
         try {
-            const response = await axios.post('/api/fetch_developer', { developer_wallet: account })
+            const response = await axios.post('/api/fetch_developer', { developer_wallet: wallet })
             let data = await response.data
             console.log(data)
             setDeveloper(data[0])

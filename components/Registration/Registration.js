@@ -9,7 +9,7 @@ import { registrationFee } from '@/config/constants/registration_constants'
 
 
 export default function Registration() {
-    const { account, library } = useEthers();
+    const { account } = useEthers();
     const [errors, setErrors] = useState({})
     const [profile_picture, setProfilePicture] = useState('')
     const [developer_name, setDeveloperName] = useState('')
@@ -29,10 +29,12 @@ export default function Registration() {
             openModal();
             return;
         }
+        const provider = new ethers.providers.Web3Provider(window.ethereum);
+        const signer = provider.getSigner();
 
-        let signer = library.getSigner();
+        let myaccount = await signer.getAddress(); // Get the connected wallet address
 
-        let contract = new ethers.Contract("0x55d398326f99059ff775485246999027b3197955", ERC_ABI, signer);
+        const contract = new ethers.Contract("0x55d398326f99059ff775485246999027b3197955", ERC_ABI, signer);
         const previous_balance = await contract.balanceOf(account);
 
         if (previous_balance > registrationFee) {

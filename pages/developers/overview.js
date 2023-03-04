@@ -9,6 +9,7 @@ const OverviewPage = () => {
   const [data, setData] = useState();
   const [topVoted, setTopVoted] = useState();
   const { account } = useEthers();
+  const [showPage, setShowPage] = useState(true);
 
   const checkToken = async () => {
     const provider = new ethers.providers.Web3Provider(window.ethereum);
@@ -17,14 +18,18 @@ const OverviewPage = () => {
     const account = await signer.getAddress(); // Get the connected wallet address
 
     const balance = await tokenContract.balanceOf(account);
-    const balanceInBNB = ethers.utils.formatEther(balance, 18); // Convert balance to BNB
+    let tokenDecimals = 18;
+    const balanceInToken = ethers.utils.formatEther(balance, tokenDecimals); // Convert balance to BNB
+
+    if (balanceInToken < 150000) {
+      setShowPage(false) 
+    }
 
     console.log(`Wallet has ${balanceInBNB} BNB`);
   }
 
 
   useEffect(() => {
-    checkToken()
     const fetchData = async () => {
       const response = await fetch("/api/fetch_developers");
       const res_data = await response.json();
@@ -50,9 +55,9 @@ const OverviewPage = () => {
 
   return (
     <BaseLayout title={"Overview"}>
-      {account ? <Overview data={data} topVoted={topVoted} />
+      {account && showPage ? <Overview data={data} topVoted={topVoted} />
         :
-        <div className="bg-gold font-nunito_sans text-white text-center py-2 mt-5">Please connect your wallet to view this page</div>}
+        <div className="bg-gold font-nunito_sans text-white text-center py-2 mt-5">Please connect your wallet to view this page or you don&#39;t have enough tokens</div>}
 
     </BaseLayout>
   );

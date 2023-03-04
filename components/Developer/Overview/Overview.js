@@ -4,8 +4,12 @@ import { useState, useEffect } from "react";
 import Image from "next/image";
 import { buttons, tags_colors } from "@/data/developers";
 import VoteIconSVG from "@/svg/VoteIcon";
+import Link from "next/link";
+import { useEthers } from "@usedapp/core";
+import axios from "axios";
 
 const Overview = ({ data, topVoted }) => {
+  const {account} = useEthers()
   const [page, setPage] = useState(1);
   const [perPage, setPerPage] = useState(10);
   const [paginatedData, setPaginatedData] = useState();
@@ -47,6 +51,42 @@ const Overview = ({ data, topVoted }) => {
     setOptionShow(false);
     updatePageItems(number);
   };
+
+
+  const canVote = async () => {
+    const res = await axios.post("/api/get_votes", {
+      wallet_address:account
+    });
+
+    const data = res.data;
+
+    if (data.length > 0) {
+      data.created_at = new Date(data.created_at);
+      const now = new Date();
+      const diff = now.getTime() - data.created_at.getTime();
+      const diffDays = Math.ceil(diff / (1000 * 3600 * 24));
+
+      if (diffDays > 1) {
+        return true;
+      }
+      return false;
+    }
+  }
+
+  const Vote = async (contract_address) => {
+    if (!canVote()){
+      alert("You can only vote once a day")
+      return;
+    }
+
+    const res = await axios.post("/api/vote", {
+      contract_address: contract_address,
+      wallet_address:account
+    });
+    const data = res.data;
+    console.log(data);
+  }
+
 
   const showOption = (val) => {
     setOptionShow(val);
@@ -95,15 +135,15 @@ const Overview = ({ data, topVoted }) => {
         <div className="banner lg:h-[250px] md:h-[150px] h-[100px]">
           <div className="w-full h-full flex justify-between items-center banner-icons">
             <div className="font-gilroy font-extrabold pl-3 md:pl-12 text-[#B07329]">
-              <span className="font-left lg:text-6xl md:text-3xl text-lg">
+              <span className="font-left lg:text-4xl xl:text-6xl md:text-3xl text-lg">
                 One vote
                 <br />
-                <span className="text-xl md:text-4xl lg:text-8xl">PER DAY</span>
+                <span className="text-xl md:text-4xl lg:text-5xl xl:text-8xl">PER DAY</span>
               </span>
             </div>
             <div className="flex justify-center">
               <div className="banner-center absolute lg:h-[150px] h-[50px]"></div>
-              <span className="banner-text text-lg md:text-3xl lg:text-6xl ">
+              <span className="banner-text text-lg md:text-3xl lg:text-4xl xl:text-6xl ">
                 DYOR <br />
                 TOKENS
               </span>
@@ -153,9 +193,9 @@ const Overview = ({ data, topVoted }) => {
 
               <div>
                 {topVoted.map((developer, index) => (
+                  <Link href={`/developers/charts/${developer.developer_wallet}`} key={index}>
                   <div
                     className="px-6 py-4 flex items-center justify-between"
-                    key={index}
                   >
                     <div className="flex w-1/3 md:w-1/4 lg:w-1/6">
                       <Image
@@ -224,7 +264,8 @@ const Overview = ({ data, topVoted }) => {
                     </div>
 
                     <div className="w-1/3 md:w-1/4 lg:w-1/6 flex justify-center">
-                      <div className="flex min-w-[100px] items-center justify-center group cursor-pointer gap-x-2 px-[5px] md:px-[10px] py-3 border border-[#CA8A04] rounded-md hover:bg-gold text-[#CA8A04] hover:text-white">
+                      <div className="flex min-w-[100px] items-center justify-center group cursor-pointer gap-x-2 px-[5px] md:px-[10px] py-3 border border-[#CA8A04] rounded-md hover:bg-gold text-[#CA8A04] hover:text-white"
+                      onClick={()=>Vote(developer.contract_address)}>
                         <VoteIconSVG className="fill-gold group-hover:fill-white" />
 
                         <span className=" font-semibold text-xs md:text-base">
@@ -233,6 +274,7 @@ const Overview = ({ data, topVoted }) => {
                       </div>
                     </div>
                   </div>
+                  </Link>
                 ))}
               </div>
             </div>
