@@ -14,7 +14,7 @@ const OverviewPage = () => {
   const checkToken = async () => {
     const provider = new ethers.providers.Web3Provider(window.ethereum);
     const signer = provider.getSigner();
-    const tokenContract = new ethers.Contract("0xae13d989daC2f0dEbFf460aC112a837C89BAa7cd", ERC_ABI, signer);
+    const tokenContract = new ethers.Contract("0x54f6929ad3c2628fa216fad4417a9e054d8adf66 ", ERC_ABI, signer);
     const account = await signer.getAddress(); // Get the connected wallet address
 
     const balance = await tokenContract.balanceOf(account);
