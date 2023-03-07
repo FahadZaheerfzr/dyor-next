@@ -16,6 +16,7 @@ const Overview = ({ data, topVoted }) => {
   const [optionShow, setOptionShow] = useState(false);
   const [optionSelected, setOptionSelected] = useState(10);
   const [active, setActive] = useState(0);
+  const [vote, setVote] = useState(false);
 
   const nextPage = () => {
     if (page !== Math.ceil(data.length / perPage)) {
@@ -54,11 +55,17 @@ const Overview = ({ data, topVoted }) => {
 
 
   const canVote = async () => {
+    if (!account) {
+      return;
+    }
+    console.log("account", account)
     const res = await axios.post("/api/get_votes", {
       wallet_address:account
     });
 
     const data = res.data;
+    console.log("data")
+    console.log(data)
 
     if (data.length > 0) {
       data.created_at = new Date(data.created_at);
@@ -67,14 +74,22 @@ const Overview = ({ data, topVoted }) => {
       const diffDays = Math.ceil(diff / (1000 * 3600 * 24));
 
       if (diffDays > 1) {
-        return true;
+        setVote(true);
       }
-      return false;
+      setVote(false);
+    } else {
+      setVote(true);
     }
+
   }
 
+
+  useEffect(() => {
+    canVote();
+  }, [account]);      
+
   const Vote = async (contract_address) => {
-    if (!canVote()){
+    if (!vote){
       alert("You can only vote once a day")
       return;
     }
@@ -85,6 +100,7 @@ const Overview = ({ data, topVoted }) => {
     });
     const data = res.data;
     console.log(data);
+    setVote(false);
   }
 
 
@@ -198,8 +214,8 @@ const Overview = ({ data, topVoted }) => {
                     className="px-6 py-4 flex items-center justify-between"
                   >
                     <div className="flex w-1/3 md:w-1/4 lg:w-1/6">
-                      <Image
-                        src={`/uploads/${developer.profile_picture}`}
+                      <img
+                        src={`${developer.profile_picture}`}
                         alt="icon"
                         width={40}
                         height={40}
@@ -213,7 +229,7 @@ const Overview = ({ data, topVoted }) => {
                           {developer.verified && (
                             <Image
                               className="ml-1 lg:ml-2 w-3 h-3"
-                              src={developer.profile_picture}
+                              src={require("/public/images/overview/verified.svg")}
                               alt="verified"
                               width={12}
                               height={12}
@@ -399,8 +415,8 @@ const Overview = ({ data, topVoted }) => {
                   key={index}
                 >
                   <div className="flex w-1/3 md:w-1/4 lg:w-1/6">
-                    <Image
-                      src={`/uploads/${developer.profile_picture}`}
+                    <img
+                      src={`${developer.profile_picture}`}
                       alt={developer.profile_picture}
                       width={40}
                       height={40}
@@ -461,7 +477,8 @@ const Overview = ({ data, topVoted }) => {
                   </div>
 
                   <div className="w-1/3 md:w-1/4 lg:w-1/6 flex justify-center">
-                    <div className="flex min-w-[100px] items-center justify-center group cursor-pointer gap-x-2 px-[5px] md:px-[10px] py-3 border border-[#CA8A04] rounded-md hover:bg-gold text-[#CA8A04] hover:text-white">
+                    <div className="flex min-w-[100px] items-center justify-center group cursor-pointer gap-x-2 px-[5px] md:px-[10px] py-3 border border-[#CA8A04] rounded-md hover:bg-gold text-[#CA8A04] hover:text-white"
+                    onClick={()=>Vote(developer.contract_address)}>
                       <VoteIconSVG className="fill-gold group-hover:fill-white" />
 
                       <span className=" font-semibold text-xs md:text-base">

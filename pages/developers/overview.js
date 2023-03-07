@@ -14,9 +14,8 @@ const OverviewPage = () => {
   const checkToken = async () => {
     const provider = new ethers.providers.Web3Provider(window.ethereum);
     const signer = provider.getSigner();
-    const tokenContract = new ethers.Contract("0x54f6929ad3c2628fa216fad4417a9e054d8adf66 ", ERC_ABI, signer);
-    const account = await signer.getAddress(); // Get the connected wallet address
-
+    const tokenContract = new ethers.Contract("0xDa972b416fD9d572CC7C5E17b2cE998af0326712", ERC_ABI, signer);
+    const account = await signer.getAddress();
     const balance = await tokenContract.balanceOf(account);
     let tokenDecimals = 18;
     const balanceInToken = ethers.utils.formatEther(balance, tokenDecimals); // Convert balance to BNB
@@ -25,7 +24,7 @@ const OverviewPage = () => {
       setShowPage(false) 
     }
 
-    console.log(`Wallet has ${balanceInBNB} BNB`);
+    console.log(`Wallet has ${balanceInToken} DYOR`);
   }
 
 
@@ -37,7 +36,6 @@ const OverviewPage = () => {
       for (let i = 0; i < res_data.length; i++) {
         res_data[i].tags = tags;
       }
-      console.log(res_data)
       let topVoted = res_data.sort((a, b) => b.votes - a.votes).slice(0, 5);
       setData(res_data);
       setTopVoted(topVoted);

@@ -31,7 +31,6 @@ export default function Charts({wallet}) {
         try {
             const response = await axios.post('/api/fetch_developer', { developer_wallet: wallet })
             let data = await response.data
-            console.log(data)
             setDeveloper(data[0])
         } catch (err) {
             console.log(err)
@@ -134,7 +133,7 @@ export default function Charts({wallet}) {
                                                     </div>
                                                     <div className="flex flex-col justify-center text-center">
                                                         {developer?.profile_picture ?
-                                                            <Image className='rounded-lg' width={130} height={130} src={`/uploads/${developer?.profile_picture}`} alt="profile-picture" />
+                                                            <Image className='rounded-lg' width={130} height={130} src={`${developer?.profile_picture}`} alt="profile-picture" />
                                                             :
                                                             <img src="/images/profile-pic.png" />
                                                         }

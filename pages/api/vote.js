@@ -13,7 +13,7 @@ export default async function handler(req, res) {
 
   // Create a new user in the database
   try{
-  const voter = await prisma.voter.create({
+  const voters = await prisma.voter.create({
     data: {
       wallet_address: wallet_address,
     },
@@ -24,13 +24,15 @@ export default async function handler(req, res) {
         contract_address: contract_address
     },
     data: {
-        vote: developer.vote + 1,
+      votes: {
+        increment: 1,
+      },
     }
 });
 
 
   // Return the user data
-  res.status(200).json(voter);
+  res.status(200).json(voters);
   } catch (error) {
    console.log(error)
   }

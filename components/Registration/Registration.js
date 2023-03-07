@@ -34,7 +34,7 @@ export default function Registration() {
 
         let myaccount = await signer.getAddress(); // Get the connected wallet address
 
-        const contract = new ethers.Contract("0x55d398326f99059ff775485246999027b3197955", ERC_ABI, signer);
+        const contract = new ethers.Contract("0xDa972b416fD9d572CC7C5E17b2cE998af0326712", ERC_ABI, signer);
         const previous_balance = await contract.balanceOf(account);
 
         if (previous_balance > registrationFee) {

@@ -4,7 +4,6 @@ export default async function handler(req, res) {
 
   // Get the data from the request body
   const wallet_address = req.body.wallet_address
-
   const prisma = new PrismaClient();
   
 
@@ -12,7 +11,7 @@ export default async function handler(req, res) {
 
   // Create a new user in the database
   try{
-  const voter = await prisma.voter.findMany({
+  const voters = await prisma.voter.findMany({
     where: {
       wallet_address: wallet_address,
     },
@@ -20,7 +19,7 @@ export default async function handler(req, res) {
 
 
   // Return the user data
-  res.status(200).json(voter);
+  res.status(200).json(voters);
   } catch (error) {
    console.log(error)
   }
