@@ -66,7 +66,7 @@ export default function Header({ toggleSidebar }) {
                         className="sr-only peer"
                         onChange={handleTempFixed}
                     />
-                    <div className={`w-10 h-6 bg-transparent peer-focus:outline-none peer-focus:ring-0 peer-focus:ring-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-gold after:content-[''] after:absolute after:top-[12px] after:md:top-[12px] ${account ? "after:md:top-[14.2px] after:top-[13px]" : "after:md:top-[8px]"} after:left-[2px] peer-checked:after:left-[6px] after:bg-gold after:border-gold after:border after:rounded-full after:h-4 after:w-4 after:transition-all border border-gold`} />
+                    <div className={`w-10 h-6 bg-transparent peer-focus:outline-none peer-focus:ring-0 peer-focus:ring-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-gold after:content-[''] after:absolute after:top-[12px] after:md:top-[12.2px] ${account ? "after:md:top-[14.2px] after:top-[13px]" : "after:md:top-[8px]"} after:left-[2px] peer-checked:after:left-[6px] after:bg-gold after:border-gold after:border after:rounded-full after:h-4 after:w-4 after:transition-all border border-gold`} />
                 </label>
                 <div className='cursor-pointer' onClick={handleOpen}>
 
