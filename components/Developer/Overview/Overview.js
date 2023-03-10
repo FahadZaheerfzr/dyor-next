@@ -9,7 +9,7 @@ import { useEthers } from "@usedapp/core";
 import axios from "axios";
 
 const Overview = ({ data, topVoted }) => {
-  const {account} = useEthers()
+  const { account } = useEthers()
   const [page, setPage] = useState(1);
   const [perPage, setPerPage] = useState(10);
   const [paginatedData, setPaginatedData] = useState();
@@ -60,23 +60,24 @@ const Overview = ({ data, topVoted }) => {
     }
     console.log("account", account)
     const res = await axios.post("/api/get_votes", {
-      wallet_address:account
+      wallet_address: account
     });
+    console.log("res.data", res.data)
+    const data = res.data[res.data.length-1];
 
-    const data = res.data;
-    console.log("data")
-    console.log(data)
+    if (data) {
+      console.log("data.created_at", data.created_at)
+      let date = new Date(data.created_at);
 
-    if (data.length > 0) {
-      data.created_at = new Date(data.created_at);
       const now = new Date();
-      const diff = now.getTime() - data.created_at.getTime();
+      const diff = now.getTime() - date.getTime();
       const diffDays = Math.ceil(diff / (1000 * 3600 * 24));
-
+      console.log("diffDays", diffDays)
       if (diffDays > 1) {
         setVote(true);
+      } else {
+        setVote(false);
       }
-      setVote(false);
     } else {
       setVote(true);
     }
@@ -86,17 +87,17 @@ const Overview = ({ data, topVoted }) => {
 
   useEffect(() => {
     canVote();
-  }, [account]);      
+  }, [account]);
 
   const Vote = async (contract_address) => {
-    if (!vote){
+    if (!vote) {
       alert("You can only vote once a day")
       return;
     }
 
     const res = await axios.post("/api/vote", {
       contract_address: contract_address,
-      wallet_address:account
+      wallet_address: account
     });
     const data = res.data;
     console.log(data);
@@ -209,79 +210,89 @@ const Overview = ({ data, topVoted }) => {
 
               <div>
                 {topVoted.map((developer, index) => (
-                  <Link href={`/developers/charts/${developer.developer_wallet}`} key={index}>
                   <div
-                    className="px-6 py-4 flex items-center justify-between"
+                    className="px-6 py-4 flex items-center justify-between" key={index}
                   >
-                    <div className="flex w-1/3 md:w-1/4 lg:w-1/6">
-                      <img
-                        src={`${developer.profile_picture}`}
-                        alt="icon"
-                        width={40}
-                        height={40}
-                      />
-                      <div className="flex flex-col ml-1 lg:ml-4">
-                        <div className="flex items-center">
-                          <span className="text-[8px] md:text-sm lg:text-base text-[#57534E] font-extrabold">
-                            {developer.developer_name}
-                          </span>
+                    <Link href={`/developers/charts/${developer.developer_wallet}`} >
 
-                          {developer.verified && (
-                            <Image
-                              className="ml-1 lg:ml-2 w-3 h-3"
-                              src={require("/public/images/overview/verified.svg")}
-                              alt="verified"
-                              width={12}
-                              height={12}
-                            />
-                          )}
-                        </div>
+                      <div className="flex w-1/3 md:w-1/4 lg:w-1/6">
+                        <img
+                          src={`${developer.profile_picture}`}
+                          alt="icon"
+                          width={40}
+                          height={40}
+                        />
+                        <div className="flex flex-col ml-1 lg:ml-4">
+                          <div className="flex items-center">
+                            <span className="text-[8px] md:text-sm lg:text-base text-[#57534E] font-extrabold">
+                              {developer.developer_name}
+                            </span>
 
-                        <div className="flex mt-1">
-                          <div className="flex">
-                            {developer.tags.map((tag, index) => (
-                              <div
-                                className="sm:py-[1px] px-1 lg:px-2 lg:mr-[6px] scale-75 lg:scale-100"
-                                key={index}
-                                style={{
-                                  backgroundColor: tags_colors[index].bg_color,
-                                  color: tags_colors[index].text_color,
-                                  borderRadius: tags_colors[index].radius,
-                                }}
-                              >
-                                <span className="text-[8px] md:text-[10px] font-extrabold">
-                                  {tag}
-                                </span>
-                              </div>
-                            ))}
+                            {developer.verified && (
+                              <Image
+                                className="ml-1 lg:ml-2 w-3 h-3"
+                                src={require("/public/images/overview/verified.svg")}
+                                alt="verified"
+                                width={12}
+                                height={12}
+                              />
+                            )}
+                          </div>
+
+                          <div className="flex mt-1">
+                            <div className="flex">
+                              {developer.tags.map((tag, index) => (
+                                <div
+                                  className="sm:py-[1px] px-1 lg:px-2 lg:mr-[6px] scale-75 lg:scale-100"
+                                  key={index}
+                                  style={{
+                                    backgroundColor: tags_colors[index].bg_color,
+                                    color: tags_colors[index].text_color,
+                                    borderRadius: tags_colors[index].radius,
+                                  }}
+                                >
+                                  <span className="text-[8px] md:text-[10px] font-extrabold">
+                                    {tag}
+                                  </span>
+                                </div>
+                              ))}
+                            </div>
                           </div>
                         </div>
                       </div>
-                    </div>
+                    </Link>
 
                     {
-                      <div className="hidden lg:flex lg:justify-around lg:w-1/3">
-                        <div className="text-sm text-[#78716C] flex justify-center font-extrabold">
-                          <span>{developer.telegram_project}</span>
-                        </div>
+                      <div className="hidden lg:flex lg:justify-around lg:w-1/3 -ml-16">
+                        <Link href={`/developers/charts/${developer.developer_wallet}`} >
+                          <div className="text-sm text-[#78716C] flex justify-center font-extrabold">
+                            <span>{developer.telegram_project}</span>
+                          </div>
+                        </Link>
+                        <Link href={`/developers/charts/${developer.developer_wallet}`} >
 
-                        <div className="text-sm text-[#CA8A04] flex justify-center font-extrabold">
-                          <span>{developer.developer_website.slice(0, 12)}...</span>
-                        </div>
+                          <div className="text-sm text-[#CA8A04] flex justify-center font-extrabold">
+                            <span>{developer.developer_website.slice(0, 12)}...</span>
+                          </div>
+                        </Link>
+
                       </div>
                     }
+                    <Link href={`/developers/charts/${developer.developer_wallet}`} >
 
-                    <div className="text-xs md:text-sm lg:ml-0 ml-10 text-[#78716C] w-1/3 md:w-1/4 lg:w-1/6 flex justify-center font-extrabold">
-                      <span>{developer.developer_website.slice(0, 12)}...</span>
-                    </div>
+                      <div className="text-xs md:text-sm lg:ml-0 ml-10 text-[#78716C] w-1/3 md:w-1/4 lg:w-1/6 flex justify-center font-extrabold">
+                        <span>{developer.developer_website.slice(0, 12)}...</span>
+                      </div>
+                    </Link>
+                    <Link href={`/developers/charts/${developer.developer_wallet}`} >
 
-                    <div className="text-sm text-[#78716C] hidden md:w-1/4 lg:w-1/6 md:flex justify-center font-extrabold">
-                      <span>{developer.number_of_projects}</span>
-                    </div>
-
+                      <div className="text-sm text-[#78716C] hidden md:w-1/4 lg:w-1/6 md:flex justify-center font-extrabold">
+                        <span>{developer.number_of_projects}</span>
+                      </div>
+                    </Link>
                     <div className="w-1/3 md:w-1/4 lg:w-1/6 flex justify-center">
                       <div className="flex min-w-[100px] items-center justify-center group cursor-pointer gap-x-2 px-[5px] md:px-[10px] py-3 border border-[#CA8A04] rounded-md hover:bg-gold text-[#CA8A04] hover:text-white"
-                      onClick={()=>Vote(developer.contract_address)}>
+                        onClick={() => Vote(developer.contract_address)}>
                         <VoteIconSVG className="fill-gold group-hover:fill-white" />
 
                         <span className=" font-semibold text-xs md:text-base">
@@ -290,7 +301,7 @@ const Overview = ({ data, topVoted }) => {
                       </div>
                     </div>
                   </div>
-                  </Link>
+
                 ))}
               </div>
             </div>
@@ -414,71 +425,77 @@ const Overview = ({ data, topVoted }) => {
                   className="px-6 py-4 flex items-center justify-between"
                   key={index}
                 >
-                  <div className="flex w-1/3 md:w-1/4 lg:w-1/6">
-                    <img
-                      src={`${developer.profile_picture}`}
-                      alt={developer.profile_picture}
-                      width={40}
-                      height={40}
-                    />
-                    <div className="flex flex-col ml-1 lg:ml-4">
-                      <div className="flex items-center">
-                        <span className="text-[8px] md:text-sm lg:text-base text-[#57534E] font-extrabold">
-                          {developer.developer_name}
-                        </span>
+                  <Link href={`/developers/charts/${developer.developer_wallet}`} >
 
-                        {developer.verified && (
-                          <Image
-                            className="ml-1 lg:ml-2 w-3 h-3"
-                            src={require("/public/images/overview/verified.svg")}
-                            alt="verified"
-                            width={12}
-                            height={12}
-                          />
-                        )}
-                      </div>
+                    <div className="flex w-1/3 md:w-1/4 lg:w-1/6">
+                      <img
+                        src={`${developer.profile_picture}`}
+                        alt={developer.profile_picture}
+                        width={40}
+                        height={40}
+                      />
+                      <div className="flex flex-col ml-1 lg:ml-4">
+                        <div className="flex items-center">
+                          <span className="text-[8px] md:text-sm lg:text-base text-[#57534E] font-extrabold">
+                            {developer.developer_name}
+                          </span>
 
-                      <div className="flex mt-1">
-                        <div className="flex">
-                          {developer.tags.map((tag, index) => (
-                            <div
-                              className="py-[1px] px-1 lg:px-2 lg:mr-[6px] scale-75 lg:scale-100"
-                              key={index}
-                              style={{
-                                backgroundColor: tags_colors[index].bg_color,
-                                color: tags_colors[index].text_color,
-                                borderRadius: tags_colors[index].radius,
-                              }}
-                            >
-                              <span className="text-[10px] font-extrabold">
-                                {tag}
-                              </span>
-                            </div>
-                          ))}
+                          {developer.verified && (
+                            <Image
+                              className="ml-1 lg:ml-2 w-3 h-3"
+                              src={require("/public/images/overview/verified.svg")}
+                              alt="verified"
+                              width={12}
+                              height={12}
+                            />
+                          )}
+                        </div>
+
+                        <div className="flex mt-1">
+                          <div className="flex">
+                            {developer.tags.map((tag, index) => (
+                              <div
+                                className="py-[1px] px-1 lg:px-2 lg:mr-[6px] scale-75 lg:scale-100"
+                                key={index}
+                                style={{
+                                  backgroundColor: tags_colors[index].bg_color,
+                                  color: tags_colors[index].text_color,
+                                  borderRadius: tags_colors[index].radius,
+                                }}
+                              >
+                                <span className="text-[10px] font-extrabold">
+                                  {tag}
+                                </span>
+                              </div>
+                            ))}
+                          </div>
                         </div>
                       </div>
                     </div>
-                  </div>
-
-                  <div className="text-sm w-1/6 lg:flex hidden justify-center text-[#57534E] font-extrabold">
-                    <span>{developer.telegram_project}</span>
-                  </div>
-
-                  <div className="text-sm text-[#CA8A04] w-1/6 lg:flex justify-center hidden font-extrabold">
-                    <span>{developer.developer_website.slice(0, 12)}...</span>
-                  </div>
-
-                  <div className="text-sm ml-10 text-[#78716C] w-1/3 md:w-1/4 lg:w-1/6 flex justify-center font-extrabold">
-                    <span>{developer.developer_website.slice(0, 12)}...</span>
-                  </div>
-
-                  <div className="text-xs md:text-sm text-[#78716C] hidden md:w-1/4 lg:w-1/6 md:flex justify-center font-extrabold">
-                    <span>{developer.number_of_projects}</span>
-                  </div>
-
+                  </Link>
+                  <Link href={`/developers/charts/${developer.developer_wallet}`} >
+                    <div className="text-sm w-1/6 lg:flex hidden justify-center text-[#57534E] font-extrabold">
+                      <span>{developer.telegram_project}</span>
+                    </div>
+                  </Link>
+                  <Link href={`/developers/charts/${developer.developer_wallet}`} >
+                    <div className="text-sm text-[#CA8A04] w-1/6 lg:flex justify-center hidden font-extrabold">
+                      <span>{developer.developer_website.slice(0, 12)}...</span>
+                    </div>
+                  </Link>
+                  <Link href={`/developers/charts/${developer.developer_wallet}`} >
+                    <div className="text-sm ml-10 text-[#78716C] w-1/3 md:w-1/4 lg:w-1/6 flex justify-center font-extrabold">
+                      <span>{developer.developer_website.slice(0, 12)}...</span>
+                    </div>
+                  </Link>
+                  <Link href={`/developers/charts/${developer.developer_wallet}`} >
+                    <div className="text-xs md:text-sm text-[#78716C] hidden md:w-1/4 lg:w-1/6 md:flex justify-center font-extrabold">
+                      <span>{developer.number_of_projects}</span>
+                    </div>
+                  </Link>
                   <div className="w-1/3 md:w-1/4 lg:w-1/6 flex justify-center">
                     <div className="flex min-w-[100px] items-center justify-center group cursor-pointer gap-x-2 px-[5px] md:px-[10px] py-3 border border-[#CA8A04] rounded-md hover:bg-gold text-[#CA8A04] hover:text-white"
-                    onClick={()=>Vote(developer.contract_address)}>
+                      onClick={() => Vote(developer.contract_address)}>
                       <VoteIconSVG className="fill-gold group-hover:fill-white" />
 
                       <span className=" font-semibold text-xs md:text-base">
@@ -528,7 +545,7 @@ const Overview = ({ data, topVoted }) => {
             </button>
           </div>}
       </div>
-    </main>
+    </main >
   );
 };
 

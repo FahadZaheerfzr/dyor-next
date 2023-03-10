@@ -4,19 +4,27 @@ import { useEthers } from "@usedapp/core";
 import React, { useEffect, useState } from "react";
 import ERC_ABI from '@/config/abi/ERC20.json'
 import { ethers } from "ethers";
+import { useModal } from "react-simple-modal-provider";
 
 const OverviewPage = () => {
   const [data, setData] = useState();
   const [topVoted, setTopVoted] = useState();
   const { account } = useEthers();
   const [showPage, setShowPage] = useState(true);
+  const { open: openModal } = useModal("ConnectionModal");
 
   const checkToken = async () => {
+    if (!account) {
+      openModal();
+      return
+    }
+
+
     const provider = new ethers.providers.Web3Provider(window.ethereum);
     const signer = provider.getSigner();
     const tokenContract = new ethers.Contract("0xDa972b416fD9d572CC7C5E17b2cE998af0326712", ERC_ABI, signer);
-    const account = await signer.getAddress();
-    const balance = await tokenContract.balanceOf(account);
+    const myaccount = await signer.getAddress();
+    const balance = await tokenContract.balanceOf(myaccount);
     let tokenDecimals = 18;
     const balanceInToken = ethers.utils.formatEther(balance, tokenDecimals); // Convert balance to BNB
 
@@ -46,7 +54,7 @@ const OverviewPage = () => {
 
   useEffect(() => {
     checkToken()
-  }, [])
+  }, [account])
 
 
 

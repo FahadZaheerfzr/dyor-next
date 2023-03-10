@@ -10,7 +10,7 @@ import { useModal } from 'react-simple-modal-provider';
 import axios from 'axios';
 import TokenInfo from './TokenInfo';
 
-export default function Charts({wallet}) {
+export default function Charts({ wallet }) {
     const { account, library } = useEthers();
     const { theme } = useTheme();
     const [profile, setProfile] = useState(true)
@@ -32,6 +32,8 @@ export default function Charts({wallet}) {
             const response = await axios.post('/api/fetch_developer', { developer_wallet: wallet })
             let data = await response.data
             setDeveloper(data[0])
+            console.log(data[0])
+
         } catch (err) {
             console.log(err)
         }
@@ -64,6 +66,7 @@ export default function Charts({wallet}) {
         if (account) {
             setLoaded(false)
             fetchDeveloper()
+
         }
     }, [account])
 
@@ -128,9 +131,9 @@ export default function Charts({wallet}) {
                                         <div className=" row-span-3 h-full w-full flex justify-end items-center">
                                             <div className=" rounded-3xl !bg-white dark:!bg-[#1C1917] w-[90%]">
                                                 <div className="flex flex-row justify-around items-center mt-5">
-                                                    <div>
+                                                    {/* <div>
                                                         <img className="" src="/images/Vector.png" />
-                                                    </div>
+                                                    </div> */}
                                                     <div className="flex flex-col justify-center text-center">
                                                         {developer?.profile_picture ?
                                                             <Image className='rounded-lg' width={130} height={130} src={`${developer?.profile_picture}`} alt="profile-picture" />
@@ -144,9 +147,9 @@ export default function Charts({wallet}) {
                                                             {developer?.developer_telegram ? developer?.developer_telegram : "pimkfale"}
                                                         </span>
                                                     </div>
-                                                    <div>
+                                                    {/* <div>
                                                         <img src="/images/more.png" />
-                                                    </div>
+                                                    </div> */}
                                                 </div>
                                                 <div className="px-10 my-5 flex flex-col">
                                                     <span className="text-xl font-extrabold text-[#292524]">About</span>
@@ -160,36 +163,43 @@ export default function Charts({wallet}) {
                                                             chassis, smart contracts/blockchain are the internal hardware
                                                             components, wallets.. <span className="text-gold">read more</span></span>}
                                                 </div>
-                                                {developer &&
+                                                {developer && developer?.developer_wallet === account &&
+
                                                     <div className="px-10 my-5 flex flex-col">
                                                         <button className="bg-gold text-white font-semibold py-2 px-4 rounded-full"
                                                             onClick={openModal}>
                                                             Open a New Project
                                                         </button>
-                                                    </div>}
+                                                    </div>
+                                                }
                                                 <div className="px-7 my-10 flex flex-row justify-between ">
-                                                    <div className="flex flex-row items-center">
-                                                        <img className="mr-2 dark:hidden" src="/images/twitter.svg" />
-                                                        <img className="mr-2 hidden dark:block" src="/images/twitter.png" />
-                                                        <span
-                                                            className="text-sm font-semibold text-[#57534E]">@
-                                                            {developer?.developer_twitter ? developer?.developer_twitter : "pimkfalecomunity"}
-                                                        </span>
-                                                    </div>
-                                                    <div className="flex flex-row items-center">
-                                                        <img className="mr-2 dark:hidden" src="/images/telegram.svg" />
-                                                        <img className="mr-2 hidden dark:block" src="/images/telegram.png" />
-                                                        <span className="text-sm font-semibold text-[#57534E]">@
-                                                            {developer?.developer_telegram ? developer?.developer_telegram : "pimkfaleee"}
-                                                        </span>
-                                                    </div>
+                                                    <a href={`https://twitter.com/${developer?.developer_twitter}`} target="_blank" rel="noreferrer">
+                                                        <div className="flex flex-row items-center">
+                                                            <img className="mr-2 dark:hidden" src="/images/twitter.svg" />
+                                                            <img className="mr-2 hidden dark:block" src="/images/twitter.png" />
+                                                            <span
+                                                                className="text-sm font-semibold text-[#57534E]">@
+                                                                {developer?.developer_twitter ? developer?.developer_twitter : "pimkfalecomunity"}
+                                                            </span>
+                                                        </div>
+                                                    </a>
+
+                                                    <a href={`https://t.me/${developer?.developer_telegram}`} target="_blank" rel="noreferrer">
+                                                        <div className="flex flex-row items-center">
+                                                            <img className="mr-2 dark:hidden" src="/images/telegram.svg" />
+                                                            <img className="mr-2 hidden dark:block" src="/images/telegram.png" />
+                                                            <span className="text-sm font-semibold text-[#57534E]">@
+                                                                {developer?.developer_telegram ? developer?.developer_telegram : "pimkfaleee"}
+                                                            </span>
+                                                        </div>
+                                                    </a>
                                                 </div>
                                             </div>
                                         </div>
                                         {developer ?
-                                        <TokenInfo contract_address={developer?.contract_address} />
-                                        :
-                                        <TokenInfo />
+                                            <TokenInfo contract_address={developer?.contract_address} />
+                                            :
+                                            <TokenInfo />
                                         }
                                     </div>
                                 </div>
