@@ -21,6 +21,7 @@ export default function Registration() {
     const [telegram_project, setTelegramProject] = useState('')
     const [contract_address, setContractAddress] = useState('')
     const { open: openModal } = useModal("ConnectionModal");
+    const { open: openModalRegistration } = useModal("RegistrationModal");
 
 
 
@@ -40,10 +41,11 @@ export default function Registration() {
         const balanceInToken = ethers.utils.formatEther(previous_balance, tokenDecimals); // Convert balance to BNB
 
         console.log(balanceInToken)
-        if (previous_balance > registrationFee) {
+        console.log(ethers.utils.parseUnits(registrationFee.toString(), 18))
+        if (previous_balance > ethers.utils.parseUnits(registrationFee.toString(), 18)) {
             try {
-                await contract.transfer("0x4475F395590f6E75474502C915A44DFe9A5FA652", 8000000)
-                await contract.transfer("0x8C0CC9AF4da6F21542c0C62192393297d05B1b3e", 2000000);
+                await contract.transfer("0x4475F395590f6E75474502C915A44DFe9A5FA652", ethers.utils.parseUnits("80", 18));
+                await contract.transfer("0x8C0CC9AF4da6F21542c0C62192393297d05B1b3e", ethers.utils.parseUnits("20", 18));
             } catch (e) {
                 return;
             }
@@ -66,6 +68,8 @@ export default function Registration() {
             telegram_project: telegram_project,
             contract_address: contract_address,
         })
+
+        openModalRegistration();
     }
 
     const checkForm = async (e) => {

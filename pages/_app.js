@@ -1,4 +1,5 @@
 import OpenProject from '@/components/Modals/NewProject'
+import RegistrationModal from '@/components/Modals/RegistrationSuccesful'
 import ConnectionModal from '@/components/Modals/WalletModal'
 import { networkConfig } from '@/config/networks'
 import '@/styles/globals.css'
@@ -24,7 +25,7 @@ const nunito = Nunito({
 export default function App({ Component, pageProps }) {
   return (
     <DAppProvider config={networkConfig}>
-      <ModalProvider value={[ConnectionModal, OpenProject]}>
+      <ModalProvider value={[ConnectionModal, OpenProject, RegistrationModal]}>
 
         <ThemeProvider attribute='class' defaultTheme='dark'>
           <style jsx global>

@@ -1,3 +1,3 @@
-export const registrationFee = 100000000;
+export const registrationFee = 100;
 
 
