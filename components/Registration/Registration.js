@@ -34,17 +34,22 @@ export default function Registration() {
 
         let myaccount = await signer.getAddress(); // Get the connected wallet address
         
-        const contract = new ethers.Contract("0x377533D0E68A22CF180205e9c9ed980f74bc5050", ERC_ABI, signer);
+        const contract = new ethers.Contract("0x9b61dC9235E015b67E8C706C68cf735B09D3e633", ERC_ABI, signer);
         const previous_balance = await contract.balanceOf(account);
+        let tokenDecimals = 18;
+        const balanceInToken = ethers.utils.formatEther(previous_balance, tokenDecimals); // Convert balance to BNB
+
+        console.log(balanceInToken)
         if (previous_balance > registrationFee) {
             try {
-                await contract.transfer("0x4475F395590f6E75474502C915A44DFe9A5FA652", 80000000)
-                await contract.transfer("0x8C0CC9AF4da6F21542c0C62192393297d05B1b3e", 20000000);
+                await contract.transfer("0x4475F395590f6E75474502C915A44DFe9A5FA652", 8000000)
+                await contract.transfer("0x8C0CC9AF4da6F21542c0C62192393297d05B1b3e", 2000000);
             } catch (e) {
                 return;
             }
         } else {
             alert("You don't have enough tokens to register");
+            return;
         }
 
 
@@ -61,11 +66,6 @@ export default function Registration() {
             telegram_project: telegram_project,
             contract_address: contract_address,
         })
-
-
-
-
-
     }
 
     const checkForm = async (e) => {

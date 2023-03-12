@@ -46,6 +46,7 @@ export default function Charts({ wallet }) {
             let signer = await library.getSigner(developer.developer_wallet);
             let contract = new ethers.Contract(developer.contract_address, ERC_ABI, signer)
             let symbol = await contract.symbol()
+            console.log(symbol)
             setSymbol(`${symbol}/BNB`)
         } catch (err) {
             setSymbol("RBAUSD_48E54C")

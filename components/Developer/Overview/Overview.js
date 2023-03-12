@@ -63,7 +63,7 @@ const Overview = ({ data, topVoted }) => {
       wallet_address: account
     });
     console.log("res.data", res.data)
-    const data = res.data[res.data.length-1];
+    const data = res.data[res.data.length - 1];
 
     if (data) {
       console.log("data.created_at", data.created_at)
@@ -213,14 +213,13 @@ const Overview = ({ data, topVoted }) => {
                   <div
                     className="px-6 py-4 flex items-center justify-between" key={index}
                   >
-                    <Link href={`/developers/charts/${developer.developer_wallet}`} >
+                    <Link href={`/developers/charts/${developer.developer_wallet}`} className="w-1/3 md:w-1/4 lg:w-1/6" >
 
-                      <div className="flex w-1/3 md:w-1/4 lg:w-1/6">
+                      <div className="flex items-center">
                         <img
                           src={`${developer.profile_picture}`}
                           alt="icon"
-                          width={40}
-                          height={40}
+                          className="w-[40px] h-[40px]"
                         />
                         <div className="flex flex-col ml-1 lg:ml-4">
                           <div className="flex items-center">

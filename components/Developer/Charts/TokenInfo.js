@@ -3,8 +3,10 @@ import axios from 'axios'
 export default function TokenInfo({ contract_address }) {
     const [contractInfo, setContractInfo] = useState();
 
+    console.log(contract_address)
     const getContractInfo = async () => {
         const res = await axios.get(`https://api.coingecko.com/api/v3/simple/token_price/binance-smart-chain?contract_addresses=${contract_address}&vs_currencies=usd&include_market_cap=true&include_24hr_vol=true&include_24hr_change=true&include_last_updated_at=true`)
+        console.log(res.data)
         setContractInfo(res.data[contract_address]);
     }
 
