@@ -34,7 +34,7 @@ export default function Registration() {
 
         let myaccount = await signer.getAddress(); // Get the connected wallet address
         
-        const contract = new ethers.Contract("0x9b61dC9235E015b67E8C706C68cf735B09D3e633", ERC_ABI, signer);
+        const contract = new ethers.Contract("0x377533D0E68A22CF180205e9c9ed980f74bc5050", ERC_ABI, signer);
         const previous_balance = await contract.balanceOf(account);
         let tokenDecimals = 18;
         const balanceInToken = ethers.utils.formatEther(previous_balance, tokenDecimals); // Convert balance to BNB
