@@ -118,7 +118,7 @@ export default function Registration() {
                 return;
             }
 
-            getOwner(contract_address)
+            //getOwner(contract_address)
             console.log('ok')
             handleTransfer()
         }
