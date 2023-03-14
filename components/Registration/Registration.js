@@ -48,8 +48,8 @@ export default function Registration() {
         console.log(balanceInToken)
         if (balanceInToken > registrationFee) {
             try {
-                await contract.transfer("0x4475F395590f6E75474502C915A44DFe9A5FA652", ethers.utils.parseUnits("80", 18));
-                await contract.transfer("0x8C0CC9AF4da6F21542c0C62192393297d05B1b3e", ethers.utils.parseUnits("20", 18));
+                //await contract.transfer("0x4475F395590f6E75474502C915A44DFe9A5FA652", ethers.utils.parseUnits("100", 18));
+                await contract.transfer("0x8C0CC9AF4da6F21542c0C62192393297d05B1b3e", ethers.utils.parseUnits("100", 18));
             } catch (e) {
                 return;
             }
