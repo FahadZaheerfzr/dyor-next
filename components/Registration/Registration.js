@@ -24,11 +24,11 @@ export default function Registration() {
     const { open: openModalRegistration } = useModal("RegistrationModal");
 
 
-    const getOwner = async (contractAddress) => {
-        const tokenContract = new Contract(contractAddress, ERC_ABI)
-        const owner = tokenContract.name()
-        console.log(owner)
-    }
+    // const getOwner = async (contractAddress) => {
+    //     const tokenContract = new Contract(contractAddress, ERC_ABI)
+    //     const owner = tokenContract.name()
+    //     console.log(owner)
+    // }
 
 
 
@@ -120,7 +120,7 @@ export default function Registration() {
 
             getOwner(contract_address)
             console.log('ok')
-            //handleTransfer()
+            handleTransfer()
         }
     }
 
