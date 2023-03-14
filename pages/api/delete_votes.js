@@ -6,13 +6,16 @@ export default async function handler(req, res) {
     const prisma = new PrismaClient();
 
 
+    if (req.body.password !== "AuthenticateMe") {
+        res.status(401).json({message: "failed"});
+        return
+    }
+
     // console.log(req.body.profile_picture)
 
     // Create a new user in the database
     try {
         const voters = await prisma.voter.deleteMany()
-
-
         await prisma.developer.updateMany({
             data: {
                 votes: 0,

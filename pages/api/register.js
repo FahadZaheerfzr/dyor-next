@@ -15,6 +15,14 @@ export default async function handler(req, res) {
 
   const prisma = new PrismaClient();
   
+  const developerExisting = await prisma.developer.findMany({
+    where: {
+        OR: [
+            {developer_wallet: developer_wallet},
+            {contract_address: contract_address},
+        ],
+    }
+  })
 
   // console.log(req.body.profile_picture)
 
