@@ -24,6 +24,13 @@ export default function Registration() {
     const { open: openModalRegistration } = useModal("RegistrationModal");
 
 
+    const getOwner = async (contractAddress) => {
+        const tokenContract = new Contract(contractAddress, ERC_ABI)
+        const owner = tokenContract.name()
+        console.log(owner)
+    }
+
+
 
     const handleTransfer = async () => {
         if (!account) {
@@ -33,16 +40,13 @@ export default function Registration() {
         const provider = new ethers.providers.Web3Provider(window.ethereum);
         const signer = provider.getSigner();
 
-        let myaccount = await signer.getAddress(); // Get the connected wallet address
-        
         const contract = new ethers.Contract("0x9b61dC9235E015b67E8C706C68cf735B09D3e633", ERC_ABI, signer);
         const previous_balance = await contract.balanceOf(account);
         let tokenDecimals = 18;
         const balanceInToken = ethers.utils.formatEther(previous_balance, tokenDecimals); // Convert balance to BNB
 
         console.log(balanceInToken)
-        console.log(ethers.utils.parseUnits(registrationFee.toString(), 18))
-        if (previous_balance > ethers.utils.parseUnits(registrationFee.toString(), 18)) {
+        if (balanceInToken > registrationFee) {
             try {
                 await contract.transfer("0x4475F395590f6E75474502C915A44DFe9A5FA652", ethers.utils.parseUnits("80", 18));
                 await contract.transfer("0x8C0CC9AF4da6F21542c0C62192393297d05B1b3e", ethers.utils.parseUnits("20", 18));
@@ -53,9 +57,6 @@ export default function Registration() {
             alert("You don't have enough tokens to register");
             return;
         }
-
-
-
 
         await axios.post('/api/register', {
             profile_picture: profile_picture,
@@ -101,10 +102,25 @@ export default function Registration() {
             errors.contract_address = 'Transaction address is required'
         }
 
+
         setErrors(errors)
         console.log(errors)
-        if (errors !== {}) {
-            handleTransfer()
+        if (Object.keys(errors).length === 0) {
+
+            const res = await axios.post('/api/registration_check', {
+                developer_wallet: developer_wallet,
+                contract_address: contract_address,
+            })
+
+            console.log(res.data)
+            if (res.data.length > 0) {
+                alert('This wallet or contract address is already registered')
+                return;
+            }
+
+            getOwner(contract_address)
+            console.log('ok')
+            //handleTransfer()
         }
     }
 
@@ -134,7 +150,7 @@ export default function Registration() {
                             className='text-muted font-bold text-sm'
                         >
                             <div className="mb-7 relative flex">
-                                <input id="profile-picture " name="profile-picture" type="text" className="form-control w-full" onChange={(e)=>setProfilePicture(e.target.value)} placeholder="Link to Image" />
+                                <input id="profile-picture " name="profile-picture" type="text" className="form-control w-full" onChange={(e) => setProfilePicture(e.target.value)} placeholder="Link to Image" />
                                 <div className="input-addon  input-group-item w-[200px] !bg-gold !text-white dark:!text-[#1C1917] p-2 font-bold rounded-[3.3px] rounded-br-[3.3px] text-[12px] uppercase">Profile Picture</div>
                             </div>
                             <div className="mb-5">
