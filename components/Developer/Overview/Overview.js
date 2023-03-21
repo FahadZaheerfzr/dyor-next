@@ -8,6 +8,7 @@ import Link from "next/link";
 import { useEthers } from "@usedapp/core";
 import axios from "axios";
 import { useRouter } from "next/router";
+import DribbleSVG from "@/svg/dribble";
 
 const Overview = ({ data, topVoted }) => {
   const router = useRouter();
@@ -207,15 +208,15 @@ const Overview = ({ data, topVoted }) => {
               <div className="table-header text-xs md:text-sm lg:text-lg font-extrabold text-[#57534E] rounded-t-2xl">
                 <div className="py-7 w-full flex justify-between px-6">
                   <span className="w-1/3 md:w-1/4 lg:w-1/6 flex justify-center">
-                    Developer Name
+                    Developer
                   </span>
 
                   <div className="lg:w-1/3 hidden lg:flex lg:justify-around">
                     <span className="flex w-full justify-center">
-                      Current project TG
+                      Telegram
                     </span>
                     <span className="flex w-full justify-center">
-                      Poocoin project
+                      Chart
                     </span>
                   </div>
 
@@ -223,7 +224,7 @@ const Overview = ({ data, topVoted }) => {
                     Website
                   </span>
                   <span className="md:w-1/4 lg:w-1/6 hidden md:flex justify-center">
-                    Number of projects
+                    Projects
                   </span>
                   <span className="w-1/3 md:w-1/4 lg:w-1/6 flex justify-center">
                     Votes
@@ -285,26 +286,29 @@ const Overview = ({ data, topVoted }) => {
                     </Link>
 
 
-                      <Link href={`/developers/charts/${developer.developer_wallet}`} className="hidden lg:flex justify-center lg:w-1/6" >
-                        <div className="text-sm text-[#78716C] flex justify-center font-extrabold">
-                          <span>{developer.telegram_project}</span>
-                        </div>
-                      </Link>
-                      <Link href={`/developers/charts/${developer.developer_wallet}`} className="hidden lg:flex justify-center lg:w-1/6" >
+                    <Link href={`/developers/charts/${developer.developer_wallet}`} className="hidden lg:flex justify-center lg:w-1/6" >
+                      <div className="text-sm text-[#78716C] flex justify-center font-extrabold">
+                      <img src={("/images/telegram.svg")} alt="telegram" className="w-6 h-6 mr-1" />
+                        {/* <span>{developer.telegram_project}</span> */}
+                      </div>
+                    </Link>
+                    <Link href={`/developers/charts/${developer.developer_wallet}`} className="hidden lg:flex justify-center lg:w-1/6" >
 
-                        <div className="text-sm text-[#CA8A04] flex justify-center font-extrabold">
-                          <span>{developer.developer_website.slice(0, 12)}...</span>
-                        </div>
-                      </Link>
+                      <div className="text-sm text-[#CA8A04] flex justify-center font-extrabold">
+                      <img src={("/images/poocoin.svg")} alt="telegram" className="w-6 h-6 mr-1" />
+
+                        {/* <span>{developer.developer_website.slice(0, 12)}...</span> */}
+                      </div>
+                    </Link>
 
 
                     <Link href={`/developers/charts/${developer.developer_wallet}`} className="flex justify-center w-1/3 md:w-1/4 lg:w-1/6">
 
                       <div className="text-xs md:text-sm lg:ml-0 ml-10 text-[#78716C] font-extrabold">
-                        <span>{developer.developer_website.slice(0, 12)}...</span>
+                      <DribbleSVG className="fill-gold" />
                       </div>
                     </Link>
-                    <Link href={`/developers/charts/${developer.developer_wallet}`}  className="hidden md:w-1/4 lg:w-1/6 md:flex justify-center">
+                    <Link href={`/developers/charts/${developer.developer_wallet}`} className="hidden md:w-1/4 lg:w-1/6 md:flex justify-center">
 
                       <div className="text-sm text-[#78716C]  font-extrabold">
                         <span>{developer.number_of_projects}</span>
@@ -420,19 +424,19 @@ const Overview = ({ data, topVoted }) => {
             <div className="table-header text-xs md:text-sm lg:text-lg font-extrabold text-[#57534E] rounded-t-2xl">
               <div className="py-7 w-full flex justify-between px-6">
                 <span className="w-1/3 md:w-1/4 lg:w-1/6 flex justify-center">
-                  Assets
+                  Developer
                 </span>
                 <span className="w-1/6 lg:flex justify-center hidden">
-                  Symbol
+                Telegram
                 </span>
                 <span className="w-1/3 md:w-1/4 lg:w-1/6 flex justify-center ml-6 lg:ml-0">
-                  24h volume
+                  Chart
                 </span>
                 <span className="w-1/6 lg:flex justify-center hidden">
-                  Market Cap
+                  Website
                 </span>
                 <span className="md:w-1/4 lg:w-1/6 hidden md:flex justify-center">
-                  Launch
+                  Projects
                 </span>
                 <span className="w-1/3 md:w-1/4 lg:w-1/6 flex justify-center">
                   Votes
@@ -494,17 +498,20 @@ const Overview = ({ data, topVoted }) => {
                   </Link>
                   <Link href={`/developers/charts/${developer.developer_wallet}`} className="w-1/6 lg:flex hidden justify-center">
                     <div className="text-sm  text-[#57534E] font-extrabold">
-                      <span>{developer.telegram_project}</span>
+                      <img src={("/images/telegram.svg")} alt="telegram" className="w-6 h-6 mr-1" />
+                      {/* <span>{developer.telegram_project}</span> */}
                     </div>
                   </Link>
                   <Link href={`/developers/charts/${developer.developer_wallet}`} className="w-1/6 hidden lg:flex justify-center">
                     <div className="text-sm text-[#CA8A04]  font-extrabold">
-                      <span>{developer.developer_website.slice(0, 12)}...</span>
+                      <img src={("/images/poocoin.svg")} alt="telegram" className="w-6 h-6 mr-1" />
+                      {/* <span>{developer.developer_website.slice(0, 12)}...</span> */}
                     </div>
                   </Link>
                   <Link href={`/developers/charts/${developer.developer_wallet}`} className="w-1/3 md:w-1/4 lg:w-1/6 flex justify-center">
                     <div className="text-sm text-[#78716C]   font-extrabold">
-                      <span>{developer.developer_website.slice(0, 12)}...</span>
+                      <DribbleSVG className="fill-gold" />
+                      {/* <span>{developer.developer_website.slice(0, 12)}...</span> */}
                     </div>
                   </Link>
                   <Link href={`/developers/charts/${developer.developer_wallet}`} className="hidden md:w-1/4 lg:w-1/6 md:flex justify-center">
@@ -564,7 +571,7 @@ const Overview = ({ data, topVoted }) => {
             </button>
           </div>}
       </div>
-    </main >
+    </main>
   );
 };
 

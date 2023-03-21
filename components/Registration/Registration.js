@@ -54,7 +54,7 @@ export default function Registration() {
                 return;
             }
         } else {
-            alert("You don't have enough tokens to register");
+            alert("You do not have enough USDT in your wallet to register");
             return;
         }
 
@@ -183,7 +183,7 @@ export default function Registration() {
                                     {errors.telegram_username && <small className="block mt-2 invalid-feedback">{errors.telegram_username}</small>}
                                 </div>
                                 <div className="w-full ml-5">
-                                    <label className="label block mb-2" htmlFor="twitter_username">Twitter Username</label>
+                                    <label className="label block mb-2" htmlFor="twitter_username">Twitter Username <span className="invalid-feedback">*</span></label>
                                     <div className="input-group">
                                         <div className="input-addon input-addon-prepend input-group-item !bg-[#CA8A04] dark:!bg-[#292524] !text-white dark:!text-[#57534E]">@</div>
                                         <input id="twitter_username" type="text" name="twitter_username" className="form-control input-group-item" placeholder="Twitter Username"
@@ -203,7 +203,7 @@ export default function Registration() {
                                     {errors.telegram_username && <small className="block mt-2 invalid-feedback">{errors.telegram_username}</small>}
                                 </div>
                                 <div className="w-full ml-5 ">
-                                    <label className="label block mb-2" htmlFor="website">Website</label>
+                                    <label className="label block mb-2" htmlFor="website">Website <span className="invalid-feedback">*</span></label>
                                     <div className="input-group">
                                         <input id="website" type="text" name="website" className="form-control input-group-item" placeholder="Website"
                                             onChange={(e) => setDeveloperWebsite(e.target.value)} value={developer_website} />
@@ -215,6 +215,9 @@ export default function Registration() {
                                 <label className="label block mb-2" htmlFor="title">Contract Address</label>
                                 <input id="transactions" name="transactions" type="text" className="form-control" placeholder="Contract Address"
                                     onChange={(e) => setContractAddress(e.target.value)} value={contract_address} />
+                            </div>
+                            <div className="mb-5">
+                                <small>Please ensure you have the required 100USDT on the BEP20 network to register</small>
                             </div>
                             <div className="mb-5">
                                 <small>All fields with (<span className="invalid-feedback">*</span>) are Required.</small>

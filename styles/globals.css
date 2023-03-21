@@ -115,5 +115,5 @@ h3 {
 }
 
 .icon {
-  @apply text-[32px] text-muted hover:text-gold;
+  @apply text-[32px];
 }

@@ -153,8 +153,8 @@ export default function Charts({ wallet }) {
                                                     </div> */}
                                                 </div>
                                                 <div className="px-10 my-5 flex flex-col">
-                                                    <span className="text-xl font-extrabold text-[#292524]">About</span>
-                                                    {developer?.developer_about ? <span className="text-[12px] font-normal text-[#57534E] dark:text-[#292524]">
+                                                    <span className="text-xl font-extrabold text-gold">About</span>
+                                                    {developer?.developer_about ? <span className="text-[12px] font-normal text-[#57534E]">
                                                         {developer?.developer_about}
                                                     </span>
                                                         :
@@ -317,8 +317,10 @@ export default function Charts({ wallet }) {
 
                     <div className={` !bg-[#F9F9F9] dark:!bg-[#292524] w-full mt-10 flex flex-col p-5 ${!profile && currentCharts ? "block" : "hidden"}`}>
                         <div className="w-full">
-                            <div className=" my-5" >
-                                {symbol !== "" && <CustomChart symbol={symbol} />}
+                            <div className=" mt-5 mb-10 text-center" >
+                                <span className='text-muted'>
+                                    Chart is not available on mobile
+                                </span>
                             </div>
                         </div>
                         <div className="rounded-3xl !bg-white dark:!bg-[#1C1917] w-full relative p-5">

@@ -16,19 +16,19 @@ export default function Sidebar({ handleSideBar }) {
 
             <div className="menu-items pb-20">
                 <div className="w-full h-[120px] flex items-center justify-center border-b dark:border-fields">
-                    <Link href="/" className="flex flex-col items-center   justify-center">
+                    <Link href="/" className="flex flex-col items-center text-muted hover:text-gold   justify-center">
                         <i className='icon la la-home'></i>
-                        <span className="text-muted mt-2 text-sm">Home</span>
+                        <span className=" mt-2 text-sm">Home</span>
                     </Link>
                 </div>
-                <div className="w-full h-[120px] flex items-center justify-center border-b dark:border-fields">
-                    <div className="flex flex-col items-center  justify-start"
-                        onClick={() => setOpenSub1(!openSub1)}>
+                <div className="w-full h-[120px] flex items-center text-muted hover:text-gold cursor-pointer justify-center border-b dark:border-fields"
+                onClick={() => setOpenSub1(!openSub1)}>
+                    <div className="flex flex-col items-center  justify-start">
                         <div >
                             <i className='icon la la-users'></i>
                         </div>
                         <div className="flex items-center cursor-pointer">
-                            <span className="text-muted mt-2 text-sm flex flex-row items-center">
+                            <span className="mt-2 text-sm flex flex-row items-center">
                                 Developers
                             </span>
                         </div>
@@ -48,40 +48,40 @@ export default function Sidebar({ handleSideBar }) {
                         </div>
                     </div>
                 )}
-                <div className="w-full h-[120px] flex items-center justify-center border-b dark:border-fields">
+                <div className="w-full h-[120px] flex items-center justify-center border-b dark:border-fields text-muted hover:text-gold">
                     <div className="flex flex-col items-center  justify-start" >
                         <Link href="/kyc_audit">
                             <i className='icon la la-file-alt'></i>
                         </Link>
-                        <span className="mt-2 text-muted text-sm">KYC & Audit</span>
+                        <span className="mt-2 text-sm">KYC & Audit</span>
                     </div>
                 </div>
-                <div className="w-full h-[120px] flex items-center justify-center border-b dark:border-fields">
+                <div className="w-full h-[120px] flex items-center justify-center border-b text-muted hover:text-gold dark:border-fields">
                     <div className="flex flex-col items-center  justify-start">
                         <Link href="/reviews">
                             <i className='icon la la-check-circle' />
                         </Link>
-                        <span className="text-muted text-sm mt-2">Reviews</span>
+                        <span className="text-sm mt-2">Reviews</span>
                     </div>
                 </div>
-                <div className="w-full h-[120px] flex items-center justify-center border-b dark:border-fields">
+                <div className="w-full h-[120px] flex items-center justify-center border-b dark:border-fields text-muted hover:text-gold">
                     <div className="flex flex-col items-center  justify-start">
                         <Link href="/map">
                             <i className='icon la la-sitemap'></i>
                         </Link>
-                        <span className="text-muted text-sm mt-2">Bubble Map</span>
+                        <span className="text-sm mt-2">Bubble Map</span>
                     </div>
                 </div>
-                <div className="w-full h-[120px] flex items-center justify-center border-b dark:border-fields">
+                <div className="w-full h-[120px] flex items-center justify-center border-b text-muted hover:text-gold dark:border-fields">
                     <div className="flex flex-col items-center  justify-center">
                         <i className='icon la la-wallet'></i>
-                        <span className="text-muted text-sm mt-2">Scan for<br/> scammer</span>
+                        <span className="text-sm mt-2">Scan for<br/> scammer</span>
                     </div>
                 </div>
-                <div className="w-full h-[120px] flex items-center justify-center">
+                <div className="w-full h-[120px] flex items-center text-muted hover:text-gold justify-center">
                     <div className="flex flex-col items-center  justify-start">
                         <i className='icon la la-robot'></i>
-                        <span className="text-muted text-sm mt-2">Buy Bot</span>
+                        <span className="text-sm mt-2">Buy Bot</span>
                     </div>
                 </div>
             </div>

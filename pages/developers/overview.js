@@ -5,6 +5,7 @@ import React, { useEffect, useState } from "react";
 import ERC_ABI from '@/config/abi/ERC20.json'
 import { ethers } from "ethers";
 import { useModal } from "react-simple-modal-provider";
+import axios from "axios";
 
 const OverviewPage = () => {
   const [data, setData] = useState();
@@ -18,6 +19,17 @@ const OverviewPage = () => {
       openModal();
       return
     }
+
+
+    const res = await axios.post("/api/fetch_developer", {
+      developer_wallet: account,
+    });
+
+    if (res.data.length > 0) {
+      setShowPage(true)
+      return
+    }
+
 
 
     const provider = new ethers.providers.Web3Provider(window.ethereum);
