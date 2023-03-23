@@ -12,7 +12,6 @@ import TokenInfo from './TokenInfo';
 
 export default function Charts({ wallet }) {
     const { account, library } = useEthers();
-    const { theme } = useTheme();
     const [profile, setProfile] = useState(true)
     const [currentCharts, setCurrentCharts] = useState(true)
     const [menuOpen, setMenuOpen] = useState(false)
@@ -54,11 +53,7 @@ export default function Charts({ wallet }) {
         }
     }
 
-    useEffect(() => {
-        if (library) {
-            handleSymbol()
-        }
-    }, [library, developer])
+
 
 
 
@@ -70,6 +65,12 @@ export default function Charts({ wallet }) {
 
         }
     }, [account])
+
+    useEffect(() => {
+        if (library && developer) {
+            handleSymbol()
+        }
+    }, [library, developer])
 
     const toggleProfile = (bool) => {
         setProfile(bool)
