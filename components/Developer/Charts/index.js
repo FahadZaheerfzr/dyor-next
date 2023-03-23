@@ -207,8 +207,8 @@ export default function Charts({ wallet }) {
                                 </div>
                                 <div className=" col-span-7 px-8 h-full w-full flex justify-center items-center" >
                                     <div className='h-full w-full flex justify-center items-center  dark:bg-primary' ref={graph}>
-                                        {symbol !== "" ?<CustomChart symbol={symbol} />
-                                        : <CustomChart symbol="RBAUSD_48E54C" />}
+                                        {symbol !== "" &&<CustomChart symbol={symbol} />}
+                                        {symbol === "" && <CustomChart symbol={"RBAUSD_48E54C"} />}
                                     </div>
                                 </div>
                             </div>

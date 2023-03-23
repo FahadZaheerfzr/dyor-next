@@ -5,9 +5,10 @@ export default function TokenInfo({ contract_address }) {
 
     console.log(contract_address)
     const getContractInfo = async () => {
-        const res = await axios.get(`https://api.coingecko.com/api/v3/simple/token_price/binance-smart-chain?contract_addresses=${contract_address}&vs_currencies=usd&include_market_cap=true&include_24hr_vol=true&include_24hr_change=true&include_last_updated_at=true`)
-        console.log("Coingecko returned " , res.data)
-        setContractInfo(res.data[contract_address]);
+        const res = await axios.get(`https://api.coingecko.com/api/v3/simple/token_price/binance-smart-chain?contract_addresses=0xbb4cdb9cbd36b01bd1cbaebf2de08d9173bc095c&vs_currencies=usd&include_market_cap=true&include_24hr_vol=true&include_24hr_change=true&include_last_updated_at=true`)
+        console.log("Coingecko returned " , res.data["0xbb4cdb9cbd36b01bd1cbaebf2de08d9173bc095c"])
+        
+        setContractInfo(res.data["0xbb4cdb9cbd36b01bd1cbaebf2de08d9173bc095c"]);
     }
 
     useEffect(() => {
@@ -20,7 +21,7 @@ export default function TokenInfo({ contract_address }) {
 
     return (
         <div className=" row-span-2 h-full w-full flex justify-end items-end">
-            {contractInfo &&
+           
                 <div className="rounded-2xl !bg-white dark:!bg-[#1C1917] w-[90%] relative p-5">
                     <div className="mb-5">
                         <span className=" font-extrabold text-sm text-[#78716C]">PANCAKESWAP V2 POOL
@@ -37,11 +38,11 @@ export default function TokenInfo({ contract_address }) {
                             <span className="text-xs font-semibold text-[#292524] col-span-1">24h
                                 volume:</span>
                             <span
-                                className=" text-[#78716C] text-xs font-normal col-span-1">{contractInfo.usd_24h_vol}</span>
+                                className=" text-[#78716C] text-xs font-normal col-span-1">{contractInfo ? contractInfo.usd_24h_vol: "N/A"}</span>
                         </div>
                         <div className="grid grid-cols-2 mb-2">
                             <span className="text-xs font-semibold text-[#292524] col-span-1">24 Hour Change:</span>
-                            <span className=" text-[#78716C] text-xs font-normal col-span-1">{contractInfo.usd_24h_change}</span>
+                            <span className=" text-[#78716C] text-xs font-normal col-span-1">{contractInfo ? contractInfo.usd_24h_change: "N/A"}</span>
                         </div>
                         {/* <div className="grid grid-cols-2 mb-2">
                         <span className="text-xs font-semibold text-[#292524] col-span-1">Pooled
@@ -59,7 +60,7 @@ export default function TokenInfo({ contract_address }) {
                             <span className="text-xs font-semibold text-[#292524] col-span-1">
                                 Market Cap:</span>
                             <span
-                                className=" text-[#78716C] text-xs font-normal col-span-1">{contractInfo.usd_market_cap}</span>
+                                className=" text-[#78716C] text-xs font-normal col-span-1">{contractInfo ? contractInfo.usd_market_cap: "N/A"}</span>
                         </div>
                     </div>
                     {/* <div
@@ -88,7 +89,7 @@ export default function TokenInfo({ contract_address }) {
                     </span>
                 </div> */}
                 </div>
-            }
+            
         </div>
     )
 }
