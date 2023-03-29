@@ -45,7 +45,7 @@ export default function TradingViewWidget({symbol}) {
                         toolbar_bg: "#f1f3f6",
                         withdateranges: true,
                         hide_side_toolbar: false,
-                        allow_symbol_change: false,
+                        allow_symbol_change: true,
                         save_image: false,
                         //studies: ["ROC@tv-basicstudies", "StochasticRSI@tv-basicstudies", "MASimple@tv-basicstudies"],
                         show_popup_button: true,

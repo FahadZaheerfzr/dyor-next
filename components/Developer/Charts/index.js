@@ -9,6 +9,7 @@ import { useEthers } from '@usedapp/core'
 import { useModal } from 'react-simple-modal-provider';
 import axios from 'axios';
 import TokenInfo from './TokenInfo';
+import DexScreener from './DexScreener';
 
 export default function Charts({ wallet }) {
     const { account, library } = useEthers();
@@ -19,7 +20,7 @@ export default function Charts({ wallet }) {
     const graph = useRef(null)
     const [image, takeScreenShot] = useScreenshot();
     const [symbol, setSymbol] = useState("")
-    const [projects, setProjects] = useState()
+    const [projects, setProjects] = useState(false)
     const [developer, setDeveloper] = useState()
     const getImage = () => takeScreenShot(graph.current);
     const { open: openModal } = useModal("OpenProject");
@@ -32,12 +33,10 @@ export default function Charts({ wallet }) {
             let data = await response.data
             setDeveloper(data[0])
             console.log(data[0])
-
         } catch (err) {
             console.log(err)
         }
         setLoaded(true)
-
     }
 
     const handleSymbol = async () => {
@@ -46,16 +45,12 @@ export default function Charts({ wallet }) {
             let contract = new ethers.Contract(developer.contract_address, ERC_ABI, signer)
             let symbol = await contract.symbol()
             console.log(symbol)
-            setSymbol(`${symbol}/BNB`)
+            setSymbol(`${symbol}/BUSD`)
         } catch (err) {
             console.log("We have an error")
             console.log(err)
         }
     }
-
-
-
-
 
     useEffect(() => {
         console.log(account)
@@ -80,7 +75,6 @@ export default function Charts({ wallet }) {
         setCurrentCharts(bool)
     }
 
-
     const toggleMenu = (bool) => {
         setMenuOpen(bool)
     }
@@ -93,7 +87,6 @@ export default function Charts({ wallet }) {
         toggleMenu(false);
         toggleProfile(true);
     }
-
 
     if (!loaded) {
         return (
@@ -207,18 +200,17 @@ export default function Charts({ wallet }) {
                                 </div>
                                 <div className=" col-span-7 px-8 h-full w-full flex justify-center items-center" >
                                     <div className='h-full w-full flex justify-center items-center  dark:bg-primary' ref={graph}>
-                                        {symbol !== "" &&<CustomChart symbol={symbol} />}
-                                        {symbol === "" && <CustomChart symbol={"RBAUSD_48E54C"} />}
+                                        {<DexScreener chartAddress={developer?.contract_address} networkName={"bsc"} />}
                                     </div>
                                 </div>
                             </div>
                         </div>
                         {projects &&
-                            <div className=" row-span-2 my-10">
+                            <div className="row-span-2 my-10">
                                 <div className="grid grid-cols-4 gap-3">
                                     <div className="col-span-1 h-full w-full flex justify-center items-center">
-                                        <div className="p-5 " id="small-graph">
-                                            {image && <Image src={image} width={200} height={200} alt="graph-image" />}
+                                        <div className="p-2 " id="small-graph">
+                                        {<DexScreener chartAddress={developer?.contract_address} networkName={"bsc"} />}
                                         </div>
                                     </div>
                                     <div className="col-span-1 h-full w-full flex justify-center items-center">
