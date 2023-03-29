@@ -1,10 +1,6 @@
-import { ethers } from 'ethers';
 import { useTheme } from 'next-themes';
 import Image from 'next/image'
 import React, { useEffect, useRef, useState } from 'react'
-import { useScreenshot } from 'use-react-screenshot'
-import CustomChart from './TradingView';
-import ERC_ABI from '@/config/abi/ERC20.json'
 import { useEthers } from '@usedapp/core'
 import { useModal } from 'react-simple-modal-provider';
 import axios from 'axios';
@@ -12,19 +8,28 @@ import TokenInfo from './TokenInfo';
 import DexScreener from './DexScreener';
 
 export default function Charts({ wallet }) {
-    const { account, library } = useEthers();
+    const { account } = useEthers();
     const [profile, setProfile] = useState(true)
     const [currentCharts, setCurrentCharts] = useState(true)
     const [menuOpen, setMenuOpen] = useState(false)
     const [tablemenu, setTableMenu] = useState(false)
     const graph = useRef(null)
-    const [image, takeScreenShot] = useScreenshot();
-    const [symbol, setSymbol] = useState("")
-    const [projects, setProjects] = useState(false)
+    const [projects, setProjects] = useState(null)
     const [developer, setDeveloper] = useState()
-    const getImage = () => takeScreenShot(graph.current);
     const { open: openModal } = useModal("OpenProject");
     const [loaded, setLoaded] = useState(true)
+
+
+    const fetchOldProjects = async () => {
+        try {
+            const response = await axios.post('/api/fetch_old_projects', { developer_wallet: wallet })
+            let data = await response.data
+            setProjects(data)
+            console.log(data)
+        } catch (err) {
+            console.log(err)
+        }
+    }
 
 
     const fetchDeveloper = async () => {
@@ -39,33 +44,18 @@ export default function Charts({ wallet }) {
         setLoaded(true)
     }
 
-    const handleSymbol = async () => {
-        try {
-            let signer = await library.getSigner(developer.developer_wallet);
-            let contract = new ethers.Contract(developer.contract_address, ERC_ABI, signer)
-            let symbol = await contract.symbol()
-            console.log(symbol)
-            setSymbol(`${symbol}/BUSD`)
-        } catch (err) {
-            console.log("We have an error")
-            console.log(err)
-        }
-    }
+
 
     useEffect(() => {
         console.log(account)
         if (account) {
             setLoaded(false)
             fetchDeveloper()
-
+            fetchOldProjects()
         }
     }, [account])
 
-    useEffect(() => {
-        if (library && developer) {
-            handleSymbol()
-        }
-    }, [library, developer])
+
 
     const toggleProfile = (bool) => {
         setProfile(bool)
@@ -206,38 +196,21 @@ export default function Charts({ wallet }) {
                             </div>
                         </div>
                         {projects &&
-                            <div className="row-span-2 my-10">
-                                <div className="grid grid-cols-4 gap-3">
-                                    <div className="col-span-1 h-full w-full flex justify-center items-center">
-                                        <div className="p-2 " id="small-graph">
-                                        {<DexScreener chartAddress={developer?.contract_address} networkName={"bsc"} />}
+                            <div className="row-span-2 my-10 h-[400px]">
+                                <div className="grid grid-cols-3 h-full gap-3">
+                                    {projects?.map((project, index) => (
+                                        <div key={index} className="col-span-1 p-2 h-full w-full flex justify-center items-center">
+                                            <div className="w-full h-full " id="small-graph">
+                                                <DexScreener chartAddress={project.contract_address} networkName={"bsc"} />
+                                            </div>
                                         </div>
-                                    </div>
-                                    <div className="col-span-1 h-full w-full flex justify-center items-center">
-                                        <div className="p-5" id="small-graph1">
-                                            {image && <Image src={image} width={200} height={200} alt="graph-image" />}
-
-                                        </div>
-                                    </div>
-                                    <div className="col-span-1 h-full w-full flex justify-center items-center">
-                                        <div className="p-5" id="small-graph2">
-                                            {image && <Image src={image} width={200} height={200} alt="graph-image" />}
-
-                                        </div>
-                                    </div>
-                                    <div className="col-span-1 h-full w-full flex justify-center items-center">
-                                        <div className="p-5" id="small-graph3">
-                                            {image && <Image src={image} width={200} height={200} alt="graph-image" />}
-
-                                        </div>
-                                    </div>
+                                    ))}
                                 </div>
                             </div>}
                     </div>
                     {projects &&
                         <div className="w-full mt-14 flex justify-center items-center">
-                            <button className=" rounded-3xl bg-white dark:bg-[#1C1917] text-[#292524] text-xs font-bold uppercase py-2 px-5 infobox-shadow"
-                                onClick={handleSymbol}>
+                            <button className=" rounded-3xl bg-white dark:bg-[#1C1917] text-[#292524] text-xs font-bold uppercase py-2 px-5 infobox-shadow">
                                 See More
                             </button>
                         </div>}
@@ -310,10 +283,8 @@ export default function Charts({ wallet }) {
 
                     <div className={` !bg-[#F9F9F9] dark:!bg-[#292524] w-full mt-10 flex flex-col p-5 ${!profile && currentCharts ? "block" : "hidden"}`}>
                         <div className="w-full">
-                            <div className=" mt-5 mb-10 text-center" >
-                                <span className='text-muted'>
-                                    Chart is not available on mobile
-                                </span>
+                            <div className=" mt-5 mb-10 text-center h-[400px]" >
+                               <DexScreener networkName={"bsc"} chartAddress={developer?.contract_address} />
                             </div>
                         </div>
                         <div className="rounded-3xl !bg-white dark:!bg-[#1C1917] w-full relative p-5">
@@ -384,30 +355,13 @@ export default function Charts({ wallet }) {
                     </div>
 
                     <div className={` !bg-[#F9F9F9] dark:!bg-[#292524] w-full  mt-10 flex flex-col p-5 ${!profile && !currentCharts ? "block" : "hidden"}`} >
-                        <div className="w-full my-5">
-                            <div >
-                                <img className="hidden dark:block" src="/images/mobile/graph.png" />
-                                <img className="dark:hidden" src="/images/mobile/graph-white.png" />
-                            </div>
+                        
+                        {projects?.map((project, index) => (
+                        <div key={index} className="w-full h-[400px] my-5">                            
+                                <DexScreener networkName={"bsc"} chartAddress={project?.contract_address} />
                         </div>
-                        <div className="w-full my-5">
-                            <div >
-                                <img className="hidden dark:block" src="/images/mobile/graph.png" />
-                                <img className="dark:hidden" src="/images/mobile/graph-white.png" />
-                            </div>
-                        </div>
-                        <div className="w-full my-5">
-                            <div >
-                                <img className="hidden dark:block" src="/images/mobile/graph.png" />
-                                <img className="dark:hidden" src="/images/mobile/graph-white.png" />
-                            </div>
-                        </div>
-                        <div className="w-full my-5">
-                            <div >
-                                <img className="hidden dark:block" src="/images/mobile/graph.png" />
-                                <img className="dark:hidden" src="/images/mobile/graph-white.png" />
-                            </div>
-                        </div>
+                        ))}
+                        
                     </div>
                 </div>
 
