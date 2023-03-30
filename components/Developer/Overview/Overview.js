@@ -444,7 +444,7 @@ const Overview = ({ data, topVoted }) => {
               </div>
             </div>
             <div>
-              {paginatedData.map((developer, index) => (
+              {active === 0 && paginatedData.map((developer, index) => (
                 <div
                   className="px-6 py-4 flex items-center justify-between"
                   key={index}
