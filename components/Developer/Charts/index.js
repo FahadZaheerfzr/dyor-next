@@ -195,11 +195,11 @@ export default function Charts({ wallet }) {
                                 </div>
                             </div>
                         </div>
-                        {projects &&
-                            <div className="row-span-2 my-10 h-[400px]">
+                        {projects && projects.length > 0 &&
+                            <div className="row-span-2 my-10 ">
                                 <div className="grid grid-cols-3 h-full gap-3">
                                     {projects?.map((project, index) => (
-                                        <div key={index} className="col-span-1 p-2 h-full w-full flex justify-center items-center">
+                                        <div key={index} className="col-span-1 p-2 h-[400px] w-full flex justify-center items-center">
                                             <div className="w-full h-full " id="small-graph">
                                                 <DexScreener chartAddress={project.contract_address} networkName={"bsc"} />
                                             </div>
