@@ -250,9 +250,17 @@ export default function Charts({ wallet }) {
                                 <img className="hidden dark:block" src="/images/mobile/shareicon-dark.png" />
                             </div>
                             <div className="flex flex-col justify-center text-center">
-                                <img src="/images/profile-pic.png" />
-                                <span className="mt-3 font-extrabold text-gold text-xl">PimkFale</span>
-                                <span className="text-sm font-semibold text-[#57534E]">@pimkfale</span>
+                                {developer?.profile_picture ?
+                                    <Image className='rounded-lg' width={130} height={130} src={`${developer?.profile_picture}`} alt="profile-picture" />
+                                    :
+                                    <img src="/images/profile-pic.png" />
+                                }
+                                <span className="mt-3 font-extrabold text-gold text-xl">
+                                    {developer?.developer_name ? developer?.developer_name : "Pim Kfale"}
+                                </span>
+                                <span className="text-sm font-semibold text-[#57534E]">
+                                    {developer?.developer_telegram ? developer?.developer_telegram : "pimkfale"}
+                                </span>
                             </div>
                             <div>
                                 <img className="dark:hidden" src="/images/mobile/menuicon-light.png" />
@@ -261,30 +269,52 @@ export default function Charts({ wallet }) {
                         </div>
                         <div className="px-10 my-5 flex flex-col">
                             <span className="text-xl font-extrabold text-[#292524]">About</span>
-                            <span className="text-[12px] font-normal text-[#57534E] dark:text-[#78716C]">If
-                                we can imagine web3 as a car then, web3 libraries/dApps are the car&apos;s
-                                chassis, smart contracts/blockchain are the internal hardware
-                                components, wallets.. <span className="text-gold">read more</span></span>
+                            {developer?.developer_about ? <span className="text-[12px] font-normal text-[#57534E]">
+                                {developer?.developer_about}
+                            </span> :
+                                <span className="text-[12px] font-normal text-[#57534E] dark:text-[#78716C]">If
+                                    we can imagine web3 as a car then, web3 libraries/dApps are the car&apos;s
+                                    chassis, smart contracts/blockchain are the internal hardware
+                                    components, wallets.. <span className="text-gold">read more</span></span>
+                            }
                         </div>
+                        {developer && developer?.developer_wallet === account &&
+
+                            <div className="px-10 my-5 flex flex-col">
+                                <button className="bg-gold text-white font-semibold py-2 px-4 rounded-full"
+                                    onClick={openModal}>
+                                    Open a New Project
+                                </button>
+                            </div>
+                        }
                         <div className="px-7 my-10 flex flex-row justify-between ">
-                            <div className="flex flex-row items-center">
-                                <img className="mr-2 dark:hidden" src="/images/twitter.svg" />
-                                <img className="mr-2 hidden dark:block" src="/images/twitter.png" />
-                                <span
-                                    className="text-sm font-semibold text-[#57534E]">@pimkfalecomunity</span>
-                            </div>
-                            <div className="flex flex-row items-center">
-                                <img className="mr-2 dark:hidden" src="/images/telegram.svg" />
-                                <img className="mr-2 hidden dark:block" src="/images/telegram.png" />
-                                <span className="text-sm font-semibold text-[#57534E]">@pimkfaleee</span>
-                            </div>
+                            <a href={`https://twitter.com/${developer?.developer_twitter}`} target="_blank" rel="noreferrer">
+                                <div className="flex flex-row items-center">
+                                    <img className="mr-2 dark:hidden" src="/images/twitter.svg" />
+                                    <img className="mr-2 hidden dark:block" src="/images/twitter.png" />
+                                    <span
+                                        className="text-sm font-semibold text-[#57534E]">@
+                                        {developer?.developer_twitter ? developer?.developer_twitter : "pimkfalecomunity"}
+                                    </span>
+                                </div>
+                            </a>
+
+                            <a href={`https://t.me/${developer?.developer_telegram}`} target="_blank" rel="noreferrer">
+                                <div className="flex flex-row items-center">
+                                    <img className="mr-2 dark:hidden" src="/images/telegram.svg" />
+                                    <img className="mr-2 hidden dark:block" src="/images/telegram.png" />
+                                    <span className="text-sm font-semibold text-[#57534E]">@
+                                        {developer?.developer_telegram ? developer?.developer_telegram : "pimkfaleee"}
+                                    </span>
+                                </div>
+                            </a>
                         </div>
                     </div>
 
                     <div className={` !bg-[#F9F9F9] dark:!bg-[#292524] w-full mt-10 flex flex-col p-5 ${!profile && currentCharts ? "block" : "hidden"}`}>
                         <div className="w-full">
                             <div className=" mt-5 mb-10 text-center h-[400px]" >
-                               <DexScreener networkName={"bsc"} chartAddress={developer?.contract_address} />
+                                <DexScreener networkName={"bsc"} chartAddress={developer?.contract_address} />
                             </div>
                         </div>
                         <div className="rounded-3xl !bg-white dark:!bg-[#1C1917] w-full relative p-5">
@@ -355,13 +385,13 @@ export default function Charts({ wallet }) {
                     </div>
 
                     <div className={` !bg-[#F9F9F9] dark:!bg-[#292524] w-full  mt-10 flex flex-col p-5 ${!profile && !currentCharts ? "block" : "hidden"}`} >
-                        
+
                         {projects?.map((project, index) => (
-                        <div key={index} className="w-full h-[400px] my-5">                            
+                            <div key={index} className="w-full h-[400px] my-5">
                                 <DexScreener networkName={"bsc"} chartAddress={project?.contract_address} />
-                        </div>
+                            </div>
                         ))}
-                        
+
                     </div>
                 </div>
 
