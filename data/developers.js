@@ -5,18 +5,18 @@ export const buttons = [
       icon: "fire_yellow.svg",
       active_icon: "fire.svg",
     },
-    {
-      id: 1,
-      name: "KYC",
-      icon: "kyc_yellow.svg",
-      active_icon: "kyc.svg",
-    },
-    {
-      id: 2,
-      name: "Audit",
-      icon: "audit_yellow.svg",
-      active_icon: "audit.svg",
-    },
+    // {
+    //   id: 1,
+    //   name: "KYC",
+    //   icon: "kyc_yellow.svg",
+    //   active_icon: "kyc.svg",
+    // },
+    // {
+    //   id: 2,
+    //   name: "Audit",
+    //   icon: "audit_yellow.svg",
+    //   active_icon: "audit.svg",
+    // },
   ];
   
   export const data = [

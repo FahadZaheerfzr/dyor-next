@@ -5,15 +5,37 @@ export default function TokenInfo({ contract_address }) {
 
     console.log(contract_address)
     const getContractInfo = async () => {
-        const res = await axios.get(`https://api.coingecko.com/api/v3/simple/token_price/binance-smart-chain?contract_addresses=0xbb4cdb9cbd36b01bd1cbaebf2de08d9173bc095c&vs_currencies=usd&include_market_cap=true&include_24hr_vol=true&include_24hr_change=true&include_last_updated_at=true`)
-        console.log("Coingecko returned " , res.data["0xbb4cdb9cbd36b01bd1cbaebf2de08d9173bc095c"])
-        
-        setContractInfo(res.data["0xbb4cdb9cbd36b01bd1cbaebf2de08d9173bc095c"]);
+
+        const res = await axios.get(`https://api.dexscreener.com/latest/dex/tokens/${contract_address}`)
+        console.log("DexScreener returned ", res.data)
+
+        let usd_24h_vol = res.data["pairs"][0]["volume"]["h24"]
+        let liquidity = res.data["pairs"][0]["liquidity"]["usd"]
+        let transactions = res.data["pairs"][0]["txns"]["h24"]["buys"] + res.data["pairs"][0]["txns"]["h24"]["sells"]
+        let market_cap = res.data["pairs"][0]["fdv"]
+        let price_change = res.data["pairs"][0]["priceChange"]["h24"]
+        console.log("use_24h_vol", usd_24h_vol)
+        console.log("liquidity", liquidity)
+        console.log("market_cap", market_cap)
+        console.log("transactions", transactions)
+        console.log("price_change", price_change)
+
+        let contractInfo = {
+            usd_24h_vol: usd_24h_vol/1000,
+            liquidity: liquidity/1000,
+            transactions: transactions,
+            market_cap: market_cap/1000,
+            price_change: price_change
+        }
+
+        setContractInfo(contractInfo)
     }
 
     useEffect(() => {
         try {
-            getContractInfo();
+            if (contract_address) {
+                getContractInfo();
+            }
         } catch (error) {
             console.log(error)
         }
@@ -21,49 +43,49 @@ export default function TokenInfo({ contract_address }) {
 
     return (
         <div className=" row-span-2 h-full w-full flex justify-end items-end">
-           
-                <div className="rounded-2xl !bg-white dark:!bg-[#1C1917] w-[90%] relative p-5">
-                    <div className="mb-5">
-                        <span className=" font-extrabold text-sm text-[#78716C]">PANCAKESWAP V2 POOL
-                            INFO</span>
+
+            <div className="rounded-2xl !bg-white dark:!bg-[#1C1917] w-[90%] relative p-5">
+                <div className="mb-5">
+                    <span className=" font-extrabold text-sm text-[#78716C]">PANCAKESWAP V2 POOL
+                        INFO</span>
+                </div>
+                <div className="mb-10">
+                    <div className="grid grid-cols-2 mb-2">
+                        <span className="text-xs font-semibold text-[#292524] col-span-1">Total
+                            liquidity:</span>
+                        <span
+                            className=" text-[#78716C] text-xs font-normal col-span-1">${contractInfo ? contractInfo.liquidity.toFixed(2): "N/A"}K</span>
                     </div>
-                    <div className="mb-10">
-                        <div className="grid grid-cols-2 mb-2">
-                            <span className="text-xs font-semibold text-[#292524] col-span-1">Total
-                                liquidity:</span>
-                            <span
-                                className=" text-[#78716C] text-xs font-normal col-span-1">$3.27k</span>
-                        </div>
-                        <div className="grid grid-cols-2 mb-2">
-                            <span className="text-xs font-semibold text-[#292524] col-span-1">24h
-                                volume:</span>
-                            <span
-                                className=" text-[#78716C] text-xs font-normal col-span-1">{contractInfo ? contractInfo.usd_24h_vol: "N/A"}</span>
-                        </div>
-                        <div className="grid grid-cols-2 mb-2">
-                            <span className="text-xs font-semibold text-[#292524] col-span-1">24 Hour Change:</span>
-                            <span className=" text-[#78716C] text-xs font-normal col-span-1">{contractInfo ? contractInfo.usd_24h_change: "N/A"}</span>
-                        </div>
-                        {/* <div className="grid grid-cols-2 mb-2">
+                    <div className="grid grid-cols-2 mb-2">
+                        <span className="text-xs font-semibold text-[#292524] col-span-1">24h
+                            volume:</span>
+                        <span
+                            className=" text-[#78716C] text-xs font-normal col-span-1">${contractInfo ? contractInfo.usd_24h_vol.toFixed(2) : "N/A"}</span>
+                    </div>
+                    <div className="grid grid-cols-2 mb-2">
+                        <span className="text-xs font-semibold text-[#292524] col-span-1">24 Hour Change:</span>
+                        <span className=" text-[#78716C] text-xs font-normal col-span-1">${contractInfo ? contractInfo.price_change.toFixed(2) : "N/A"}</span>
+                    </div>
+                    {/* <div className="grid grid-cols-2 mb-2">
                         <span className="text-xs font-semibold text-[#292524] col-span-1">Pooled
                             DYOR:</span>
                         <span
                             className=" text-[#78716C] text-xs font-normal col-span-1">88.99M</span>
                     </div> */}
-                        <div className="grid grid-cols-2 mb-2">
-                            <span className="text-xs font-semibold text-[#292524] col-span-1">Total
-                                tx:</span>
-                            <span
-                                className=" text-[#78716C] text-xs font-normal col-span-1">8.27K</span>
-                        </div>
-                        <div className="grid grid-cols-2 mb-2">
-                            <span className="text-xs font-semibold text-[#292524] col-span-1">
-                                Market Cap:</span>
-                            <span
-                                className=" text-[#78716C] text-xs font-normal col-span-1">{contractInfo ? contractInfo.usd_market_cap: "N/A"}</span>
-                        </div>
+                    <div className="grid grid-cols-2 mb-2">
+                        <span className="text-xs font-semibold text-[#292524] col-span-1">Total
+                            tx:</span>
+                        <span
+                            className=" text-[#78716C] text-xs font-normal col-span-1">{contractInfo?contractInfo.transactions:"N/A"}</span>
                     </div>
-                    {/* <div
+                    <div className="grid grid-cols-2 mb-2">
+                        <span className="text-xs font-semibold text-[#292524] col-span-1">
+                            Market Cap:</span>
+                        <span
+                            className=" text-[#78716C] text-xs font-normal col-span-1">${contractInfo ? contractInfo.market_cap.toFixed(2) : "N/A"}K</span>
+                    </div>
+                </div>
+                {/* <div
                     className="group absolute bottom-0 left-0 py-2 w-full bg-gold flex flex-row items-center justify-center rounded-b-2xl">
                     <span className="text-sm font-extrabold text-white dark:text-[#1C1917]">More Info</span>
                     <span className="relative ml-1">
@@ -88,8 +110,8 @@ export default function TokenInfo({ contract_address }) {
                         </div>
                     </span>
                 </div> */}
-                </div>
-            
+            </div>
+
         </div>
     )
 }
