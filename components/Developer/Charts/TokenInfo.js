@@ -6,29 +6,28 @@ export default function TokenInfo({ contract_address }) {
     console.log(contract_address)
     const getContractInfo = async () => {
 
-        const res = await axios.get(`https://api.dexscreener.com/latest/dex/tokens/${contract_address}`)
-        console.log("DexScreener returned ", res.data)
+        try {
+            const res = await axios.get(`https://api.dexscreener.com/latest/dex/tokens/${contract_address}`)
+            console.log("DexScreener returned ", res.data)
 
-        let usd_24h_vol = res.data["pairs"][0]["volume"]["h24"]
-        let liquidity = res.data["pairs"][0]["liquidity"]["usd"]
-        let transactions = res.data["pairs"][0]["txns"]["h24"]["buys"] + res.data["pairs"][0]["txns"]["h24"]["sells"]
-        let market_cap = res.data["pairs"][0]["fdv"]
-        let price_change = res.data["pairs"][0]["priceChange"]["h24"]
-        console.log("use_24h_vol", usd_24h_vol)
-        console.log("liquidity", liquidity)
-        console.log("market_cap", market_cap)
-        console.log("transactions", transactions)
-        console.log("price_change", price_change)
+            let usd_24h_vol = res.data["pairs"][0]["volume"]["h24"]
+            let liquidity = res.data["pairs"][0]["liquidity"]["usd"]
+            let transactions = res.data["pairs"][0]["txns"]["h24"]["buys"] + res.data["pairs"][0]["txns"]["h24"]["sells"]
+            let market_cap = res.data["pairs"][0]["fdv"]
+            let price_change = res.data["pairs"][0]["priceChange"]["h24"]
 
-        let contractInfo = {
-            usd_24h_vol: usd_24h_vol/1000,
-            liquidity: liquidity/1000,
-            transactions: transactions,
-            market_cap: market_cap/1000,
-            price_change: price_change
+            let contractInfo = {
+                usd_24h_vol: usd_24h_vol / 1000,
+                liquidity: liquidity / 1000,
+                transactions: transactions,
+                market_cap: market_cap / 1000,
+                price_change: price_change
+            }
+
+            setContractInfo(contractInfo)
+        } catch (error) {
+            console.log(error)
         }
-
-        setContractInfo(contractInfo)
     }
 
     useEffect(() => {
@@ -54,17 +53,17 @@ export default function TokenInfo({ contract_address }) {
                         <span className="text-xs font-semibold text-[#292524] col-span-1">Total
                             liquidity:</span>
                         <span
-                            className=" text-[#78716C] text-xs font-normal col-span-1">${contractInfo ? contractInfo.liquidity.toFixed(2): "N/A"}K</span>
+                            className=" text-[#78716C] text-xs font-normal col-span-1">${contractInfo ? contractInfo.liquidity.toFixed(2) : "0"}K</span>
                     </div>
                     <div className="grid grid-cols-2 mb-2">
                         <span className="text-xs font-semibold text-[#292524] col-span-1">24h
                             volume:</span>
                         <span
-                            className=" text-[#78716C] text-xs font-normal col-span-1">${contractInfo ? contractInfo.usd_24h_vol.toFixed(2) : "N/A"}</span>
+                            className=" text-[#78716C] text-xs font-normal col-span-1">${contractInfo ? contractInfo.usd_24h_vol.toFixed(2) : "0"}</span>
                     </div>
                     <div className="grid grid-cols-2 mb-2">
                         <span className="text-xs font-semibold text-[#292524] col-span-1">24 Hour Change:</span>
-                        <span className=" text-[#78716C] text-xs font-normal col-span-1">${contractInfo ? contractInfo.price_change.toFixed(2) : "N/A"}</span>
+                        <span className=" text-[#78716C] text-xs font-normal col-span-1">${contractInfo ? contractInfo.price_change.toFixed(2) : "0"}</span>
                     </div>
                     {/* <div className="grid grid-cols-2 mb-2">
                         <span className="text-xs font-semibold text-[#292524] col-span-1">Pooled
@@ -76,13 +75,13 @@ export default function TokenInfo({ contract_address }) {
                         <span className="text-xs font-semibold text-[#292524] col-span-1">Total
                             tx:</span>
                         <span
-                            className=" text-[#78716C] text-xs font-normal col-span-1">{contractInfo?contractInfo.transactions:"N/A"}</span>
+                            className=" text-[#78716C] text-xs font-normal col-span-1">{contractInfo ? contractInfo.transactions : "0"}</span>
                     </div>
                     <div className="grid grid-cols-2 mb-2">
                         <span className="text-xs font-semibold text-[#292524] col-span-1">
                             Market Cap:</span>
                         <span
-                            className=" text-[#78716C] text-xs font-normal col-span-1">${contractInfo ? contractInfo.market_cap.toFixed(2) : "N/A"}K</span>
+                            className=" text-[#78716C] text-xs font-normal col-span-1">${contractInfo ? contractInfo.market_cap.toFixed(2) : "0"}K</span>
                     </div>
                 </div>
                 {/* <div
