@@ -3,9 +3,11 @@ import { ethers } from 'ethers'
 import Image from 'next/image'
 import React, { useState } from 'react'
 import ERC_ABI from '@/config/abi/ERC20.json'
+import OwnerABI from '@/config/abi/OwnerABI.json'
 import { useEthers } from '@usedapp/core'
 import { useModal } from 'react-simple-modal-provider'
 import { registrationFee } from '@/config/constants/registration_constants'
+import Web3 from 'web3';
 
 
 export default function Registration() {
@@ -20,15 +22,19 @@ export default function Registration() {
     const [developer_twitter, setDeveloperTwitter] = useState('')
     const [telegram_project, setTelegramProject] = useState('')
     const [contract_address, setContractAddress] = useState('')
+    const [contract_owner, setContractOwner] = useState('')
     const { open: openModal } = useModal("ConnectionModal");
     const { open: openModalRegistration } = useModal("RegistrationModal");
 
 
-    // const getOwner = async (contractAddress) => {
-    //     const tokenContract = new Contract(contractAddress, ERC_ABI)
-    //     const owner = tokenContract.name()
-    //     console.log(owner)
-    // }
+    const getOwner = async (contractAddress) => {
+        const web3 = new Web3(window.ethereum);
+        await window.ethereum.enable();
+        const uploadedContract = new web3.eth.Contract(OwnerABI, '0xDD534480782eCf53e4A5257B0f3C37702A0bAD61');
+        let owner = await uploadedContract.methods.owner().call();
+        console.log(owner)
+        setContractOwner(owner)
+    }
 
 
 
@@ -105,6 +111,10 @@ export default function Registration() {
 
         setErrors(errors)
         console.log(errors)
+
+
+
+
         if (Object.keys(errors).length === 0) {
 
             const res = await axios.post('/api/registration_check', {
@@ -112,15 +122,24 @@ export default function Registration() {
                 contract_address: contract_address,
             })
 
+
+            await getOwner(contract_address)
+
+
+            
+            if(developer_wallet.toLowerCase() !== contract_owner.toLowerCase()){
+                alert('This contract is not owned by this wallet')
+                return;
+            }
+
             console.log(res.data)
             if (res.data.length > 0) {
                 alert('This wallet or contract address is already registered')
                 return;
             }
 
-            //getOwner(contract_address)
-            console.log('ok')
-            handleTransfer()
+
+            //handleTransfer()
         }
     }
 
