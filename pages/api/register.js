@@ -39,6 +39,7 @@ export default async function handler(req, res) {
       developer_telegram: developer_telegram,
       contract_address: contract_address,
       telegram_project: telegram_project,
+      verified: false,
     },
   })
 
