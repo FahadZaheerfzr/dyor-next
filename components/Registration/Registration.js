@@ -122,9 +122,12 @@ export default function Registration() {
                 contract_address: contract_address,
             })
 
-
+            try{
             await getOwner(contract_address)
-
+            } catch(e){
+                alert('Unable to get contract owner')
+                return;
+            }
 
             
             if(developer_wallet.toLowerCase() !== contract_owner.toLowerCase()){
