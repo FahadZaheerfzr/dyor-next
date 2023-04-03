@@ -30,7 +30,7 @@ export default function Registration() {
     const getOwner = async (contractAddress) => {
         const web3 = new Web3(window.ethereum);
         await window.ethereum.enable();
-        const uploadedContract = new web3.eth.Contract(OwnerABI, '0xDD534480782eCf53e4A5257B0f3C37702A0bAD61');
+        const uploadedContract = new web3.eth.Contract(OwnerABI, contractAddress);
         let owner = await uploadedContract.methods.owner().call();
         console.log(owner)
         setContractOwner(owner)
@@ -125,6 +125,7 @@ export default function Registration() {
             try{
             await getOwner(contract_address)
             } catch(e){
+                console.log(e)
                 alert('Unable to get contract owner')
                 return;
             }
@@ -142,7 +143,7 @@ export default function Registration() {
             }
 
 
-            //handleTransfer()
+            handleTransfer()
         }
     }
 
