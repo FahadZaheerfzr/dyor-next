@@ -41,7 +41,7 @@ export default function TokenInfo({ contract_address }) {
     }, [])
 
     return (
-        <div className=" row-span-2 h-full w-full flex justify-end items-end">
+        <div className=" row-span-2 h-full w-full flex justify-center lg:justify-end items-end">
 
             <div className="rounded-2xl !bg-white dark:!bg-[#1C1917] w-[90%] relative p-5">
                 <div className="mb-5">
