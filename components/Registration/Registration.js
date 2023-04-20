@@ -8,6 +8,7 @@ import { useEthers } from '@usedapp/core'
 import { useModal } from 'react-simple-modal-provider'
 import { registrationFee } from '@/config/constants/registration_constants'
 import Web3 from 'web3';
+import { USDT_ADDRESS, WALLET_TRANSFER } from '@/config/constants/tokens'
 
 
 export default function Registration() {
@@ -46,16 +47,16 @@ export default function Registration() {
         const provider = new ethers.providers.Web3Provider(window.ethereum);
         const signer = provider.getSigner();
 
-        const contract = new ethers.Contract("0x9b61dC9235E015b67E8C706C68cf735B09D3e633", ERC_ABI, signer);
+        const contract = new ethers.Contract(USDT_ADDRESS, ERC_ABI, signer);
         const previous_balance = await contract.balanceOf(account);
-        let tokenDecimals = 18;
-        const balanceInToken = ethers.utils.formatEther(previous_balance, tokenDecimals); // Convert balance to BNB
+        const decimals = await contract.decimals();
+        const balanceInToken = ethers.utils.formatEther(previous_balance, decimals); // Convert balance to BNB
 
         console.log(balanceInToken)
         if (balanceInToken > registrationFee) {
             try {
                 //await contract.transfer("0x4475F395590f6E75474502C915A44DFe9A5FA652", ethers.utils.parseUnits("100", 18));
-                await contract.transfer("0x8C0CC9AF4da6F21542c0C62192393297d05B1b3e", ethers.utils.parseUnits("100", 18));
+                await contract.transfer(WALLET_TRANSFER, ethers.utils.parseUnits("100", decimals));
             } catch (e) {
                 return;
             }

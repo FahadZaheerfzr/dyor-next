@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import Modal, { useModalState } from "react-simple-modal-provider";
 
 import WalletConnectProvider from '@walletconnect/web3-provider/dist/umd/index.min.js'
@@ -12,7 +12,8 @@ import { networkConfig } from "@/config/networks";
 
 export default function ConnectionModal({ children }) {
   const [isOpen, setOpen] = useModalState();
-  const { activate, account, activateBrowserWallet } = useEthers();
+  const [logged, setLogged] = useState();
+  const { activate, account, activateBrowserWallet, switchNetwork, chainId } = useEthers();
 
 
   const onConnect = async () => {
@@ -37,11 +38,28 @@ export default function ConnectionModal({ children }) {
   }
 
 
-    useEffect(() => {
-        if (account) {
-          setOpen(false)
-        }
-      }, [account, setOpen])
+  useEffect(() => {
+    if (account) {
+      setOpen(false)
+    }
+  }, [account, setOpen])
+
+  useEffect(() => {
+    if (typeof account == "undefined") {
+      return;
+    }
+    if (account && typeof logged == "undefined") {
+      if (chainId !== 56) {
+        switchNetwork(56);
+      }
+
+      setLogged(account);
+      return;
+    }
+    if (account !== logged) {
+      window.location.reload();
+    }
+  }, [account, logged]);
 
 
   return (

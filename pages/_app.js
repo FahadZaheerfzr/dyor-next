@@ -26,7 +26,6 @@ export default function App({ Component, pageProps }) {
   return (
     <DAppProvider config={networkConfig}>
       <ModalProvider value={[ConnectionModal, OpenProject, RegistrationModal]}>
-
         <ThemeProvider attribute='class' defaultTheme='dark'>
           <style jsx global>
             {`

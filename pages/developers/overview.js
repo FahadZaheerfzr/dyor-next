@@ -6,11 +6,12 @@ import ERC_ABI from '@/config/abi/ERC20.json'
 import { ethers } from "ethers";
 import { useModal } from "react-simple-modal-provider";
 import axios from "axios";
+import { DYOR_TOKEN } from "@/config/constants/tokens";
 
 const OverviewPage = () => {
   const [data, setData] = useState();
   const [topVoted, setTopVoted] = useState();
-  const { account } = useEthers();
+  const { account, chainId, switchNetwork } = useEthers();
   const [showPage, setShowPage] = useState(true);
   const { open: openModal } = useModal("ConnectionModal");
 
@@ -19,7 +20,6 @@ const OverviewPage = () => {
       openModal();
       return
     }
-
 
     const res = await axios.post("/api/fetch_developer", {
       developer_wallet: account,
@@ -30,18 +30,16 @@ const OverviewPage = () => {
       return
     }
 
-
-
     const provider = new ethers.providers.Web3Provider(window.ethereum);
     const signer = provider.getSigner();
-    const tokenContract = new ethers.Contract("0xDa972b416fD9d572CC7C5E17b2cE998af0326712", ERC_ABI, signer);
+    const tokenContract = new ethers.Contract(DYOR_TOKEN, ERC_ABI, signer);
     const myaccount = await signer.getAddress();
     const balance = await tokenContract.balanceOf(myaccount);
     let tokenDecimals = 18;
     const balanceInToken = ethers.utils.formatEther(balance, tokenDecimals); // Convert balance to BNB
 
     if (balanceInToken < 150000) {
-      setShowPage(false) 
+      setShowPage(false)
     }
 
     console.log(`Wallet has ${balanceInToken} DYOR`);
@@ -65,8 +63,15 @@ const OverviewPage = () => {
   }, []);
 
   useEffect(() => {
+    if (!account) return
+
+    if (chainId !== 56) {
+      switchNetwork(56);
+      return;
+    }
+
     checkToken()
-  }, [account])
+  }, [account, chainId])
 
 
 
@@ -76,7 +81,6 @@ const OverviewPage = () => {
       {account && showPage ? <Overview data={data} topVoted={topVoted} />
         :
         <div className="bg-gold font-nunito_sans text-white text-center py-2 mt-5">Please connect your wallet to view this page or you don&#39;t have enough tokens</div>}
-
     </BaseLayout>
   );
 };
