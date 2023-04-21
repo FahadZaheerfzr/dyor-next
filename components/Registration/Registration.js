@@ -4,11 +4,12 @@ import Image from 'next/image'
 import React, { useState } from 'react'
 import ERC_ABI from '@/config/abi/ERC20.json'
 import OwnerABI from '@/config/abi/OwnerABI.json'
+import RevenueShareABI from '@/config/abi/RevenueShare.json'
 import { useEthers } from '@usedapp/core'
 import { useModal } from 'react-simple-modal-provider'
 import { registrationFee } from '@/config/constants/registration_constants'
 import Web3 from 'web3';
-import { USDT_ADDRESS, WALLET_TRANSFER } from '@/config/constants/tokens'
+import { USDT_ADDRESS, WALLET_TRANSFER ,REVENUE_SHARE_ADDRESS} from '@/config/constants/tokens'
 
 
 export default function Registration() {
@@ -33,7 +34,7 @@ export default function Registration() {
         await window.ethereum.enable();
         const uploadedContract = new web3.eth.Contract(OwnerABI, contractAddress);
         let owner = await uploadedContract.methods.owner().call();
-        console.log(owner)
+        console.log(owner, 'contract owner')
         setContractOwner(owner)
     }
 
@@ -47,16 +48,19 @@ export default function Registration() {
         const provider = new ethers.providers.Web3Provider(window.ethereum);
         const signer = provider.getSigner();
 
-        const contract = new ethers.Contract(USDT_ADDRESS, ERC_ABI, signer);
-        const previous_balance = await contract.balanceOf(account);
-        const decimals = await contract.decimals();
+        debugger
+        const USDTcontract = new ethers.Contract(USDT_ADDRESS, ERC_ABI, signer);
+        const RevenueShareContract = new ethers.Contract(REVENUE_SHARE_ADDRESS, RevenueShareABI, signer);
+        const previous_balance = await USDTcontract.balanceOf(account);
+        const decimals = await USDTcontract.decimals();
         const balanceInToken = ethers.utils.formatEther(previous_balance, decimals); // Convert balance to BNB
-
+        
         console.log(balanceInToken)
         if (balanceInToken > registrationFee) {
             try {
                 //await contract.transfer("0x4475F395590f6E75474502C915A44DFe9A5FA652", ethers.utils.parseUnits("100", 18));
-                await contract.transfer(WALLET_TRANSFER, ethers.utils.parseUnits("100", decimals));
+                await USDTcontract.approve(REVENUE_SHARE_ADDRESS, ethers.utils.parseUnits("100", decimals));
+                await RevenueShareContract.receiveUSDT();
             } catch (e) {
                 return;
             }
